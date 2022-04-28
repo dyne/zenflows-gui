@@ -18,5 +18,5 @@ jobs:
         with:
           install: false
           command: pnpm run cypress:headless
-          build: pnpm build
-          start: pnpm start
+          start: pnpm run dev
+          wait-on: 'http://localhost:3000'
