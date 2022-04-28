@@ -66,13 +66,18 @@ Abstract description like: 🚧 Zenroom is a software in **ALPHA stage** and are
 
 ***
 ## 💾 Install
-```pip install / yard add {project_name}```
+```
+pnpm install
+pnpm run build
+pnpm run start
+```
 
 
 ***
 ## 🎮 Quick start
 
-To start using {project_name} just (fill with real documentation)
+```pnpm run dev```
+
 
 ***
 ## 🐋 Docker

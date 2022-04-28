@@ -1,0 +1,22 @@
+name: End-to-end tests
+on: [push, pull_request]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          install: false
+          command: pnpm cypress
+          build: pnpm build
+          start: pnpm start
+          wait-on: 'http://localhost:3000'
