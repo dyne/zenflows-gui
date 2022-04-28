@@ -17,6 +17,6 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
+          command: pnpm run cypress:headless
           build: pnpm build
           start: pnpm start
-          wait-on: 'http://localhost:3000'
