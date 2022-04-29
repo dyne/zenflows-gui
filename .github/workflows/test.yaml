@@ -29,7 +29,6 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           install: false
-          command: pnpm run cypress:headless
           start: pnpm run dev
           wait-on: 'http://localhost:3000'
           wait-on-timeout: 30
