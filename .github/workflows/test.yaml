@@ -1,10 +1,22 @@
-name: End-to-end tests
-on: [push, pull_request]
+name: E2E tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [16, 18]
+    name: E2E on Node v${{ matrix.node }}
     steps:
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up pnpm
@@ -20,3 +32,9 @@ jobs:
           command: pnpm run cypress:headless
           start: pnpm run dev
           wait-on: 'http://localhost:3000'
+          record: true
+          tag: node-${{ matrix.node }}
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CYPRESS_PROJECT_ID: ${{ secrets.PROJECT_ID }}
