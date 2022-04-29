@@ -1,0 +1,29 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    name: Bump release
+    steps:
+      - name: Setup Node
+        uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - run: git config user.name "$GITHUB_ACTOR"
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
+      - name: Install dependencies
+        run: pnpm install
+      - name: Release and Changelog
+        run: pnpm release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: git push "https://$GITHUB_ACTOR:${{ secrets.ACCESS_TOKEN }}@github.com/$GITHUB_REPOSITORY.git" --follow-tags origin HEAD
+
