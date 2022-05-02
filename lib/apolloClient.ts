@@ -2,11 +2,10 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-  uri: process.env.uri,
+  uri: process.env?.reflow_graphql_endpoint ,
 });
 
 const authLink = setContext((_, { headers }) => {
-  console.log(process.env.uri);
   return {
     headers: {
       ...headers,

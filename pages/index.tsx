@@ -6,8 +6,9 @@ import {ReactNode} from "react";
 
 
 export async function getStaticProps() {
-  const {data} = await apolloClient.query({
-    query: gql`
+   if (process.env?.reflow_graphql_endpoint ){
+     const {data} = await apolloClient.query({
+       query: gql`
         query {
           me {
             user {
@@ -40,12 +41,16 @@ export async function getStaticProps() {
           }
         }
       `,
-  });
-
-  return {
+     });
+      return {
+        props: {
+          userActivities: [...data.me.user.userActivities],
+        },
+  };
+   }
+   return {
     props: {
-      userActivities: [...data.me.user.userActivities],
-
+      userActivities: null,
     },
   };
 }
@@ -77,11 +82,14 @@ function renderUserActivities(userActivity: any) {
   } return <><b>nothing to show</b><br /><br /></>
 }
 
-const Home: NextPage = ({userActivities}: any) => {
 
-  return <ul>{userActivities.map((activity: any) => (
+const Home: NextPage = ({userActivities}: any) => {
+  if (userActivities) {
+     return <ul>{userActivities.map((activity: any) => (
     renderUserActivities(activity)
   ))}</ul>
+  }
+  return <h2>Probably you should log in in some way</h2>
 
 };
 
