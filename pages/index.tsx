@@ -1,12 +1,12 @@
 import type {NextPage} from 'next'
-import { gql } from "@apollo/client";
+import {gql} from "@apollo/client";
 import apolloClient from "../lib/apolloClient";
 import {ReactNode} from "react";
 
 
 
 export async function getStaticProps() {
-    const { data } = await apolloClient.query({
+  const {data} = await apolloClient.query({
     query: gql`
         query {
           me {
@@ -47,42 +47,43 @@ export async function getStaticProps() {
       userActivities: [...data.me.user.userActivities],
 
     },
- };
+  };
 }
 
-function renderUserActivities(userActivity:any) {
-    const obj = userActivity.object;
-    if (obj.__typename == "Process") {
-    return <li>
-            <ul>
-                <li>{obj.__typename}</li>
-                <li>title:{obj.name}</li>
-                <li>description:{obj?.note}</li>
-                <li>{obj?.finished}</li>
-            </ul><br/>
+function renderUserActivities(userActivity: any) {
+  const obj = userActivity.object;
+  if (obj.__typename == "Process") {
+    return <li key={obj.id} className="border-l-8 ml-2 ">
+      <ul>
+        <li>{obj.__typename}</li>
+        <li>title:{obj.name}</li>
+        <li>description:{obj?.note}</li>
+        <li>{obj?.finished}</li>
+      </ul><br />
 
-        </li>;
-    }
-    else if (obj.__typename == "EconomicEvent") {
-    return <li>
-            <ul>
-                <li>Activity:{obj.action?.id}</li>
-                <li>note:{obj.note}</li>
-                <li>from:{obj.provider?.displayUsername}</li>
-                <li>to:{obj.receiver?.displayUsername}</li>
-                <li>resource type::{obj.resourceConformsTo?.name}</li>
-                <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.symbol}</li>
-            </ul><br/>
+    </li>;
+  }
+  else if (obj.__typename == "EconomicEvent") {
 
-        </li>;
-    } return <><b>nothing to show</b><br/><br/></>
+    return <li key={obj.action?.id} className="border-l-8 ml-2 ">
+      <ul>
+        <li>Activity:{obj.action?.id}</li>
+        <li>note:{obj.note}</li>
+        <li>from:{obj.provider?.displayUsername}</li>
+        <li>to:{obj.receiver?.displayUsername}</li>
+        <li>resource type::{obj.resourceConformsTo?.name}</li>
+        <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.symbol}</li>
+      </ul><br />
+
+    </li>;
+  } return <><b>nothing to show</b><br /><br /></>
 }
 
-const Home: NextPage = ({userActivities}:any) => {
+const Home: NextPage = ({userActivities}: any) => {
 
-    return <ul>{userActivities.map((activity: any) => (
-        renderUserActivities(activity)
-    ))}</ul>
+  return <ul>{userActivities.map((activity: any) => (
+    renderUserActivities(activity)
+  ))}</ul>
 
 };
 
