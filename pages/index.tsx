@@ -60,11 +60,9 @@ function renderUserActivities(userActivity: any) {
         <li>description:{obj?.note}</li>
         <li>{obj?.finished}</li>
       </ul><br />
-
     </li>;
   }
   else if (obj.__typename == "EconomicEvent") {
-
     return <li key={obj.action?.id} className="border-l-8 ml-2 ">
       <ul>
         <li>Activity:{obj.action?.id}</li>
@@ -72,7 +70,7 @@ function renderUserActivities(userActivity: any) {
         <li>from:{obj.provider?.displayUsername}</li>
         <li>to:{obj.receiver?.displayUsername}</li>
         <li>resource type::{obj.resourceConformsTo?.name}</li>
-        <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.symbol}</li>
+        <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.label}</li>
       </ul><br />
 
     </li>;
