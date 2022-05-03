@@ -1,14 +1,9 @@
 import type {NextPage} from 'next'
-import {gql} from "@apollo/client";
-import apolloClient from "../lib/apolloClient";
+import { gql } from '@apollo/client'
 import {ReactNode} from "react";
+import {initializeApollo} from "../lib/apolloClient";
 
-
-
-export async function getStaticProps() {
-   if (process.env?.reflow_graphql_endpoint ){
-     const {data} = await apolloClient.query({
-       query: gql`
+const fetchUserData = gql`
         query {
           me {
             user {
@@ -18,9 +13,9 @@ export async function getStaticProps() {
                    ... on Process {
                         __typename
                         id
-                        name # title
-                        note # description
-                        finished # the green Open text; false = Open
+                        name 
+                        note
+                        finished
                       }
                   ... on EconomicEvent {
                     note
@@ -40,9 +35,14 @@ export async function getStaticProps() {
             }
           }
         }
-      `,
-     });
-      return {
+      `
+
+const client = initializeApollo()
+
+export async function getStaticProps() {
+   if (process.env?.reflow_graphql_endpoint ){
+     const {data} = await client.query({query: fetchUserData})
+     return {
         props: {
           userActivities: [...data.me.user.userActivities],
         },
