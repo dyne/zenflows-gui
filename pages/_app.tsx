@@ -1,13 +1,12 @@
 import '../styles/globals.css'
-import {useApollo} from '../lib/apolloClient'
 import type { AppProps } from 'next/app'
-import {ApolloProvider} from "@apollo/client";
+import { AuthProvider } from '../lib/auth'
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={useApollo(pageProps)}>
+    <AuthProvider>
       <Component {...pageProps} />
-    </ApolloProvider>
+    </AuthProvider>
   )
 }
 

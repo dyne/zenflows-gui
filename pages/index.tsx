@@ -1,9 +1,10 @@
 import type {NextPage} from 'next'
-import { gql } from '@apollo/client'
-import {ReactNode} from "react";
-import {initializeApollo} from "../lib/apolloClient";
+import {gql, useQuery} from '@apollo/client'
+import {ReactNode, useState} from "react";
+import {useAuth} from "../lib/auth";
+import renderUserActivities from "../components/renderUserActivities"
 
-const fetchUserData = gql`
+const FETCH_USER_DATA = gql`
         query {
           me {
             user {
@@ -34,63 +35,69 @@ const fetchUserData = gql`
               }
             }
           }
-        }
-      `
+        }`
 
-const client = initializeApollo()
+const SignIn = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-export async function getStaticProps() {
-   if (process.env?.reflow_graphql_endpoint ){
-     const {data} = await client.query({query: fetchUserData})
-     return {
-        props: {
-          userActivities: [...data.me.user.userActivities],
-        },
-  };
-   }
-   return {
-    props: {
-      userActivities: null,
-    },
-  };
+  // @ts-ignore
+  const { signIn } = useAuth()
+
+  function onSubmit(e:any) {
+    e.preventDefault()
+    signIn({ username, password })
+  }
+
+  return (
+    <div>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder="username"
+          onChange={(e) => setUsername(e.target.value)}
+        ></input>
+        <input
+          type="password"
+          placeholder="password"
+          onChange={(e) => setPassword(e.target.value)}
+        ></input>
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+  )
 }
 
-function renderUserActivities(userActivity: any) {
-  const obj = userActivity.object;
-  if (obj.__typename == "Process") {
-    return <li key={obj.id} className="border-l-8 ml-2 ">
-      <ul>
-        <li>{obj.__typename}</li>
-        <li>title:{obj.name}</li>
-        <li>description:{obj?.note}</li>
-        <li>{obj?.finished}</li>
-      </ul><br />
-    </li>;
-  }
-  else if (obj.__typename == "EconomicEvent") {
-    return <li key={obj.action?.id} className="border-l-8 ml-2 ">
-      <ul>
-        <li>Activity:{obj.action?.id}</li>
-        <li>note:{obj.note}</li>
-        <li>from:{obj.provider?.displayUsername}</li>
-        <li>to:{obj.receiver?.displayUsername}</li>
-        <li>resource type::{obj.resourceConformsTo?.name}</li>
-        <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.label}</li>
-      </ul><br />
+const User: NextPage = () => {
+  const [res, setRes] = useState()
+  const { signOut } = useAuth()
+  const {createApolloClient} = useAuth()
+  const client = createApolloClient()
+  let userActivities;
+  const result = async () => await client.query({query: FETCH_USER_DATA}).then((res:any) => {
+      userActivities = [...res.data.me.user.userActivities]
+      // @ts-ignore
+      setRes(userActivities)
+  });
+  result()
+  if (res) {
+         return <><button onClick={() => signOut()}>Sign Out</button>
+           <ul>{res.map((activity: any) => (
+        renderUserActivities(activity)
+      ))}</ul></>
+      }
+  return <h2>aspetta un attimo</h2>
+};
 
-    </li>;
-  } return <><b>nothing to show</b><br /><br /></>
-}
-
-
-const Home: NextPage = ({userActivities}: any) => {
-  if (userActivities) {
-     return <ul>{userActivities.map((activity: any) => (
-    renderUserActivities(activity)
-  ))}</ul>
-  }
-  return <h2>Probably you should log in in some way</h2>
-
+const Home: NextPage = () => {
+  // @ts-ignore
+  const { isSignedIn } = useAuth()
+  return (
+      <main>
+        {!isSignedIn() && <SignIn />}
+        {isSignedIn() && <User/>}
+      </main>
+  )
 };
 
 export default Home
