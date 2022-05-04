@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function renderUserActivities(userActivity: any) {
+export default function renderActivities(userActivity: any) {
   const obj = userActivity.object;
   if (obj.__typename == "Process") {
     return <li key={obj.id} className="border-l-8 ml-2 ">

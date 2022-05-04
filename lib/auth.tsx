@@ -23,7 +23,7 @@ export function AuthProvider({ children}:any) {
   )
 }
 
-export const useAuth = () => {
+export const useAuth:any = () => {
   return useContext(authContext)
 }
 
@@ -58,6 +58,7 @@ function useProvideAuth() {
       cache: new InMemoryCache({
     addTypename: false
   }),
+
     })
   }
 
