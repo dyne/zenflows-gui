@@ -1,19 +1,15 @@
 import type {NextPage} from 'next'
-import {ReactNode} from "react";
 import {useAuth} from "../lib/auth";
-import SignIn from "../components/SignIn"
+import SignIn from "./sign_in"
 import User from "../components/UserActivities"
-
-
 
 const Home: NextPage = () => {
   const { isSignedIn } = useAuth()
-  return (
-      <main>
-        {!isSignedIn() && <SignIn />}
-        {isSignedIn() && <User/>}
-      </main>
-  )
-};
+  return (<>
+            {!isSignedIn() && <SignIn />}
+            {isSignedIn() && <User/>}
+        </>)};
 
 export default Home
+
+
