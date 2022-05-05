@@ -1,5 +1,6 @@
 import React from 'react';
 import {NextPage} from "next";
+import Link from "next/link";
 
 function Topbar() {
     return (
@@ -14,7 +15,7 @@ function Topbar() {
                 </label>
             </div>
             <div className="navbar-center">
-                <a className="btn btn-ghost normal-case text-xl">ReflowApp</a>
+                 <Link href="/"><a className="btn btn-ghost normal-case text-xl">ReflowApp</a></Link>
             </div>
             <div className="navbar-end">
                 <button className="btn btn-ghost btn-circle">
