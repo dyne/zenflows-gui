@@ -55,6 +55,7 @@ function useProvideAuth() {
 
     return new ApolloClient({
       link,
+      ssrMode: typeof window === 'undefined',
       cache: new InMemoryCache({
     addTypename: false
   }),
