@@ -10,29 +10,29 @@ import {useAuth} from "../../lib/auth";
 const Process: NextPage = () => {
 
     const [unitId, setUnitId] = useState('')
-    const [quantity, setQuantity] = useState('')
+    const [quantity, setQuantity] = useState(0)
     const [resourceType, setResourceType] = useState('')
     const [hasPointInTime, setHasPointInTime] = useState('')
     const [resourceName, setResourceName] = useState('')
     const [resourceNote, setResourceNote] = useState('')
 
-    const {createApolloClient} = useAuth()
+    const {createApolloClient, authId} = useAuth()
     const produce = async () => {
     const client = createApolloClient()
     const ProduceMutation = gql`
             mutation{
               createEconomicEvent(event:{
                 action:"produce",
-                resourceQuantity:{hasNumericalValue:10, hasUnit: ${unitId}},
-                triggeredBy:${userId},
-                resourceConformsTo: ${resourceType},
-                hasPointInTime: ${hasPointInTime},
-                outputOf: ${processId},
-                provider: ${userId},
-                receiver: ${userId},
+                resourceQuantity:{hasNumericalValue:${quantity}, hasUnit:"${unitId}"},
+                triggeredBy:"${authId}",
+                resourceConformsTo: "${resourceType}",
+                hasPointInTime: "${new Date(hasPointInTime).toISOString()}",
+                outputOf: "${p.data?.process.id}",
+                provider: "${authId}",
+                receiver: "${authId}",
               }, newInventoriedResource: 
-                { name: ${resourceName},
-                  note: ${resourceNote},
+                { name: "${resourceName}",
+                  note: "${resourceNote}",
                 }) {
                 economicEvent{
                   id
@@ -52,11 +52,16 @@ const Process: NextPage = () => {
   }
 
   function onSubmit(e:any) {
+    produce()
     e.preventDefault()
   }
    const handleUnit = (e:any) => {
     e.preventDefault()
-    setUnitId(e.target.key)
+    setUnitId(e.target.value)
+  }
+   const handleResource = (e:any) => {
+    e.preventDefault()
+    setResourceType(e.target.value)
   }
     const router = useRouter()
     const { id } = router.query
@@ -77,19 +82,19 @@ const Process: NextPage = () => {
       <li>
           <Popup name="produce" action1="Produce">
               <form onSubmit={onSubmit}>
-                  <SelectResourceType/>
+                  <SelectResourceType handleSelect={handleResource}/>
                   <input type="number"
                          placeholder="Type here"
                          className="input input-bordered"
-                         onChange={(e) => setQuantity(e.target.value)}
+                         onChange={(e) => setQuantity(parseInt(e.target.value))}
                   />
                   <SelectUnit handleSelect={handleUnit}/>
-                  <textarea onChange={(e)=>setResourceName} className="textarea textarea-bordered w-full" placeholder="Resource Descrption"/>
-                  <textarea onChange={(e)=>setResourceNote} className="textarea textarea-bordered w-full" placeholder="Note"/>
-                  <input onChange={(e)=>setHasPointInTime} type="date" placeholder="Date 1" className="input input-bordered"/>
+                  <textarea onChange={(e)=>setResourceName(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Resource Descrption"/>
+                  <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/>
+                  <input onChange={(e)=>setHasPointInTime(e.target.value)} type="date" placeholder="Date 1" className="input input-bordered"/>
                   <input type="date" placeholder="Date 2" className="input input-bordered"/>
                   <input type="date" placeholder="Date 3" className="input input-bordered"/>
-                  <label htmlFor="produce" className="btn btn-primary float-right">Produce</label>
+                  <button type="submit" className="btn btn-primary float-right">Produce</button>
               </form>
           </Popup>
       </li>

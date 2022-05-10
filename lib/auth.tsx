@@ -29,6 +29,7 @@ export const useAuth:any = () => {
 
 function useProvideAuth() {
   const [authToken, setAuthToken] = useState(null)
+  const [authId, setAuthId] = useState(null)
 
   const isSignedIn = () => {
     if (authToken) {
@@ -69,6 +70,7 @@ function useProvideAuth() {
             mutation {
               login(emailOrUsername: "${username}", password: "${password}") {
                 token
+                currentUser {id}
               }
             }
           `
@@ -82,6 +84,7 @@ function useProvideAuth() {
 
     if (result?.data?.login?.token) {
       setAuthToken(result.data.login.token)
+      setAuthId(result.data.login.currentUser.id)
     }
   }
 
@@ -95,5 +98,6 @@ function useProvideAuth() {
     signIn,
     signOut,
     createApolloClient,
+    authId,
   }
 }
