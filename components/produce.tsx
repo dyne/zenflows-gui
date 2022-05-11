@@ -1,8 +1,7 @@
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useMutation} from "@apollo/client";
 import React, {useState} from "react";
-import SelectResourceType from "../components/select_resource_type";
-import SelectUnit from "../components/select_unit";
 import {useAuth} from "../lib/auth";
+import ActionForm from "./actions_form";
 
 const Produce = (props:{processId:string}) => {
 
@@ -96,21 +95,14 @@ const Produce = (props:{processId:string}) => {
   }
 
   return (
-      <form onSubmit={onSubmit}>
-          <SelectResourceType handleSelect={handleResource}/>
-          <input type="number"
-                 placeholder="Type here"
-                 className="input input-bordered"
-                 onChange={(e) => setQuantity(parseInt(e.target.value))}
-          />
-          <SelectUnit handleSelect={handleUnit}/>
-          <textarea onChange={(e)=>setResourceName(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Resource Descrption"/>
-          <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/>
-          <input onChange={(e)=>setHasPointInTime(e.target.value)} type="date" placeholder="Date 1" className="input input-bordered"/>
-          <input type="date" placeholder="Date 2" className="input input-bordered"/>
-          <input type="date" placeholder="Date 3" className="input input-bordered"/>
-          <button type="submit" className="btn btn-primary float-right">Produce</button>
-      </form>
+      <ActionForm handleUnitId={handleUnit}
+                  action={{onSubmit: onSubmit, name:"produce"}}
+                  handleQuantity={(e:number) => setQuantity(e)}
+                  handleResourceName={(e:string)=>setResourceName(e)}
+                  handleResourceType={handleResource}
+                  handleResourceNote={(e:string)=>setResourceNote(e)}
+                  handleHasPointInTime={(e:string)=>setHasPointInTime(e)}
+      />
   )};
 
 export default Produce
