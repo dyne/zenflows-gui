@@ -1,23 +1,15 @@
 import type {NextPage} from 'next'
-import {gql} from "@apollo/client";
+import {gql, useMutation} from "@apollo/client";
 import {useAuth} from "../lib/auth";
 import React, {useState} from "react";
-
-
-
-
-
 
 const NewProcess: NextPage = () => {
     const [processName, setProcessName] = useState('')
     const [processNote, setProcessNote] = useState('')
 
-    const {createApolloClient} = useAuth()
-    const createNewProcess = async ({ name, note }:{name:string,note:string}) => {
-    const client = createApolloClient()
     const NewProcessMutation = gql`
-            mutation {
-              createProcess(process:{name:"${name}", note:"${note}"} ){
+            mutation ($name: String, $note: String){
+              createProcess(process:{name:$name, note:$note} ){
                 process{
                   id 
                   name 
@@ -27,17 +19,11 @@ const NewProcess: NextPage = () => {
             }
           `
 
-    const result = await client.mutate({
-      mutation: NewProcessMutation,
-      variables: { name, note },
-    })
-
-    console.log(result)
-  }
+    const [newProcess, { data, loading, error }] = useMutation(NewProcessMutation)
 
   function onSubmit(e:any) {
     e.preventDefault()
-    createNewProcess({ name: processName, note: processNote })
+    newProcess({variables:{ name: processName, note: processNote }})
   }
   return (<>
             <h1>New Process</h1>
