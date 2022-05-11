@@ -1,5 +1,5 @@
 import type {NextPage} from 'next'
-import {gql, useQuery} from "@apollo/client";
+import {gql, useMutation, useQuery} from "@apollo/client";
 import React, {useState} from "react";
 import { useRouter } from 'next/router'
 import Popup from "../../components/popup";
@@ -16,43 +16,77 @@ const Process: NextPage = () => {
     const [resourceName, setResourceName] = useState('')
     const [resourceNote, setResourceNote] = useState('')
 
-    const {createApolloClient, authId} = useAuth()
-    const produce = async () => {
-    const client = createApolloClient()
-    const ProduceMutation = gql`
-            mutation{
-              createEconomicEvent(event:{
-                action:"produce",
-                resourceQuantity:{hasNumericalValue:${quantity}, hasUnit:"${unitId}"},
-                triggeredBy:"${authId}",
-                resourceConformsTo: "${resourceType}",
-                hasPointInTime: "${new Date(hasPointInTime).toISOString()}",
-                outputOf: "${p.data?.process.id}",
-                provider: "${authId}",
-                receiver: "${authId}",
-              }, newInventoriedResource: 
-                { name: "${resourceName}",
-                  note: "${resourceNote}",
-                }) {
-                economicEvent{
+    const {authId} = useAuth()
+    const PRODUCE_MUTATION = gql`
+            mutation (
+              $outputOf: ID!
+              $provider: ID!
+              $receiver: ID!
+              $resourceConformsTo: ID!
+              $resourceQuantity: IMeasure!
+              $newInventoriedResource: EconomicResourceCreateParams!
+              $hasPointInTime: DateTime
+              $hasBeginning: DateTime
+              $hasEnd: DateTime
+            ) {
+              createEconomicEvent(
+                event: {
+                  action: "produce"
+                  outputOf: $outputOf
+                  provider: $provider
+                  receiver: $receiver
+                  resourceConformsTo: $resourceConformsTo
+                  resourceQuantity: $resourceQuantity
+                  hasPointInTime: $hasPointInTime
+                  hasBeginning: $hasBeginning
+                  hasEnd: $hasEnd
+                }
+                newInventoriedResource: $newInventoriedResource
+              ) {
+                economicEvent {
                   id
-                  action {
-                    id
+                  action {id}
+                  outputOf {id}
+                  provider {id}
+                  receiver {id}
+                  resourceConformsTo {id}
+                  resourceQuantity {
+                    hasNumericalValue
+                    hasUnit {id}
                   }
+                  resourceInventoriedAs {
+                    id
+                    name
+                    note
+                    primaryAccountable {id}
+                    accountingQuantity {
+                      hasNumericalValue
+                      hasUnit {id}
+                    }
+                    onhandQuantity {
+                      hasNumericalValue
+                      hasUnit {id}
+                    }
+                    conformsTo {id}
+                  }
+                  hasPointInTime
+                  hasEnd
+                  hasBeginning
                 }
               }
             }
           `
 
-    const result = await client.mutate({
-      mutation: ProduceMutation,
-    })
-
-    console.log(result)
-  }
+    const [result, { data, loading, error }] = useMutation(PRODUCE_MUTATION)
 
   function onSubmit(e:any) {
-    produce()
+    result({variables:{provider: authId,
+                              receiver: authId,
+                              outputOf: process.data?.process.id,
+                              newInventoriedResource: { name:resourceName, note: resourceNote},
+                              resourceConformsTo: resourceType,
+                              resourceQuantity: {hasNumericalValue:quantity,hasUnit:unitId },
+                              hasPointInTime: new Date(hasPointInTime).toISOString()}})
     e.preventDefault()
   }
    const handleUnit = (e:any) => {
@@ -73,12 +107,12 @@ const Process: NextPage = () => {
               }
             }
           `
-    const p = useQuery(Process)
+    const process = useQuery(Process)
 
   return (
   <ul>
-      <li>{p.data?.process.name}</li>
-      <li>{p.data?.process.id}</li>
+      <li>{process.data?.process.name}</li>
+      <li>{process.data?.process.id}</li>
       <li>
           <Popup name="produce" action1="Produce">
               <form onSubmit={onSubmit}>
