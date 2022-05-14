@@ -52,7 +52,6 @@ function useProvideAuth() {
       uri: "https://reflow-demo.dyne.org/api/graphql",
       headers: getAuthHeaders(),
     })
-    console.log(link)
 
     return new ApolloClient({
       link,
@@ -79,8 +78,6 @@ function useProvideAuth() {
       mutation: LoginMutation,
       variables: { username, password },
     })
-
-    console.log(result)
 
     if (result?.data?.login?.token) {
       setAuthToken(result.data.login.token)

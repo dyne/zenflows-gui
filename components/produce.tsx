@@ -86,11 +86,11 @@ const Produce = (props:{processId:string}) => {
                               hasPointInTime: new Date(hasPointInTime).toISOString()}})
     e.preventDefault()
   }
-   const handleUnit = (e:any) => {
+   const handleUnit = (e:React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     setUnitId(e.target.value)
   }
-   const handleResource = (e:any) => {
+   const handleResource = (e:React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault()
     setResourceType(e.target.value)
   }
