@@ -1,9 +1,10 @@
 import {gql, useMutation} from "@apollo/client";
 import React, {useState} from "react";
+import SelectResourceType from "../components/select_resource_type";
+import SelectUnit from "../components/select_unit";
 import {useAuth} from "../lib/auth";
-import ActionForm from "./ActionForm";
 
-const Produce = (props:{processId:string}) => {
+const Transfer = (props:{processId:string}) => {
 
     const [unitId, setUnitId] = useState('')
     const [quantity, setQuantity] = useState(0)
@@ -13,7 +14,7 @@ const Produce = (props:{processId:string}) => {
     const [resourceNote, setResourceNote] = useState('')
 
     const {authId} = useAuth()
-    const PRODUCE_MUTATION = gql`
+    const RAISE_MUTATION = gql`
             mutation (
               $outputOf: ID!
               $provider: ID!
@@ -27,7 +28,7 @@ const Produce = (props:{processId:string}) => {
             ) {
               createEconomicEvent(
                 event: {
-                  action: "produce"
+                  action: "raise"
                   outputOf: $outputOf
                   provider: $provider
                   receiver: $receiver
@@ -73,7 +74,7 @@ const Produce = (props:{processId:string}) => {
             }
           `
 
-    const [result, { data, loading, error }] = useMutation(PRODUCE_MUTATION)
+    const [result, { data, loading, error }] = useMutation(RAISE_MUTATION)
 
   function onSubmit(e:any) {
     result({variables:{provider: authId,
@@ -95,15 +96,20 @@ const Produce = (props:{processId:string}) => {
   }
 
   return (
-      <ActionForm handleUnit={handleUnit}
-                  onSubmit={onSubmit}
-                  setQuantity={(e:number) => setQuantity(e)}
-                  setResourceName={(e:string)=>setResourceName(e)}
-                  handleResource={handleResource}
-                  setResourceNote={(e:string)=>setResourceNote(e)}
-                  setHasPointInTime={(e:string)=>setHasPointInTime(e)}
-                  type="produce"
-      />
+      <form onSubmit={onSubmit}>
+          <input type="number"
+                 placeholder="Type here"
+                 className="input input-bordered"
+                 onChange={(e) => setQuantity(parseInt(e.target.value))}
+          />
+          <SelectUnit handleSelect={handleUnit}/>
+          <SelectResourceType handleSelect={handleResource}/>
+          <select className="select select-bordered w-full"/>
+          <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/>
+          <input onChange={(e)=>setHasPointInTime(e.target.value)} type="date" placeholder="Date 1" className="input input-bordered"/>
+          <input type="date" placeholder="Date 2" className="input input-bordered"/>
+          <button type="submit" className="btn btn-primary float-right">Transfer</button>
+      </form>
   )};
 
-export default Produce
+export default Transfer
