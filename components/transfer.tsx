@@ -1,20 +1,10 @@
 import {gql, useMutation} from "@apollo/client";
-import React, {useState} from "react";
-import SelectResourceType from "../components/select_resource_type";
-import SelectUnit from "../components/select_unit";
-import {useAuth} from "../lib/auth";
+import React from "react";
+import ActionForm from "./ActionForm";
 
 const Transfer = (props:{processId:string}) => {
 
-    const [unitId, setUnitId] = useState('')
-    const [quantity, setQuantity] = useState(0)
-    const [resourceType, setResourceType] = useState('')
-    const [hasPointInTime, setHasPointInTime] = useState('')
-    const [resourceName, setResourceName] = useState('')
-    const [resourceNote, setResourceNote] = useState('')
-
-    const {authId} = useAuth()
-    const RAISE_MUTATION = gql`
+    const TRANSFER_MUTATION = gql`
             mutation (
               $outputOf: ID!
               $provider: ID!
@@ -74,42 +64,8 @@ const Transfer = (props:{processId:string}) => {
             }
           `
 
-    const [result, { data, loading, error }] = useMutation(RAISE_MUTATION)
-
-  function onSubmit(e:any) {
-    result({variables:{provider: authId,
-                              receiver: authId,
-                              outputOf: props.processId,
-                              newInventoriedResource: { name:resourceName, note: resourceNote},
-                              resourceConformsTo: resourceType,
-                              resourceQuantity: {hasNumericalValue:quantity,hasUnit:unitId },
-                              hasPointInTime: new Date(hasPointInTime).toISOString()}})
-    e.preventDefault()
-  }
-   const handleUnit = (e:React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    setUnitId(e.target.value)
-  }
-   const handleResource = (e:React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-    setResourceType(e.target.value)
-  }
-
   return (
-      <form onSubmit={onSubmit}>
-          <input type="number"
-                 placeholder="Type here"
-                 className="input input-bordered"
-                 onChange={(e) => setQuantity(parseInt(e.target.value))}
-          />
-          <SelectUnit handleSelect={handleUnit}/>
-          <SelectResourceType handleSelect={handleResource}/>
-          <select className="select select-bordered w-full"/>
-          <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/>
-          <input onChange={(e)=>setHasPointInTime(e.target.value)} type="date" placeholder="Date 1" className="input input-bordered"/>
-          <input type="date" placeholder="Date 2" className="input input-bordered"/>
-          <button type="submit" className="btn btn-primary float-right">Transfer</button>
-      </form>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type="transfer"/>
   )};
 
 export default Transfer
