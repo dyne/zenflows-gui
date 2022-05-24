@@ -2,7 +2,7 @@ import {gql} from "@apollo/client";
 import React from "react";
 import ActionForm from "./ActionForm";
 
-const Transfer = (props:{processId:string}) => {
+const Consume = (props:{processId:string}) => {
 
     const TRANSFER_MUTATION = gql`
             mutation (
@@ -65,7 +65,7 @@ const Transfer = (props:{processId:string}) => {
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type="transfer"/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type="consume"/>
   )};
 
-export default Transfer
+export default Consume

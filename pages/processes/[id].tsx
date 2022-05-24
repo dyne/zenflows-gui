@@ -6,6 +6,9 @@ import Popup from "../../components/popup";
 import Produce from "../../components/produce";
 import Raise from "../../components/raise";
 import Transfer from "../../components/transfer";
+import Use from "../../components/use";
+import Consume from "../../components/consume";
+import Lower from "../../components/lower";
 
 const Process: NextPage = () => {
     const router = useRouter()
@@ -42,17 +45,17 @@ const Process: NextPage = () => {
       </li>
       <li className="float-left mr-2">
           <Popup name="use" action1="Use">
-                 <Produce processId={process.data?.process.id}/>
+                 <Use processId={process.data?.process.id}/>
           </Popup>
       </li>
       <li className="float-left mr-2">
           <Popup name="consume" action1="Consume">
-                 <Produce processId={process.data?.process.id}/>
+                 <Consume processId={process.data?.process.id}/>
           </Popup>
       </li>
       <li className="float-left mr-2">
           <Popup name="lower" action1="Lower">
-                 <Produce processId={process.data?.process.id}/>
+                 <Lower processId={process.data?.process.id}/>
           </Popup>
       </li>
   </ul>

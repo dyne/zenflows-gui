@@ -77,6 +77,19 @@ return (<>
           <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/>
           <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
+
+        {(props.type==="use")&&<><SelectResourceType handleSelect={handleResource}/>
+          <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/></>}
+
+        {(props.type==="consume" || props.type==="lower")&&<><input type="number"
+                 placeholder="Type here"
+                 className="input input-bordered"
+                 onChange={(e) => setQuantity(parseInt(e.target.value))}
+          />
+          <SelectUnit handleSelect={handleUnit}/>
+            <SelectResourceType handleSelect={handleResource}/>
+          <textarea onChange={(e)=>setResourceNote(e.target.value)} className="textarea textarea-bordered w-full" placeholder="Note"/></>}
+
           <input onChange={(e)=>setHasPointInTime(e.target.value)} type="date" placeholder="Date 1" className="input input-bordered"/>
           <input type="date" placeholder="Date 2" className="input input-bordered"/>
           <button type="submit" className="btn btn-primary float-right">{props.type}</button>
