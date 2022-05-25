@@ -66,10 +66,7 @@ const Raise = (props:{processId:string}) => {
 
 
   return (
-      <ActionForm MUTATION={RAISE_MUTATION}
-                  processId={props.processId}
-                  type="raise"
-      />
+      <ActionForm MUTATION={RAISE_MUTATION} processId={props.processId} type="raise"/>
   )};
 
 export default Raise
