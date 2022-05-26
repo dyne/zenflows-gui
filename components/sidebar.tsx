@@ -8,8 +8,8 @@ function Sidebar() {
                 <li><Link href="/new_process"><a className="btn btn-primary">New Process</a></Link></li>
                 <li className="divider"/>
                 <li><Link href="/processes"><a>Processes</a></Link></li>
+                <li><Link href="/my_inventory"><a>Resources</a></Link></li>
                 <li>Material</li>
-                <li>Resources</li>
             </ul>
         </h1>
     )}
