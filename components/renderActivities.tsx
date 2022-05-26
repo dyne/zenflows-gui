@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from "next/link";
 
 const ProcessAttributes = (obj:any) => <>
   <li>{obj.__typename}</li>
@@ -13,6 +14,7 @@ const EconomicEventAttributes = (obj:any) => <>
   <li>from:{obj.provider?.displayUsername}</li>
   <li>to:{obj.receiver?.displayUsername}</li>
   <li>resource type::{obj.resourceConformsTo?.name}</li>
+  <li><Link href={`/resource/${obj.resourceInventoriedAs?.id || ''}`}><a>resource link</a></Link></li>
   <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.label}</li>
 </>
 

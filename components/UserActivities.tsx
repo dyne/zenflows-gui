@@ -24,7 +24,7 @@ const FETCH_USER_DATA = gql`
                     provider {displayUsername}
                     receiver {displayUsername}
                     resourceConformsTo {name note}
-                    resourceInventoriedAs {name note}
+                    resourceInventoriedAs {name id note}
                     toResourceInventoriedAs {name note}
                     action { id }
                     resourceQuantity {
