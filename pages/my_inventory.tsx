@@ -37,7 +37,7 @@ const MyInventory: NextPage = () => {
     const {authId} = useAuth()
     const {createApolloClient} = useAuth()
     const client = createApolloClient()
-    const result = async () => await client.query({query: FETCH_INVENTORY, variables: {id: authId},}).then((res: any) => {
+    const result = async () => await client.query({query: FETCH_INVENTORY, variables: {id: authId}}).then((res: any) => {
         setInventory(res.data.agent.inventoriedEconomicResources)
         setFlag(true)
     });

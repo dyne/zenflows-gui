@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {useAuth} from "../lib/auth";
 import {DocumentNode, TypedDocumentNode, useMutation} from "@apollo/client";
 import SelectUser from "./SelectUser";
+import SelectInventoriedResource from "./SelectInventoriedResource";
 
 type ActionVariables = {
     inputOf?:string,
@@ -31,6 +32,7 @@ const ActionForm = (props: ActionFormProps) => {
     const [hasPointInTime, setHasPointInTime] = useState('')
     const [resourceName, setResourceName] = useState('')
     const [resourceNote, setResourceNote] = useState('')
+    const [inventoredResource, setinventoredResource] = useState({})
 
     const {authId} = useAuth()
 
@@ -109,7 +111,7 @@ const ActionForm = (props: ActionFormProps) => {
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
 
-                {(props.type === "use") && <><SelectResourceType handleSelect={handleResource}/>
+                {(props.type === "use") && <><SelectInventoriedResource handleSelect={(e:any) => setinventoredResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
@@ -119,7 +121,7 @@ const ActionForm = (props: ActionFormProps) => {
                                                                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
                     <SelectUnit handleSelect={handleUnit}/>
-                    <SelectResourceType handleSelect={handleResource}/>
+                    <SelectInventoriedResource handleSelect={(e:any) => setinventoredResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
