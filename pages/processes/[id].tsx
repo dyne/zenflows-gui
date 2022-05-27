@@ -9,6 +9,7 @@ import Transfer from "../../components/transfer";
 import Use from "../../components/use";
 import Consume from "../../components/consume";
 import Lower from "../../components/lower";
+import EconomicEventCell from "../../components/EconomicEventCell";
 
 const Process: NextPage = () => {
     const router = useRouter()
@@ -18,6 +19,8 @@ const Process: NextPage = () => {
               process(id:"${id}"){
                 id
                 name
+                inputs{id}
+                outputs{id}
               }
             }
           `
@@ -58,6 +61,9 @@ const Process: NextPage = () => {
                  <Lower processId={process.data?.process.id}/>
           </Popup>
       </li>
+      <div className="divider"/>
+      <li>{process.data?.process.inputs.map((i:any)=><EconomicEventCell id={i.id} key={i.id}/>)}</li>
+      <li>{process.data?.process.outputs.map((i:any)=><EconomicEventCell id={i.id} key={i.id}/>)}</li>
   </ul>
   )};
 

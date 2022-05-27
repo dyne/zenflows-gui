@@ -9,7 +9,6 @@ function Sidebar() {
                 <li className="divider"/>
                 <li><Link href="/processes"><a>Processes</a></Link></li>
                 <li><Link href="/my_inventory"><a>Resources</a></Link></li>
-                <li>Material</li>
             </ul>
         </h1>
     )}
