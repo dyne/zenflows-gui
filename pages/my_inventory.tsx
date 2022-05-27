@@ -2,6 +2,8 @@ import {NextPage} from "next";
 import React, {useState} from "react";
 import {useAuth} from "../lib/auth";
 import {gql} from "@apollo/client";
+import base45 from 'base45';
+
 
 const FETCH_INVENTORY = gql(`query($id: ID!) {
                                       agent(id: $id) {
@@ -32,6 +34,8 @@ const FETCH_INVENTORY = gql(`query($id: ID!) {
 
 
 const MyInventory: NextPage = () => {
+
+
     const [inventory, setInventory] = useState<any[]>()
     const [flag, setFlag] = useState(false)
     const {authId} = useAuth()

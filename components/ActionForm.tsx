@@ -22,6 +22,7 @@ type ActionFormProps = {
     MUTATION: DocumentNode | TypedDocumentNode,
     processId: string,
     type: "produce" | "raise" | "transfer" | "use" | "consume" | "lower",
+    inventoriedResource?: {name:string, id:string},
 }
 
 
@@ -32,7 +33,7 @@ const ActionForm = (props: ActionFormProps) => {
     const [hasPointInTime, setHasPointInTime] = useState('')
     const [resourceName, setResourceName] = useState('')
     const [resourceNote, setResourceNote] = useState('')
-    const [inventoredResource, setinventoredResource] = useState({})
+    const [inventoriedResource, setInventoriedResource] = useState(props.inventoriedResource)
 
     const {authId} = useAuth()
 
@@ -50,19 +51,32 @@ const ActionForm = (props: ActionFormProps) => {
                     resourceQuantity: {hasNumericalValue: quantity, hasUnit: unitId},
                     hasPointInTime: new Date(hasPointInTime).toISOString()
                 }
+            case "use" :
             case "consume":
             case "lower":
                 return {
                       inputOf: props.processId,
                       provider: authId,
                       receiver: authId,
-                      resourceInventoriedAs: resourceType,
+                      resourceInventoriedAs: inventoriedResource!.id,
                       resourceQuantity: {
                         hasNumericalValue: quantity,
                         hasUnit:  unitId
                       },
                       hasPointInTime: new Date(hasPointInTime).toISOString()
                     }
+            case "transfer":
+                return {
+                      inputOf: props.processId,
+                      provider: authId,
+                      receiver: authId,
+                      resourceInventoriedAs: inventoriedResource!.id,
+                      resourceQuantity: {
+                        hasNumericalValue: quantity,
+                        hasUnit:  unitId
+                      },
+                      hasPointInTime: new Date(hasPointInTime).toISOString()
+                }
         }
     }
 
@@ -111,7 +125,7 @@ const ActionForm = (props: ActionFormProps) => {
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
 
-                {(props.type === "use") && <><SelectInventoriedResource handleSelect={(e:any) => setinventoredResource(e)}/>
+                {(props.type === "use") && <><SelectInventoriedResource inventoriedResource={props.inventoriedResource} handleSelect={(e:any) => setInventoriedResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
@@ -121,7 +135,7 @@ const ActionForm = (props: ActionFormProps) => {
                                                                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
                     <SelectUnit handleSelect={handleUnit}/>
-                    <SelectInventoriedResource handleSelect={(e:any) => setinventoredResource(e)}/>
+                    <SelectInventoriedResource handleSelect={(e:any) => setInventoriedResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 

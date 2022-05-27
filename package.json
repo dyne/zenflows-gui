@@ -19,6 +19,8 @@
     "@apollo/link-error": "2.0.0-beta.3",
     "@apollo/react-common": "^3.1.4",
     "@apollo/react-hooks": "^4.0.0",
+    "@types/base45": "^2.0.0",
+    "base45": "^2.0.1",
     "deepmerge": "^4.2.2",
     "graphql": "^16.4.0",
     "graphql-upload": "^13.0.0",
@@ -26,7 +28,8 @@
     "lodash": "^4.17.21",
     "next": "12.1.5",
     "react": "18.1.0",
-    "react-dom": "18.1.0"
+    "react-dom": "18.1.0",
+    "react-qr-code": "^2.0.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",
