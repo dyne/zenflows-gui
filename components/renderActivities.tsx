@@ -2,17 +2,10 @@ import React from 'react';
 import Link from "next/link";
 import Card from "./Card";
 import ProcessCard from "./ProcessCard";
+import EconomicEventCard from "./EconomicEventCard";
 
 
-const EconomicEventAttributes = (obj:any) => <>
-  <li>Activity:{obj.action?.id}</li>
-  <li>note:{obj.note}</li>
-  <li>from:{obj.provider?.displayUsername}</li>
-  <li>to:{obj.receiver?.displayUsername}</li>
-  <li>resource type::{obj.resourceConformsTo?.name}</li>
-  <li><Link href={`/resource/${obj.resourceInventoriedAs?.id || ''}`}><a>resource link</a></Link></li>
-  <li>quantity:{obj.resourceQuantity?.hasNumericalValue} {obj.resourceQuantity?.hasUnit.label}</li>
-</>
+
 
 const RenderActivities = (userActivity: any) => {
   const obj = userActivity.object;
@@ -26,7 +19,7 @@ const RenderActivities = (userActivity: any) => {
     <li key={obj.id} className="ml-2">
       <ul>
         {isProcess() && <ProcessCard process={obj}/>}
-        {isEconomicEvent() && EconomicEventAttributes(obj)}
+        {isEconomicEvent() && <EconomicEventCard event={obj}/>}
       </ul>
       <br />
     </li>
