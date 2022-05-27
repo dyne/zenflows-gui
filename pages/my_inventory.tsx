@@ -2,6 +2,9 @@ import {NextPage} from "next";
 import React, {useState} from "react";
 import {useAuth} from "../lib/auth";
 import {gql} from "@apollo/client";
+import Card from "../components/Card";
+import Link from "next/link";
+
 
 
 const FETCH_INVENTORY = gql(`query($id: ID!) {
@@ -49,7 +52,7 @@ const MyInventory: NextPage = () => {
     }
     return (<>
         <h1>inventory</h1>
-        <div>{JSON.stringify(inventory)}</div>
+        <ul>{inventory?.map((r)=><li key={r.id}><Link href={`/resource/${r.id}`}><a><Card title={r.name}><p>{JSON.stringify(r)}</p></Card></a></Link></li>)}</ul>
     </>)
 };
 
