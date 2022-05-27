@@ -1,12 +1,8 @@
 import React from 'react';
 import Link from "next/link";
+import Card from "./Card";
+import ProcessCard from "./ProcessCard";
 
-const ProcessAttributes = (obj:any) => <>
-  <li>{obj.__typename}</li>
-  <li>title:{obj.name}</li>
-  <li>description:{obj?.note}</li>
-  <li>{obj?.finished}</li>
-</>
 
 const EconomicEventAttributes = (obj:any) => <>
   <li>Activity:{obj.action?.id}</li>
@@ -27,9 +23,9 @@ const RenderActivities = (userActivity: any) => {
     return (<><b>nothing to show</b><br /><br /></>)
 
   return (
-    <li key={obj.id} className="ml-2 border-l-8 ">
+    <li key={obj.id} className="ml-2">
       <ul>
-        {isProcess() && ProcessAttributes(obj)}
+        {isProcess() && <ProcessCard process={obj}/>}
         {isEconomicEvent() && EconomicEventAttributes(obj)}
       </ul>
       <br />
