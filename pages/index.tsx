@@ -5,7 +5,7 @@ import User from "../components/UserActivities"
 const Home: NextPage = () => {
   const { isSignedIn } = useAuth()
   return (<>
-      {!isSignedIn() && <><p>loggati</p></>}
+      {!isSignedIn() && <><p>You should log in first</p></>}
             {isSignedIn() && <User/>}
         </>)};
 
