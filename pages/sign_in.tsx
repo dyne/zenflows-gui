@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
 import {useAuth} from "../lib/auth";
+import {useRouter} from "next/router";
 
 export default function SignIn() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const router = useRouter()
 
   const { signIn } = useAuth()
 
-  function onSubmit(e:any) {
+  async function  onSubmit(e:any) {
     e.preventDefault()
-    signIn({ username, password })
+    await signIn({ username, password }).then(()=> router.push('/'))
   }
 
   return (

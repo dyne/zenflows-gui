@@ -43,7 +43,6 @@ const FETCH_USER_DATA = gql`
 const User: NextPage = () => {
   const [activities, setActivities] = useState<any[]>()
   const [flag, setFlag] = useState(false)
-  const { signOut } = useAuth()
   const {createApolloClient} = useAuth()
   const client = createApolloClient()
   const result = async () => await client.query({query: FETCH_USER_DATA}).then((res:any) => {
@@ -52,7 +51,6 @@ const User: NextPage = () => {
   });
   if (!flag) {result()}
   return <>
-      <button onClick={() => signOut()}>Sign Out</button>
       {activities && <ul>{activities.map((activity: any) => (renderActivities(activity)))}</ul>}
       {!activities && <h2>Just a moment...</h2>}
         </>

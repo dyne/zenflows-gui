@@ -2,7 +2,6 @@ import {NextPage} from "next";
 import React, {useState} from "react";
 import {useAuth} from "../lib/auth";
 import {gql} from "@apollo/client";
-import base45 from 'base45';
 
 
 const FETCH_INVENTORY = gql(`query($id: ID!) {
