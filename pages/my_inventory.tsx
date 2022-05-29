@@ -1,7 +1,7 @@
 import {NextPage} from "next";
-import React, {useState} from "react";
+import React from "react";
 import {useAuth} from "../lib/auth";
-import {gql} from "@apollo/client";
+import {gql, useQuery} from "@apollo/client";
 import Card from "../components/Card";
 import Link from "next/link";
 
@@ -36,23 +36,15 @@ const FETCH_INVENTORY = gql(`query($id: ID!) {
 
 
 const MyInventory: NextPage = () => {
-
-
-    const [inventory, setInventory] = useState<any[]>()
-    const [flag, setFlag] = useState(false)
     const {authId} = useAuth()
-    const {createApolloClient} = useAuth()
-    const client = createApolloClient()
-    const result = async () => await client.query({query: FETCH_INVENTORY, variables: {id: authId}}).then((res: any) => {
-        setInventory(res.data.agent.inventoriedEconomicResources)
-        setFlag(true)
-    });
-    if (!flag) {
-        result()
-    }
+    const inventory = useQuery(FETCH_INVENTORY, {variables:{id:authId}}).data?.agent.inventoriedEconomicResources
+
     return (<>
-        <h1>inventory</h1>
-        <ul>{inventory?.map((r)=><li key={r.id}><Link href={`/resource/${r.id}`}><a><Card title={r.name}><p>{JSON.stringify(r)}</p></Card></a></Link></li>)}</ul>
+        <ul>{inventory?.map((r:any)=><li key={r.id}>
+            <Link href={`/resource/${r.id}`}>
+                <a><Card title={r.name}>
+                    <p>{JSON.stringify(r)}</p>
+                </Card></a></Link></li>)}</ul>
     </>)
 };
 

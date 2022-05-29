@@ -2,10 +2,11 @@ import React from 'react';
 import {gql, useQuery} from "@apollo/client";
 import {useAuth} from "../lib/auth";
 
-type handleResource = (value: { id: string, name: string, onhandQuantity: any }) => void
+type Resource = { id: string, name: string, onhandQuantity: any }
+type handleResource = (value: Resource) => void
 
 
-const SelectInventoriedResource: any = (props: { handleSelect: Function }) => {
+const SelectInventoriedResource: any = (props: { handleSelect: handleResource }) => {
     const {authId} = useAuth()
     const FETCH_INVENTORY = gql(`query($id: ID!) {
                                       agent(id: $id) {
@@ -25,12 +26,12 @@ const SelectInventoriedResource: any = (props: { handleSelect: Function }) => {
                                     }`)
 
 
-    const resources: Array<{ id: string, name: string, onhandQuantity: any }> = useQuery(FETCH_INVENTORY,{variables: {id: authId}}).data?.agent.inventoriedEconomicResources
+    const resources: Array<Resource> = useQuery(FETCH_INVENTORY,{variables: {id: authId}}).data?.agent.inventoriedEconomicResources
 
     const options = () => resources?.map((resource) => (
         <option key={resource.id} value={resource.id}>{resource.name}</option>))
     return (<>
-        <select onChange={(e) => props.handleSelect(resources.find((r) => (r.id === `e`))!)}
+        <select onChange={(e) => props.handleSelect(resources.find(r => r.id === e.target.value)!)}
                 className="select select-bordered w-full">
             {options()}
         </select>

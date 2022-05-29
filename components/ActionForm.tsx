@@ -22,7 +22,7 @@ type ActionFormProps = {
     MUTATION: DocumentNode | TypedDocumentNode,
     processId: string,
     type: "produce" | "raise" | "transfer" | "use" | "consume" | "lower",
-    inventoriedResource?: {name:string, id:string},
+    inventoriedResource?: {name:string, id:string, onhandQuantity:any},
 }
 
 
@@ -80,9 +80,8 @@ const ActionForm = (props: ActionFormProps) => {
         }
     }
 
-    function onSubmit(e: any) {
-        console.log(variables())
-        e.preventDefault()
+    function onSubmit() {
+        //TODO: handle error and response
         result({variables: variables()})
     }
 

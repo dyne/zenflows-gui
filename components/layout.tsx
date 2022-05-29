@@ -17,7 +17,7 @@ const Layout:React.FunctionComponent<layoutProps> = (layoutProps:layoutProps) =>
             <Topbar/>
             <div className="drawer drawer-mobile" >
                 <input id = "my-drawer" type = "checkbox" className = "drawer-toggle" />
-                <div className="drawer-content">
+                <div className="drawer-content max-w-screen-sm">
                     {isSignedIn()&&layoutProps?.children}
                     {!isSignedIn()&&<SignIn/>}
                 </div>

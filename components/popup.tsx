@@ -1,5 +1,4 @@
 import React from 'react';
-import select_resource_type from "./select_resource_type";
 
 type PopupPops = {
     name: string,

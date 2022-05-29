@@ -14,6 +14,7 @@ import EconomicEventCell from "../../components/EconomicEventCell";
 const Process: NextPage = () => {
     const router = useRouter()
     const { id } = router.query
+
     const Process = gql`
             query {
               process(id:"${id}"){
@@ -25,43 +26,25 @@ const Process: NextPage = () => {
             }
           `
     const process = useQuery(Process)
+    const processId = process.data?.process.id
+    const actions = [
+        {name:"produce",component: <Produce processId={processId}/>},
+        {name:"raise",component: <Raise processId={processId}/>},
+        {name:"transfer",component: <Transfer processId={processId}/>},
+        {name:"use",component: <Use processId={processId}/>},
+        {name:"consume",component: <Consume processId={processId}/>},
+        {name:"lower",component: <Lower processId={processId}/>},
+        ]
 
   return (
   <ul>
       <li>{process.data?.process.name}</li>
-      <li>{process.data?.process.id}</li>
+      <li>{processId}</li>
       <div className="divider"/>
-      <li className="float-left mr-2">
-          <Popup name="produce" action1="Produce">
-                 <Produce processId={process.data?.process.id}/>
-          </Popup>
-      </li>
-      <li className="float-left mr-2">
-          <Popup name="raise" action1="Raise">
-              <Raise processId={process.data?.process.id}/>
-          </Popup>
-      </li>
-      <li className="float-left mr-2">
-          <Popup name="transfer" action1="Transfer">
-              <Transfer processId={process.data?.process.id}/>
-          </Popup>
-      </li>
-      <li className="float-left mr-2">
-          <Popup name="use" action1="Use">
-                 <Use processId={process.data?.process.id}/>
-          </Popup>
-      </li>
-      <li className="float-left mr-2">
-          <Popup name="consume" action1="Consume">
-                 <Consume processId={process.data?.process.id}/>
-          </Popup>
-      </li>
-      <li className="float-left mr-2">
-          <Popup name="lower" action1="Lower">
-                 <Lower processId={process.data?.process.id}/>
-          </Popup>
-      </li>
-      <div className="divider"/>
+      {actions.map((a)=><li key={a.name} className="float-left mr-2">
+          <Popup name={a.name} action1={a.name}>{a.component}</Popup>
+      </li>)}
+      <div className="divider w-full"/>
       <li>{process.data?.process.inputs.map((i:any)=><EconomicEventCell id={i.id} key={i.id}/>)}</li>
       <li>{process.data?.process.outputs.map((i:any)=><EconomicEventCell id={i.id} key={i.id}/>)}</li>
   </ul>

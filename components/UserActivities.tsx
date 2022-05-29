@@ -1,8 +1,6 @@
 import React from 'react';
 import type {NextPage} from 'next'
-import {gql} from '@apollo/client'
-import {ReactNode, useState} from "react";
-import {useAuth} from "../lib/auth";
+import {gql, useQuery} from '@apollo/client'
 import renderActivities from "../components/renderActivities"
 
 const FETCH_USER_DATA = gql`
@@ -39,21 +37,12 @@ const FETCH_USER_DATA = gql`
         }`
 
 
-
 const User: NextPage = () => {
-  const [activities, setActivities] = useState<any[]>()
-  const [flag, setFlag] = useState(false)
-  const {createApolloClient} = useAuth()
-  const client = createApolloClient()
-  const result = async () => await client.query({query: FETCH_USER_DATA}).then((res:any) => {
-      setActivities([...res.data.me.user.userActivities])
-      setFlag(true)
-  });
-  if (!flag) {result()}
-  return <>
-      {activities && <ul>{activities.map((activity: any) => (renderActivities(activity)))}</ul>}
-      {!activities && <h2>Just a moment...</h2>}
-        </>
+    const activities = useQuery(FETCH_USER_DATA).data?.me.user.userActivities
+    return <>
+        {activities && <ul>{activities.map((activity: any) => (renderActivities(activity)))}</ul>}
+        {!activities && <h2>Just a moment...</h2>}
+    </>
 };
 
 export default User

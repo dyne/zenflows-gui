@@ -1,4 +1,3 @@
-import {AppProps} from "next/app";
 import {gql, useQuery} from "@apollo/client";
 import EconomicEventCard from "./EconomicEventCard";
 
