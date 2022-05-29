@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react'
+import React, {useState, useContext, createContext, useEffect} from 'react'
 import {
   ApolloProvider,
   ApolloClient,
@@ -6,6 +6,7 @@ import {
   HttpLink,
   gql,
 } from '@apollo/client'
+import useStorage from "./useStorage";
 
 
 // @ts-ignore
@@ -28,8 +29,14 @@ export const useAuth:any = () => {
 }
 
 function useProvideAuth() {
-  const [authToken, setAuthToken] = useState(null)
-  const [authId, setAuthId] = useState(null)
+  const {getItem, setItem } = useStorage()
+  const [authToken, setAuthToken] = useState(null as string | null)
+  const [authId, setAuthId] = useState(null as string | null)
+  const storedToken =  getItem('token', 'local') !== ''? getItem('token', 'local') : null
+  useEffect(()=>setAuthToken(storedToken), [])
+  const storedId =  getItem('authId', 'local') !== ''? getItem('authId', 'local') : null
+  useEffect(()=>setAuthId(storedId), [])
+
 
   const isSignedIn = () => {
     if (authToken) {
@@ -81,12 +88,16 @@ function useProvideAuth() {
 
     if (result?.data?.login?.token) {
       setAuthToken(result.data.login.token)
+      setItem('token',result.data.login.token, 'local')
+      setItem('authId',result.data.login.currentUser.id, 'local')
       setAuthId(result.data.login.currentUser.id)
     }
   }
 
   const signOut = () => {
     setAuthToken(null)
+    setItem('token','', 'local')
+    setItem('authId','', 'local')
   }
 
   return {

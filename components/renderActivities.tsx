@@ -3,7 +3,7 @@ import ProcessCard from "./ProcessCard";
 import EconomicEventCard from "./EconomicEventCard";
 
 
-const RenderActivities = (userActivity: any) => {
+const RenderActivities = ({userActivity}:{userActivity:any}) => {
   const obj = userActivity.object;
   const isProcess = () => obj.__typename == "Process"
   const isEconomicEvent = () => obj.__typename == "EconomicEvent"

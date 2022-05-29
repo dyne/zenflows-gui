@@ -1,7 +1,7 @@
 import React from 'react';
 import type {NextPage} from 'next'
 import {gql, useQuery} from '@apollo/client'
-import renderActivities from "../components/renderActivities"
+import RenderActivities from "../components/renderActivities"
 
 const FETCH_USER_DATA = gql`
         query {
@@ -18,6 +18,7 @@ const FETCH_USER_DATA = gql`
                         finished
                       }
                   ... on EconomicEvent {
+                    id
                     note
                     provider {displayUsername}
                     receiver {displayUsername}
@@ -38,9 +39,11 @@ const FETCH_USER_DATA = gql`
 
 
 const User: NextPage = () => {
-    const activities = useQuery(FETCH_USER_DATA).data?.me.user.userActivities
+    const activities = useQuery(FETCH_USER_DATA).data?.me?.user.userActivities
     return <>
-        {activities && <ul>{activities.map((activity: any) => (renderActivities(activity)))}</ul>}
+        {activities && <ul>
+            {activities.map((activity: any) => <RenderActivities key={activity.object.id} userActivity={activity}/>)}
+        </ul>}
         {!activities && <h2>Just a moment...</h2>}
     </>
 };
