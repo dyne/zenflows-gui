@@ -9,7 +9,7 @@ import Transfer from "../../components/transfer";
 import Use from "../../components/use";
 import Consume from "../../components/consume";
 import Lower from "../../components/lower";
-import EconomicEventCell from "../../components/EconomicEventCell";
+import EconomicEventCard from "../../components/EconomicEventCard";
 
 const Process: NextPage = () => {
     const router = useRouter()
@@ -20,8 +20,34 @@ const Process: NextPage = () => {
               process(id:"${id}"){
                 id
                 name
-                inputs{id}
-                outputs{id}
+                inputs{
+                    __typename
+                    note
+                    provider {displayUsername id}
+                    receiver {displayUsername id}
+                    resourceConformsTo {name note}
+                    resourceInventoriedAs {name id note}
+                    toResourceInventoriedAs {name note}
+                    action { id }
+                    resourceQuantity {
+                      hasNumericalValue
+                      hasUnit {label symbol}
+                    }
+                }
+                outputs{
+                    __typename
+                    note
+                    provider {displayUsername id}
+                    receiver {displayUsername id}
+                    resourceConformsTo {name note}
+                    resourceInventoriedAs {name id note}
+                    toResourceInventoriedAs {name note}
+                    action { id }
+                    resourceQuantity {
+                      hasNumericalValue
+                      hasUnit {label symbol}
+                    }
+                }
               }
             }
           `
@@ -45,8 +71,8 @@ const Process: NextPage = () => {
           <Popup name={a.name} action1={a.name}>{a.component}</Popup>
       </li>)}
       <div className="divider w-full"/>
-      <li>{process.data?.process.inputs.map((i:any)=><EconomicEventCell id={i.id} key={i.id}/>)}</li>
-      <li>{process.data?.process.outputs.map((i:any)=><EconomicEventCell id={i.id} key={i.id}/>)}</li>
+      <ul>{process.data?.process.inputs.map((i:any)=><li key={i.id}><EconomicEventCard event={i}/></li>)}</ul>
+      <li>{process.data?.process.outputs.map((o:any)=><EconomicEventCard event={o} key={o.id}/>)}</li>
   </ul>
   )};
 

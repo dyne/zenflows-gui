@@ -12,13 +12,13 @@ const RenderActivities = ({userActivity}:{userActivity:any}) => {
     return (<><b>nothing to show</b><br /><br /></>)
 
   return (
-    <li key={obj.id} className="ml-2">
+    <div key={obj.id} className="ml-2">
       <ul>
         {isProcess() && <ProcessCard process={obj}/>}
         {isEconomicEvent() && <EconomicEventCard event={obj}/>}
       </ul>
       <br />
-    </li>
+    </div>
   );
 }
 
