@@ -20,7 +20,12 @@ export default function LoginBtn() {
                     <ul tabIndex={0}
                         className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
                         <li>
-                            <button className="btn" onClick={() => signOut()}>Sign Out</button>
+                            <Link href="/profile/my_profile">
+                                <a className="btn mb-2 btn-ghost">my profile</a>
+                            </Link>
+                        </li>
+                        <li>
+                            <button className="btn btn-ghost" onClick={() => signOut()}>Sign Out</button>
                         </li>
                     </ul> :
                     <ul tabIndex={0}
