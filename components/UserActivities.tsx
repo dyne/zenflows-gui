@@ -20,8 +20,8 @@ const FETCH_USER_DATA = gql`
                   ... on EconomicEvent {
                     id
                     note
-                    provider {displayUsername}
-                    receiver {displayUsername}
+                    provider {displayUsername id}
+                    receiver {displayUsername id}
                     resourceConformsTo {name note}
                     resourceInventoriedAs {name id note}
                     toResourceInventoriedAs {name note}
