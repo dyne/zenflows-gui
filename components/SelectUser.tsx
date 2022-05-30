@@ -3,23 +3,20 @@ import {gql, useQuery} from "@apollo/client";
 
 
 const SelectUser= () => {
-    const queryUnitsId = gql`
+    const QUERY_AGENTS = gql`
             query {
-              unitsPages {
-                edges {
-                  id
-                  label
-                }
+              agents {
+                id 
+                name
               } 
             }
           `
-    const units = useQuery(queryUnitsId).data?.unitsPages.edges
+    const agents = useQuery(QUERY_AGENTS).data?.agents
 
     return(<>
-    <input list="select" name="select" className="select select-bordered w-full"/>
-            <datalist id="select">
-                <option value="Trans"/>
-            </datalist>
+            <select className="select select-bordered w-full">
+                {agents?.map((agent:any) =><option key={agent.id} value={agent} label={agent.name}/>)}
+            </select>
         </>
 )}
 
