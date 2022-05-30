@@ -42,7 +42,7 @@ const User: NextPage = () => {
     const activities = useQuery(FETCH_USER_DATA).data?.me?.user.userActivities
     return <>
         {activities && <ul>
-            {activities.map((activity: any) => <RenderActivities key={activity.object.id} userActivity={activity}/>)}
+            {activities.map((activity: any) => <RenderActivities key={activity.object.id} userActivity={activity.object}/>)}
         </ul>}
         {!activities && <h2>Just a moment...</h2>}
     </>

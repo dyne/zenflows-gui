@@ -17,8 +17,8 @@ const FETCH_LOCAL_DATA = gql`
               ... on EconomicEvent {
                 __typename
                 note
-                provider {displayUsername}
-                receiver {displayUsername}
+                provider {displayUsername id}
+                receiver {displayUsername id}
                 resourceConformsTo {name note}
                 resourceInventoriedAs {name note}
                 toResourceInventoriedAs {name note}
@@ -38,7 +38,7 @@ const Local: NextPage = () => {
     const activities = useQuery(FETCH_LOCAL_DATA).data?.feed
     return <>
         {activities && <ul>
-            {activities.map((activity: any) => <RenderActivities key={activity.object.id} userActivity={activity}/>)}
+            {activities.map((activity: any) => <RenderActivities key={activity.object.id} userActivity={activity.object}/>)}
         </ul>}
         {!activities && <h2>Just a moment...</h2>}
     </>
