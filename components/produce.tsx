@@ -1,6 +1,7 @@
 import {gql} from "@apollo/client";
 import React from "react";
 import ActionForm from "./ActionForm";
+import {ActionsEnum} from "../lib/ActionsEnum";
 
 const Produce = (props:{processId:string}) => {
 
@@ -65,7 +66,7 @@ const Produce = (props:{processId:string}) => {
           `
 
   return (
-      <ActionForm MUTATION={PRODUCE_MUTATION} processId={props.processId} type="produce"/>
+      <ActionForm MUTATION={PRODUCE_MUTATION} processId={props.processId} type={ActionsEnum.Produce}/>
   )};
 
 export default Produce

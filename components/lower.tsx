@@ -1,6 +1,7 @@
 import {gql} from "@apollo/client";
 import React from "react";
 import ActionForm from "./ActionForm";
+import {ActionsEnum} from "../lib/ActionsEnum";
 
 const Lower = (props:{processId:string}) => {
 
@@ -58,7 +59,7 @@ const Lower = (props:{processId:string}) => {
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type="lower"/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Lower}/>
   )};
 
 export default Lower
