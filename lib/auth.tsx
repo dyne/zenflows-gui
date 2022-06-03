@@ -56,7 +56,7 @@ function useProvideAuth() {
 
   const createApolloClient = () => {
     const link = new HttpLink({
-      uri: "https://reflow-demo.dyne.org/api/graphql",
+      uri: process.env.reflow_graphql_endpoint,
       headers: getAuthHeaders(),
     })
 

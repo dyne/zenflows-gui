@@ -2,7 +2,12 @@ import Link from "next/link";
 import Card from "./Card";
 import React from "react";
 
-const InventoriedResources = ({inventoriedResources}:{inventoriedResources:any}) => {
+type Resource ={
+    id: string,
+    name:string,
+}
+
+const InventoriedResources = ({inventoriedResources}:{inventoriedResources:Array<Resource>}) => {
 
     return (<>
         <ul>{inventoriedResources?.map((r:any)=><li key={r.id}>

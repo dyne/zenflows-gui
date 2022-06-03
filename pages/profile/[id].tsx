@@ -40,7 +40,6 @@ const Profile: NextPage = () => {
     const isUser: boolean = (id === 'my_profile' || id === authId)
     const idToBeFetch = isUser ? authId : id
     const user = useQuery(FETCH_USER, {variables: {id: idToBeFetch}}).data?.agent
-    console.log(user)
     const tabsArray = [
         {title: 'Activity', component: <>
                 {user?.economicEvents.map((e:any, i:number)=><RenderActivities key={i} userActivity={e}/>)}

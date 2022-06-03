@@ -26,7 +26,23 @@ const SelectInventoriedResource: any = (props: { handleSelect: handleResource })
                                     }`)
 
 
-    const resources: Array<Resource> = useQuery(FETCH_INVENTORY,{variables: {id: authId}}).data?.agent.inventoriedEconomicResources
+    const resources: Array<Resource> = useQuery(gql(`query($id: ID!) {
+                                      agent(id: $id) {
+                                        inventoriedEconomicResources {
+                                          id
+                                          name
+                                          onhandQuantity {
+                                            id
+                                            hasNumericalValue
+                                            hasUnit {
+                                              label
+                                              symbol
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }`),
+        { variables: { id: authId } }).data?.agent.inventoriedEconomicResources
 
     const options = () => resources?.map((resource) => (
         <option key={resource.id} value={resource.id}>{resource.name}</option>))

@@ -1,16 +1,17 @@
 import SelectUnit from "./select_unit";
 import SelectResourceType from "./select_resource_type";
-import React, {useState} from "react";
-import {useAuth} from "../lib/auth";
+import React, { useState } from "react";
+import { useAuth } from "../lib/auth";
 import {DocumentNode, TypedDocumentNode, useMutation} from "@apollo/client";
 import SelectUser from "./SelectUser";
 import SelectInventoriedResource from "./SelectInventoriedResource";
+import {ActionsEnum} from "../lib/ActionsEnum";
 
 type ActionVariables = {
-    inputOf?:string,
-    provider:string,
+    inputOf?: string,
+    provider: string,
     receiver: string,
-    resourceInventoriedAs?:string,
+    resourceInventoriedAs?: string,
     outputOf?: string,
     newInventoriedResource?: { name: string, note: string },
     resourceConformsTo?: string,
@@ -18,11 +19,12 @@ type ActionVariables = {
     hasPointInTime: string,
 }
 
+
 type ActionFormProps = {
     MUTATION: DocumentNode | TypedDocumentNode,
     processId: string,
-    type: "produce" | "raise" | "transfer" | "use" | "consume" | "lower",
-    inventoriedResource?: {name:string, id:string, onhandQuantity:any},
+    type: ActionsEnum,
+    inventoriedResource?: { name: string, id: string, onhandQuantity: any },
 }
 
 
@@ -35,13 +37,13 @@ const ActionForm = (props: ActionFormProps) => {
     const [resourceNote, setResourceNote] = useState('')
     const [inventoriedResource, setInventoriedResource] = useState(props.inventoriedResource)
 
-    const {authId} = useAuth()
+    const { authId } = useAuth()
 
-    const [result, {data, loading, error}] = useMutation(props.MUTATION)
+    const [performAction, {data, loading, error}] = useMutation(props.MUTATION)
 
     const variables: () => ActionVariables | undefined = () => {
         switch (props.type) {
-            case "produce":
+            case ActionsEnum.Produce:
                 return {
                     provider: authId,
                     receiver: authId,
@@ -51,38 +53,38 @@ const ActionForm = (props: ActionFormProps) => {
                     resourceQuantity: {hasNumericalValue: quantity, hasUnit: unitId},
                     hasPointInTime: new Date(hasPointInTime).toISOString()
                 }
-            case "use" :
-            case "consume":
-            case "lower":
+            case ActionsEnum.Use :
+            case ActionsEnum.Consume:
+            case ActionsEnum.Lower:
                 return {
-                      inputOf: props.processId,
-                      provider: authId,
-                      receiver: authId,
-                      resourceInventoriedAs: inventoriedResource!.id,
-                      resourceQuantity: {
+                    inputOf: props.processId,
+                    provider: authId,
+                    receiver: authId,
+                    resourceInventoriedAs: inventoriedResource!.id,
+                    resourceQuantity: {
                         hasNumericalValue: quantity,
-                        hasUnit:  unitId
-                      },
-                      hasPointInTime: new Date(hasPointInTime).toISOString()
-                    }
-            case "transfer":
+                        hasUnit: unitId
+                    },
+                    hasPointInTime: new Date(hasPointInTime).toISOString()
+                }
+            case ActionsEnum.Transfer:
                 return {
-                      inputOf: props.processId,
-                      provider: authId,
-                      receiver: authId,
-                      resourceInventoriedAs: inventoriedResource!.id,
-                      resourceQuantity: {
+                    inputOf: props.processId,
+                    provider: authId,
+                    receiver: authId,
+                    resourceInventoriedAs: inventoriedResource!.id,
+                    resourceQuantity: {
                         hasNumericalValue: quantity,
-                        hasUnit:  unitId
-                      },
-                      hasPointInTime: new Date(hasPointInTime).toISOString()
+                        hasUnit: unitId
+                    },
+                    hasPointInTime: new Date(hasPointInTime).toISOString()
                 }
         }
     }
 
     function onSubmit() {
         //TODO: handle error and response
-        result({variables: variables()})
+        performAction({variables: variables()})
     }
 
     const handleUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +99,7 @@ const ActionForm = (props: ActionFormProps) => {
     return (<>
             <form onSubmit={onSubmit}>
 
-                {(props.type === "produce" || props.type === "raise") && <><SelectResourceType
+                {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <><SelectResourceType
                     handleSelect={handleResource}/>
                     <input type="number"
                            placeholder="Type here"
@@ -110,7 +112,7 @@ const ActionForm = (props: ActionFormProps) => {
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
-                {(props.type === "transfer") && <><input type="number"
+                {(props.type === ActionsEnum.Transfer) && <><input type="number"
                                                          placeholder="Type here"
                                                          className="input input-bordered"
                                                          onChange={(e) => setQuantity(parseInt(e.target.value))}
@@ -124,7 +126,8 @@ const ActionForm = (props: ActionFormProps) => {
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
 
-                {(props.type === "use") && <><SelectInventoriedResource inventoriedResource={props.inventoriedResource} handleSelect={(e:any) => setInventoriedResource(e)}/>
+                {(props.type === ActionsEnum.Use) && <><SelectInventoriedResource inventoriedResource={props.inventoriedResource}
+                                                                        handleSelect={(e: any) => setInventoriedResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
@@ -134,7 +137,7 @@ const ActionForm = (props: ActionFormProps) => {
                                                                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
                     <SelectUnit handleSelect={handleUnit}/>
-                    <SelectInventoriedResource handleSelect={(e:any) => setInventoriedResource(e)}/>
+                    <SelectInventoriedResource handleSelect={(e: any) => setInventoriedResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 

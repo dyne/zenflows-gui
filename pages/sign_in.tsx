@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import {useAuth} from "../lib/auth";
 import {useRouter} from "next/router";
 
@@ -9,7 +9,7 @@ export default function SignIn() {
 
   const { signIn } = useAuth()
 
-  async function  onSubmit(e:any) {
+  async function  onSubmit(e: { preventDefault: () => void; }) {
     e.preventDefault()
     await signIn({ username, password }).then(()=> router.push('/'))
   }
@@ -20,12 +20,12 @@ export default function SignIn() {
         <input
           type="text"
           placeholder="username"
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e:ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
         />
         <input
           type="password"
           placeholder="password"
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
         />
         <button type="submit">Sign In</button>
       </form>

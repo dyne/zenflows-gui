@@ -1,7 +1,7 @@
 import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
 import React from "react";
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 import Popup from "../../components/popup";
 import Produce from "../../components/produce";
 import Raise from "../../components/raise";
@@ -10,6 +10,7 @@ import Use from "../../components/use";
 import Consume from "../../components/consume";
 import Lower from "../../components/lower";
 import EconomicEventCard from "../../components/EconomicEventCard";
+import {ActionsEnum} from "../../lib/ActionsEnum";
 
 const Process: NextPage = () => {
     const router = useRouter()
@@ -54,12 +55,12 @@ const Process: NextPage = () => {
     const process = useQuery(Process)
     const processId = process.data?.process.id
     const actions = [
-        {name:"produce",component: <Produce processId={processId}/>},
-        {name:"raise",component: <Raise processId={processId}/>},
-        {name:"transfer",component: <Transfer processId={processId}/>},
-        {name:"use",component: <Use processId={processId}/>},
-        {name:"consume",component: <Consume processId={processId}/>},
-        {name:"lower",component: <Lower processId={processId}/>},
+        {name:ActionsEnum.Produce,component: <Produce processId={processId}/>},
+        {name:ActionsEnum.Raise,component: <Raise processId={processId}/>},
+        {name:ActionsEnum.Transfer,component: <Transfer processId={processId}/>},
+        {name:ActionsEnum.Use,component: <Use processId={processId}/>},
+        {name:ActionsEnum.Consume,component: <Consume processId={processId}/>},
+        {name:ActionsEnum.Lower,component: <Lower processId={processId}/>},
         ]
 
   return (

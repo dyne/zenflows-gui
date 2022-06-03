@@ -22,7 +22,7 @@ const Layout:React.FunctionComponent<layoutProps> = (layoutProps:layoutProps) =>
                     {!isSignedIn()&&<SignIn/>}
                 </div>
                 <div className="drawer-side">
-                    <label htmlFor="my-drawer" className="drawer-overlay">barra laterale</label>
+                    <label htmlFor="my-drawer" className="drawer-overlay">sidebar</label>
                     {isSignedIn()&&<Sidebar/>}
                 </div>
             </div>
