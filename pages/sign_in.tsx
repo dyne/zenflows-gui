@@ -31,7 +31,8 @@ export default function SignIn() {
                 <BrInput type="password"
                          placeholder="password"
                          label="password"
-                         onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} />
+                         onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                />
                 <div className="card-actions justify-end">
                   <button className="btn btn-primary" type="submit">Sign In</button>
                 </div>

@@ -8,6 +8,7 @@ specifiers:
   '@commitlint/cli': ^16.2.4
   '@commitlint/config-conventional': ^16.2.4
   '@commitlint/cz-commitlint': ^16.2.4
+  '@heroicons/react': ^1.0.6
   '@tailwindcss/typography': ^0.5.2
   '@types/base45': ^2.0.0
   '@types/lodash': ^4.14.182
@@ -46,6 +47,7 @@ dependencies:
   '@apollo/link-error': 2.0.0-beta.3_cxfcglayresyyxxylwnor5zopi
   '@apollo/react-common': 3.1.4_jk5zuzcxxurvfxlddlu4ntjh6q
   '@apollo/react-hooks': 4.0.0_cxfcglayresyyxxylwnor5zopi
+  '@heroicons/react': 1.0.6_react@18.1.0
   '@types/base45': 2.0.0
   base45: 2.0.1
   dayjs: 1.11.2
@@ -118,8 +120,8 @@ packages:
       zen-observable-ts: 1.2.3
     dev: false
 
-  /@apollo/client/3.6.5_cxfcglayresyyxxylwnor5zopi:
-    resolution: {integrity: sha512-xGAZzv1f5abyH45MSU5eOLyGQuP4Ps0OhP36pSCtt6pCICI3n4yDkdftFCPvqDVqVTuciX1kkyeJPfGodz5kwg==}
+  /@apollo/client/3.6.8_cxfcglayresyyxxylwnor5zopi:
+    resolution: {integrity: sha512-p/J6KRHZZPGX0bZtMLvRFAIcReYsRYGg+Jz9MkgabWPy0L8rwgyolq9fvKsNqkH888Tj9Yvwrxz9V84KfcORJA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -180,7 +182,7 @@ packages:
   /@apollo/react-hooks/4.0.0_cxfcglayresyyxxylwnor5zopi:
     resolution: {integrity: sha512-fCu0cbne3gbUl0QbA8X4L33iuuFVQbC5Jo2MIKRK8CyawR6PoxDpFdFA1kc6033ODZuZZ9Eo4RdeJFlFIIYcLA==}
     dependencies:
-      '@apollo/client': 3.6.5_cxfcglayresyyxxylwnor5zopi
+      '@apollo/client': 3.6.8_cxfcglayresyyxxylwnor5zopi
     transitivePeerDependencies:
       - graphql
       - graphql-ws
@@ -570,6 +572,14 @@ packages:
     dependencies:
       '@hapi/hoek': 9.2.1
     dev: true
+
+  /@heroicons/react/1.0.6_react@18.1.0:
+    resolution: {integrity: sha512-JJCXydOFWMDpCP4q13iEplA503MQO3xLoZiKum+955ZCtHINWnx26CUxVxxFQu/uLb4LW3ge15ZpzIkXKkJ8oQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.1.0
+    dev: false
 
   /@humanwhocodes/config-array/0.9.5:
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==, registry: https://registry.yarnpkg.com/, tarball: https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.5.tgz}

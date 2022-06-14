@@ -6,7 +6,9 @@ type BrInputProps = {
     label?:string,
     onChange?:ChangeEventHandler,
     hint?:string,
+    error?:string,
 }
+import {ExclamationIcon} from '@heroicons/react/solid'
 
 
 const BrInput = (props:BrInputProps) => {
@@ -22,9 +24,13 @@ const BrInput = (props:BrInputProps) => {
                    onChange={props.onChange}
                    className="input input-bordered w-full max-w-xs focus:input-primary"
             />
-            {props.hint&&<label className="label">
-                <span className="label-text-alt">{props.hint}</span>
-            </label>}
+            <label className="label">
+                {props.error&&<span className="label-text-alt text-warning flex flex-row items-center justify-between">
+                    <ExclamationIcon className='h-5 w-5'/>
+                    {props.error}</span>}
+                {props.hint&&<span className="label-text-alt">{props.hint}</span>}
+
+            </label>
         </div>
             </> )
 }
