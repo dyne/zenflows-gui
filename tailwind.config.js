@@ -36,7 +36,14 @@ module.exports = {
     ],
   },
   theme: {
-    extend: {},
+    extend: {
+      lineHeight: {
+        '11': '3rem',
+      },
+      fontSize: {
+        'xl': '1.313rem',
+      }
+    },
   },
   plugins: [
       require('@tailwindcss/typography'),

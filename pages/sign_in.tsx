@@ -22,7 +22,7 @@ export default function SignIn() {
         <div className="w-80">
           <Card title="Welcome Back!">
             <>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna. </p>
+              <p>Lorem ipsum dolor sit amet</p>
               <form onSubmit={onSubmit}>
                 <BrInput type="text"
                          label="username"

@@ -11,9 +11,9 @@ const Card = (props:CardProps) => {
         <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
                 <>
-                    <h2 className="card-title">
+                    <h1 className="card-title heading1">
                         {props.title}
-                    </h2>
+                    </h1>
                     {props.children}
                     {props.action&&<div className="card-actions justify-end">
                         <button onClick={props.action.handle()} className="btn btn-primary">{props.action.name}</button>

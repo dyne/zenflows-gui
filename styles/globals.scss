@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+h1, .heading1 {
+    @apply text-4xl font-semibold text-gray-900 leading-11;
+}
+h2, .heading2 {
+    @apply text-2xl font-semibold text-gray-900 leading-8;
+}
+h3, .heading3 {
+    @apply text-xl font-semibold text-gray-900 leading-6;
+}
+h4, .heading4 {
+    @apply text-base font-semibold text-gray-900;
+}
+p, .paragraph {
+    @apply text-sm text-gray-900;
+}
