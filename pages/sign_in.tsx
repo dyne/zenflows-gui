@@ -1,6 +1,8 @@
 import React, {ChangeEvent, useState} from 'react';
 import {useAuth} from "../lib/auth";
 import {useRouter} from "next/router";
+import Card from "../components/brickroom/Card";
+import BrInput from "../components/brickroom/BrInput";
 
 export default function SignIn() {
   const [username, setUsername] = useState('')
@@ -17,28 +19,25 @@ export default function SignIn() {
   return (
     <div className="h-screen " style={{['background-image' as any]: "url('/reflow_background.jpeg')"}}>
       <div className="container mx-auto h-screen grid place-items-center">
-        <div className="card w-96 bg-base-100 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">Sign In!</h2>
-            <form onSubmit={onSubmit}>
-              <input
-                type="text"
-                placeholder="username"
-                onChange={(e:ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)}
-            />
-              <input
-                type="password"
-                placeholder="password"
-                onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-            />
-              <div className="card-actions justify-end">
-                <button className="btn btn-primary" type="submit">Sign In</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div>
-
+        <div className="w-80">
+          <Card title="Welcome Back!">
+            <>
+              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna. </p>
+              <form onSubmit={onSubmit}>
+                <BrInput type="text"
+                         label="username"
+                         placeholder="Username"
+                         onChange={(e:ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
+                <BrInput type="password"
+                         placeholder="password"
+                         label="password"
+                         onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} />
+                <div className="card-actions justify-end">
+                  <button className="btn btn-primary" type="submit">Sign In</button>
+                </div>
+              </form>
+            </>
+          </Card>
         </div>
       </div>
     </div>

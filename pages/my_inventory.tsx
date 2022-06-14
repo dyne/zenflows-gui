@@ -2,7 +2,7 @@ import {NextPage} from "next";
 import React from "react";
 import {useAuth} from "../lib/auth";
 import {gql, useQuery} from "@apollo/client";
-import Card from "../components/Card";
+import Card from "../components/brickroom/Card";
 import Link from "next/link";
 import InventoriedResources from "../components/InventoriedResources";
 

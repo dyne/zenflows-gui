@@ -1,4 +1,4 @@
-import Card from "./Card";
+import Card from "./brickroom/Card";
 import Link from "next/link";
 import React from "react";
 

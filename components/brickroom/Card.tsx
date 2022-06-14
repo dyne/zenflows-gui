@@ -8,7 +8,7 @@ type CardProps = {
 
 const Card = (props:CardProps) => {
     return (<>
-        <div className="card w-full bg-base-100 shadow-xl">
+        <div className="card bg-base-100 shadow-xl">
             <div className="card-body">
                 <>
                     <h2 className="card-title">

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Card from "./Card";
+import Card from "./brickroom/Card";
 import React from "react";
 
 type Resource ={

@@ -13,20 +13,22 @@ type layoutProps = {
 const Layout:React.FunctionComponent<layoutProps> = (layoutProps:layoutProps) => {
   const { isSignedIn } = useAuth()
     return (
-        <>{!isSignedIn()&&<SignIn/>}
+        <>
+            {!isSignedIn()&&<SignIn/>}
             {isSignedIn()&&<>
-            <Topbar/>
-            <div className="drawer drawer-mobile">
-                <input id = "my-drawer" type = "checkbox" className = "drawer-toggle" />
-                <div className="drawer-content max-w-screen-sm" >
-                    {layoutProps?.children}
+                <Topbar/>
+                <div className="drawer drawer-mobile">
+                    <input id = "my-drawer" type = "checkbox" className = "drawer-toggle" />
+                    <div className="drawer-content max-w-screen-sm" >
+                        {layoutProps?.children}
+                    </div>
+                    <div className="drawer-side">
+                        <label htmlFor="my-drawer" className="drawer-overlay">sidebar</label>
+                        <Sidebar/>
+                    </div>
                 </div>
-                <div className="drawer-side">
-                    <label htmlFor="my-drawer" className="drawer-overlay">sidebar</label>
-                    {isSignedIn()&&<Sidebar/>}
-                </div>
-            </div>
-        </>}</>
+            </>}
+        </>
 
     )
 }
