@@ -56,7 +56,7 @@ function useProvideAuth() {
 
   const createApolloClient = () => {
     const link = new HttpLink({
-      uri: process.env.reflow_graphql_endpoint,
+      uri: process.env.GRAPHQL,
       headers: getAuthHeaders(),
     })
 
