@@ -23,7 +23,8 @@ export default function SignIn() {
     register:{
       question:"✌️ You don’t have an account yet?",
       answer:"Sign Up"
-    }
+    },
+    button: "Sign In"
   }
 
   const { signIn } = useAuth()
@@ -34,7 +35,7 @@ export default function SignIn() {
   }
 
   return (
-    <div className="h-screen bg-cover" style={{['background-image' as any]: "url('/reflow_background.jpeg')"}}>
+    <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('/reflow_background.jpeg')"}}>
       <div className="container mx-auto h-screen grid place-items-center">
           <Card title={signInTextProps.title}
                 width={CardWidth.LG}
@@ -51,7 +52,7 @@ export default function SignIn() {
                          label={signInTextProps.password.label}
                          onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                 />
-                  <button className="btn btn-block" type="submit">Sign In</button>
+                  <button className="btn btn-block" type="submit">{signInTextProps.button}</button>
               </form>
               <p className="flex flex-row items-center justify-between">
                 {signInTextProps.register.question}
