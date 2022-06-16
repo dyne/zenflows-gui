@@ -19,6 +19,7 @@ const BrTable = ({headArray, children}:BrTableProps) => {
                     {children}
                 </tbody>
             </table>
+
         </div>
     </>
   );
