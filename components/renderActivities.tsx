@@ -1,24 +1,47 @@
 import React from 'react';
 import ProcessCard from "./ProcessCard";
 import EconomicEventCard from "./EconomicEventCard";
+import BrTable from "./brickroom/BrTable";
+import AvatarUsers from "./avatarUsers";
 
 
-const RenderActivities = ({userActivity}:{userActivity:any}) => {
-  const obj = userActivity;
-  const isProcess = () => obj.__typename == "Process"
-  const isEconomicEvent = () => obj.__typename == "EconomicEvent"
+const RenderActivities = ({userActivities}:{userActivities:any[]}) => {
+    const processes:Array<any> = []
+    const economicEvent:Array<any> = [];
+    const processesHead = ['process','status','description', 'users']
+    const eventHead = ['last update', 'activity', 'resource', 'provider', 'receiver', 'input', 'output', 'notes']
+  userActivities?.map((a:any)=>{
+      (a.object.__typename == "Process")&&processes.push(a.object);
+      (a.object.__typename == "EconomicEvent")&&economicEvent.push(a.object);
+  });
 
-  if (!obj)
-    return (<><b>nothing to show</b><br /><br /></>)
-
-  return (
-    <div key={obj.id} className="ml-2">
+  return (<>
+          <BrTable headArray={processesHead}>
+              {processes.map((p)=><tr key={p.id}>
+                    <th>{p.name}</th>
+                    <td>{p.finished? 'finished' : <div className="badge badge-success">active</div>}</td>
+                    <td>{p.note}</td>
+                    <td>
+                        <AvatarUsers/>
+                    </td>
+                </tr>)}
+          </BrTable>
+          <BrTable headArray={eventHead}>
+              {economicEvent.map((e)=><tr key={e.id}>
+                    <td></td>
+                    <td>{e.action.id}</td>
+                    <td>{e.resourceConformsTo?.name}</td>
+                    <td>{e.provider.displayUsername}</td>
+                    <td>{e.receiver.displayUsername}</td>
+                    <td>{e.inputOf}</td>
+                    <td>{e.outputOf}</td>
+                    <td>{e.note}</td>
+                </tr>)}
+          </BrTable>
       <ul>
-        {isProcess() && <ProcessCard process={obj}/>}
-        {isEconomicEvent() && <EconomicEventCard event={obj}/>}
       </ul>
       <br />
-    </div>
+    </>
   );
 }
 

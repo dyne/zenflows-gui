@@ -9,8 +9,8 @@ type SideBarButtonProps = {
 }
 
 const SideBarButton = ({text, link, active, svg}:SideBarButtonProps) => {
-    const css = `border-l-4 gap-2 left-4 pl-0 btn btn-ghost btn-block
-     border-0 hover:bg-orange-50 hover:border-l-primary ${active&&`border-l-primary bg-orange-50`}`
+    const css = `border-l-4 gap-2 left-4 pl-0 btn btn-ghost btn-block text-white ${!active&&`bg-[#101828]`}
+     border-0 hover:bg-neutral-focus hover:border-l-accent ${active&&`border-l-accent bg-neutral-focus`}`
 
     return (<Link href={link}>
 

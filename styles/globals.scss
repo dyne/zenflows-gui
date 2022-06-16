@@ -20,17 +20,23 @@ a {
 
 
 h1, .heading1 {
-    @apply text-4xl font-semibold text-gray-900 leading-11;
+    @apply text-4xl font-semibold leading-11;
 }
 h2, .heading2 {
-    @apply text-2xl font-semibold text-gray-900 leading-8;
+    @apply text-2xl font-semibold leading-8;
 }
 h3, .heading3 {
-    @apply text-xl font-semibold text-gray-900 leading-6;
+    @apply text-xl font-semibold leading-6;
 }
 h4, .heading4 {
-    @apply text-base font-semibold text-gray-900;
+    @apply text-base font-semibold;
 }
 p, .paragraph {
-    @apply text-sm text-gray-900;
+    @apply text-sm;
+}
+.logo {
+  width: 162px;
+  height: 32px;
+  background-image: url('/logo.png');
+  @apply bg-cover;
 }

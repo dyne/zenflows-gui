@@ -7,14 +7,14 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          primary: "#02E379",
-          "primary-focus":"#02BF67",
-          "primary-content":"#0C1729",
-          secondary: "#1D3D68",
+          primary: "#1D3D68",
+          "primary-focus":"#05244F",
+          "primary-content":"#FFFFFF",
+          secondary: "#05244F",
           "secondary-focus":"#05244F",
           "secondary-content":"#FFFFFF",
-          accent: "#00E0FF",
-          "accent-focus":"#00C0E2",
+          accent: "#5EF0BC",
+          "accent-focus":"#56D7A9",
           "accent-content":"#05244F",
           neutral: "#475467",
           "neutral-focus":"#344054",

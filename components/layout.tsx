@@ -16,13 +16,12 @@ const Layout:React.FunctionComponent<layoutProps> = (layoutProps:layoutProps) =>
         <>
             {!isSignedIn()&&<SignIn/>}
             {isSignedIn()&&<>
-                <Topbar/>
                 <div className="drawer drawer-mobile">
                     <input id = "my-drawer" type = "checkbox" className = "drawer-toggle" />
-                    <div className="drawer-content max-w-screen-sm" >
+                    <div className="drawer-content">
                         {layoutProps?.children}
                     </div>
-                    <div className="drawer-side">
+                    <div className="drawer-side bg-base-content">
                         <label htmlFor="my-drawer" className="drawer-overlay">sidebar</label>
                         <Sidebar/>
                     </div>
