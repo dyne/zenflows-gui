@@ -4,6 +4,7 @@ import Link from 'next/link';
 import SideBarButton from "./brickroom/SideBarButton";
 import {useRouter} from "next/router";
 import {HomeIcon, UserGroupIcon, GlobeIcon} from "@heroicons/react/solid";
+import LoginBtn from "./LoginMenu";
 
 const SideBarProps = {
     newProcess: {text: "New Process",link:"/new_process"},
@@ -80,6 +81,8 @@ function Sidebar() {
                     {SideBarProps.newProcess.text}
                 </a>
             </Link>
+            <br/>
+            <LoginBtn/>
         </div></>
     )
 }

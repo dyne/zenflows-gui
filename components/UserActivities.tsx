@@ -49,7 +49,6 @@ const HomeProps = {
 const User: NextPage = () => {
     const activities = useQuery(FETCH_USER_DATA).data?.me?.user.userActivities
     return <>
-        <div className="container p-4">
             <div className="flex justify-between">
                 <div className="w-80">
                     <h2>{HomeProps.welcome.title}</h2>
@@ -72,7 +71,6 @@ const User: NextPage = () => {
             <RenderActivities userActivities={activities}/>
         </ul>}
         {!activities && <h2>Just a moment...</h2>}
-        </div>
 
     </>
 };
