@@ -1,9 +1,7 @@
 import React, {useState} from 'react';
-import ProcessCard from "./ProcessCard";
-import EconomicEventCard from "./EconomicEventCard";
 import BrTable from "./brickroom/BrTable";
-import AvatarUsers from "./avatarUsers";
 import BrPagination from "./brickroom/BrPagination";
+import ProcessTable from "./ProcessTable";
 
 
 const RenderActivities = ({userActivities}:{userActivities:any[]}) => {
@@ -28,20 +26,7 @@ const RenderActivities = ({userActivities}:{userActivities:any[]}) => {
     const eventPages = Math.floor(economicEvent.length/10 + 1)
   return (<>
 
-          <BrTable headArray={processesHead}>
-              {paginate(processes, processStartPage, processEndPage).map((p)=><tr key={p.id}>
-                    <th>{p.name}</th>
-                    <td>{p.finished? 'finished' : <div className="badge badge-success">active</div>}</td>
-                    <td>{p.note}</td>
-                    <td>
-                        <AvatarUsers/>
-                    </td>
-                </tr>)}
-
-
-          </BrTable>
-
-          <BrPagination max={processesPages} handleStart={setProcessStartPage} handleEnd={setProcessEndPage}/>
+          <ProcessTable processes={processes}/>
 
 
           <BrTable headArray={eventHead}>
