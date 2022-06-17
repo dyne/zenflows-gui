@@ -4,32 +4,33 @@ import Link from "next/link";
 
 import BrTable from "./brickroom/BrTable";
 import BrPagination from "./brickroom/BrPagination";
-import AvatarUsers from "./avatarUsers";
 
-const ProcessTable = ({processes}:{processes:Array<any>}) => {
-  const [processStartPage, setProcessStartPage] = useState(0)
-  const [processEndPage, setProcessEndPage] = useState(10)
-  const processesHead = ['process','status','description', 'users']
+const EventTable = ({economicEvents}:{economicEvents:Array<any>}) => {
+  const [economicEventStartPage, seteconomicEventStartPage] = useState(0)
+  const [economicEventEndPage, seteconomicEventEndPage] = useState(10)
+  const economicEventsHead = ['last update', 'activity', 'resource', 'provider', 'receiver', 'input', 'output', 'notes']
   function paginate (array:Array<any>, start: number = 0, end: number = 10) {
         return array?.filter((e,i)=>(i<end&&i>start))
     }
-  const processesPages = Math.floor(processes?.length/10 + 1 | 1)
+  const economicEventsPages = Math.floor(economicEvents?.length/10 + 1 | 1)
   return (<>
-   <BrTable headArray={processesHead}>
-              {paginate(processes, processStartPage, processEndPage)?.map((p)=><tr key={p.id}>
-                  <th><Link href={`/processes/${p.id}`}><a>{p.name}</a></Link></th>
-                    <td>{p.finished? 'finished' : <div className="badge badge-success">active</div>}</td>
-                    <td>{p.note}</td>
-                    <td>
-                        <AvatarUsers/>
-                    </td>
+   <BrTable headArray={economicEventsHead}>
+              {paginate(economicEvents, economicEventStartPage, economicEventEndPage)?.map((e)=><tr key={e.id}>
+                  <td></td>
+                    <td>{e.action.id}</td>
+                    <td>{e.resourceConformsTo?.name}</td>
+                    <td>{e.provider.displayUsername}</td>
+                    <td>{e.receiver.displayUsername}</td>
+                    <td>{e.inputOf}</td>
+                    <td>{e.outputOf}</td>
+                    <td>{e.note}</td>
                 </tr>)}
 
 
           </BrTable>
 
-          <BrPagination max={processesPages} handleStart={setProcessStartPage} handleEnd={setProcessEndPage}/>
+          <BrPagination max={economicEventsPages} handleStart={seteconomicEventStartPage} handleEnd={seteconomicEventEndPage}/>
 
 </>)}
 
-export default ProcessTable
+export default EventTable
