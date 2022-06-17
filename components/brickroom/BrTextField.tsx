@@ -1,7 +1,6 @@
 import React, {ChangeEvent, ChangeEventHandler, useState} from "react";
 
-type BrInputProps = {
-    type?:'number'|'text'|'password',
+type BrTextFieldProps = {
     placeholder?:string,
     label?:string,
     onChange?:ChangeEventHandler,
@@ -11,7 +10,7 @@ type BrInputProps = {
 import {ExclamationIcon} from '@heroicons/react/solid'
 
 
-const BrInput = (props:BrInputProps) => {
+const BrTextField = (props:BrTextFieldProps) => {
 
     return (<>
 
@@ -19,10 +18,10 @@ const BrInput = (props:BrInputProps) => {
             <label className="label">
                 <span className="label-text">{props.label}</span>
             </label>
-            <input type={props.type}
+            <textarea
                    placeholder={props.placeholder}
                    onChange={props.onChange}
-                   className="input input-bordered w-full focus:input-primary"
+                   className="textarea textarea-bordered w-full focus:textarea-primary"
             />
             <label className="label">
                 {props.error&&<span className="label-text-alt text-warning flex flex-row items-center justify-between">
@@ -35,4 +34,4 @@ const BrInput = (props:BrInputProps) => {
             </> )
 }
 
-export default BrInput
+export default BrTextField

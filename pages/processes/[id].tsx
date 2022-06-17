@@ -11,6 +11,7 @@ import Consume from "../../components/consume";
 import Lower from "../../components/lower";
 import EconomicEventCard from "../../components/EconomicEventCard";
 import {ActionsEnum} from "../../lib/ActionsEnum";
+import EventTable from "../../components/EventTable";
 
 
 const Process: NextPage = () => {
@@ -63,6 +64,7 @@ const Process: NextPage = () => {
         {name:ActionsEnum.Lower,component: <Lower processId={processId}/>},
         ]
 
+    console.log(process.data?.process.inputs)
   return (
   <ul>
       <li>{process.data?.process.name}</li>
@@ -72,8 +74,8 @@ const Process: NextPage = () => {
           <Popup name={a.name} action1={a.name}>{a.component}</Popup>
       </li>)}
       <div className="divider w-full"/>
-      <ul>{process.data?.process.inputs.map((i:any)=><li key={i.id}><EconomicEventCard event={i}/></li>)}</ul>
-      <li>{process.data?.process.outputs.map((o:any)=><EconomicEventCard event={o} key={o.id}/>)}</li>
+      <EventTable economicEvents={process.data?.process.inputs}/>
+      <EventTable economicEvents={process.data?.process.outputs}/>
   </ul>
   )};
 
