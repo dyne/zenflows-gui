@@ -15,7 +15,7 @@ const SideBarProps = {
         },
     {
             name: "Local",
-            link: "/loc",
+            link: "/local",
             svg: <UserGroupIcon className="w-5 h-5 float-left mr-2"/>
         },
     {
@@ -53,8 +53,6 @@ function Sidebar() {
                     </a>
                 </Link>
             </div>
-
-
             <ul className="overflow-y-auto w-60 m-4 text-base-content border border-white rounded-md">
                 {SideBarProps.menu1.map((m) => <li key={m.name}>
                     <SideBarButton

@@ -5,6 +5,7 @@ import {gql, useQuery} from "@apollo/client";
 import Card from "../components/brickroom/Card";
 import Link from "next/link";
 import InventoriedResources from "../components/InventoriedResources";
+import ResourceTable from "../components/ResourceTable";
 
 
 
@@ -40,7 +41,6 @@ const MyInventory: NextPage = () => {
     const {authId} = useAuth()
     const inventory = useQuery(FETCH_INVENTORY, {variables:{id:authId}}).data?.agent.inventoriedEconomicResources
 
-    return <InventoriedResources inventoriedResources={inventory}/>
-};
+    return <><ResourceTable resources={inventory}/></>};
 
 export default MyInventory

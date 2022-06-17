@@ -4,7 +4,7 @@ import {gql, useQuery} from "@apollo/client";
 import {useRouter} from "next/router";
 import Tabs from "../../components/Tabs";
 import InventoriedResources from "../../components/InventoriedResources";
-import RenderActivities from "../../components/renderActivities";
+import EventTable from "../../components/EventTable";
 
 const Profile: NextPage = () => {
     const router = useRouter()
@@ -41,9 +41,7 @@ const Profile: NextPage = () => {
     const idToBeFetch = isUser ? authId : id
     const user = useQuery(FETCH_USER, {variables: {id: idToBeFetch}}).data?.agent
     const tabsArray = [
-        {title: 'Activity', component: <>
-                {user?.economicEvents.map((e:any, i:number)=><RenderActivities key={i} userActivity={e}/>)}
-            </>},
+        {title: 'Activity', component: <EventTable economicEvents={user?.economicEvents}/>},
         {
             title: 'Inventory',
             component: <InventoriedResources inventoriedResources={user?.inventoriedEconomicResources}/>
