@@ -1,6 +1,5 @@
 import type {NextPage} from 'next'
 import {gql, useMutation} from "@apollo/client";
-import {useAuth} from "../lib/auth";
 import React, {useState} from "react";
 
 const NewProcess: NextPage = () => {

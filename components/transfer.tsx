@@ -3,8 +3,9 @@ import React from "react";
 import ActionForm from "./ActionForm";
 import {ActionsEnum} from "../lib/ActionsEnum";
 
-const Produce = (props:{processId:string}) => {
-    const PRODUCE_MUTATION = gql`
+const Transfer = (props:{processId:string}) => {
+
+    const TRANSFER_MUTATION = gql`
             mutation (
               $outputOf: ID!
               $provider: ID!
@@ -18,7 +19,7 @@ const Produce = (props:{processId:string}) => {
             ) {
               createEconomicEvent(
                 event: {
-                  action: "produce"
+                  action: "raise"
                   outputOf: $outputOf
                   provider: $provider
                   receiver: $receiver
@@ -65,7 +66,7 @@ const Produce = (props:{processId:string}) => {
           `
 
   return (
-      <ActionForm MUTATION={PRODUCE_MUTATION} processId={props.processId} type={ActionsEnum.Produce}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Transfer}/>
   )};
 
-export default Produce
+export default Transfer

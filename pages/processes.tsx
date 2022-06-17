@@ -1,7 +1,8 @@
 import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
 import React from "react";
-import Link from 'next/link';
+import ProcessCard from "../components/ProcessCard";
+
 
 const Processes: NextPage = () => {
     const ProcessesQuery = gql`
@@ -9,6 +10,7 @@ const Processes: NextPage = () => {
               processes(limit:3){
                 id
                 name
+                note
               }
             }
           `
@@ -17,7 +19,7 @@ const Processes: NextPage = () => {
 
   return (<ul>
       {processes?.map((process:any)=>{
-          return <li key={process.id}><Link href={"/processes/" + process.id}><a>{process.name}</a></Link></li>})}
+          return <li key={process.id}><ProcessCard process={process}/></li>})}
   </ul>
   )};
 

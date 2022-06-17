@@ -3,40 +3,34 @@ import React from "react";
 import ActionForm from "./ActionForm";
 import {ActionsEnum} from "../lib/ActionsEnum";
 
-const Produce = (props:{processId:string}) => {
-    const PRODUCE_MUTATION = gql`
+const Lower = (props:{processId:string}) => {
+
+    const TRANSFER_MUTATION = gql`
             mutation (
-              $outputOf: ID!
               $provider: ID!
               $receiver: ID!
-              $resourceConformsTo: ID!
+              $resourceInventoriedAs: ID!
               $resourceQuantity: IMeasure!
-              $newInventoriedResource: EconomicResourceCreateParams!
               $hasPointInTime: DateTime
               $hasBeginning: DateTime
               $hasEnd: DateTime
             ) {
-              createEconomicEvent(
-                event: {
-                  action: "produce"
-                  outputOf: $outputOf
-                  provider: $provider
-                  receiver: $receiver
-                  resourceConformsTo: $resourceConformsTo
-                  resourceQuantity: $resourceQuantity
-                  hasPointInTime: $hasPointInTime
-                  hasBeginning: $hasBeginning
-                  hasEnd: $hasEnd
-                }
-                newInventoriedResource: $newInventoriedResource
-              ) {
+              createEconomicEvent(event: {
+                 action: "lower"
+                 provider: $provider
+                 receiver: $receiver
+                 resourceInventoriedAs: $resourceInventoriedAs
+                 resourceQuantity: $resourceQuantity
+                 hasPointInTime: $hasPointInTime
+                 hasBeginning: $hasBeginning
+                 hasEnd: $hasEnd
+              }) {
                 economicEvent {
                   id
                   action {id}
-                  outputOf {id}
+                  inputOf {id}
                   provider {id}
                   receiver {id}
-                  resourceConformsTo {id}
                   resourceQuantity {
                     hasNumericalValue
                     hasUnit {id}
@@ -65,7 +59,7 @@ const Produce = (props:{processId:string}) => {
           `
 
   return (
-      <ActionForm MUTATION={PRODUCE_MUTATION} processId={props.processId} type={ActionsEnum.Produce}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Lower}/>
   )};
 
-export default Produce
+export default Lower
