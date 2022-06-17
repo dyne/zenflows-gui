@@ -14,6 +14,7 @@ const SelectUnit: any = (props: { handleSelect: Function }) => {
             }
           `
     const units = useQuery(queryUnitsId).data?.unitsPages.edges
+
     return (<>
         <select onChange={(e) => props.handleSelect(e)} className="select select-bordered">
             {units?.map((unit: { id: string, label: string }) =>

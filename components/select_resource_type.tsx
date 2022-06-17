@@ -3,7 +3,6 @@ import {gql, useQuery} from "@apollo/client";
 
 
 const SelectResourceType: any = (props: { handleSelect: Function }) => {
-
     const queryTypes = gql`
             query {
               resourceSpecifications{

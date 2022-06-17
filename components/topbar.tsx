@@ -3,6 +3,7 @@ import {NextPage} from "next";
 import Link from "next/link";
 import LoginBtn from "./LoginMenu";
 
+
 function Topbar() {
     return (
         <div className="navbar bg-base-100">

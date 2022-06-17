@@ -4,6 +4,7 @@ import {gql, useQuery} from '@apollo/client'
 import RenderActivities from "../components/renderActivities"
 import Link from "next/link";
 
+
 const FETCH_USER_DATA = gql`
         query {
           me {

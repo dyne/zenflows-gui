@@ -45,4 +45,23 @@ describe('Navigation', () => {
     cy.url().should('include', '/resource/')
     cy.get('.drawer-content').contains('economicResource')
   })
+
+  it('should render a basic layout', () => {
+    cy.visit('/')
+    cy.get('.navbar').contains('ReflowApp')
+    cy.get('.drawer').contains('Processes')
+  })
+
+   it('should open a popup to produce some resource inside a process starting navigates from home', () => {
+     cy.viewport('macbook-13')
+     cy.visit('/')
+     cy.contains('Processes').click()
+     cy.url().should('include', '/processes')
+     cy.get('.drawer-content>ul>li>a').first().click()
+     cy.url().should('include', '/processes/')
+     cy.get('.drawer-content>ul>li>label').contains('Produce').click()
+     cy.get('.modal-box>form>select').first().contains(/(?=.*rice)(?=.*Gown)(?=.*Soap)/).select('rice')
+     cy.get('.modal-box>form>select').eq(1).select(3)
+  })
+
 })

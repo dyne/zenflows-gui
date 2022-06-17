@@ -3,6 +3,7 @@ import {gql, useQuery} from "@apollo/client";
 import React from "react";
 import ProcessCard from "../components/ProcessCard";
 
+
 const Processes: NextPage = () => {
     const ProcessesQuery = gql`
             query {

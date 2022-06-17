@@ -12,10 +12,10 @@ import Lower from "../../components/lower";
 import EconomicEventCard from "../../components/EconomicEventCard";
 import {ActionsEnum} from "../../lib/ActionsEnum";
 
+
 const Process: NextPage = () => {
     const router = useRouter()
     const { id } = router.query
-
     const Process = gql`
             query {
               process(id:"${id}"){

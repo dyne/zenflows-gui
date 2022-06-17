@@ -5,9 +5,11 @@ import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import {LinkIcon} from "@heroicons/react/solid";
 
+
 export default function SignIn() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
   const router = useRouter()
   const signInTextProps:any ={
     title:"Welcome Back!",
