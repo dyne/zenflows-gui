@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 0.1.3 (2022-06-17)
+
+
+### ✨ Features
+
+* Add economic events creation ([#27](https://github.com/dyne/reflow-oval-room/issues/27)) ([ae90074](https://github.com/dyne/reflow-oval-room/commit/ae900747834b9ac649a374ab4e93b1e903c4bab3)), closes [#15](https://github.com/dyne/reflow-oval-room/issues/15)
+
 ### 0.1.2 (2022-05-31)
 
 
