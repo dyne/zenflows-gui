@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import BrTable from "./brickroom/BrTable";
 import BrPagination from "./brickroom/BrPagination";
+import {mapUnit} from "../lib/mapUnit";
 
 const ResourceTable = ({resources}: { resources: Array<any> }) => {
     const [resourcesStartPage, setResourcesStartPage] = useState(0)
@@ -22,7 +23,7 @@ const ResourceTable = ({resources}: { resources: Array<any> }) => {
                 <tr key={e.id}>
                     <td><Link href={`/resource/${e.id}`}><a>{e.id}</a></Link></td>
                     <td>{e.name}</td>
-                    <td>{e.onhandQuantity?.hasNumericalValue}{e.onhandQuantity?.hasUnit.symbol}</td>
+                    <td>{e.onhandQuantity?.hasNumericalValue} {mapUnit(e.onhandQuantity?.hasUnit.label)}</td>
                     <td>{e.currentLocation?.name}</td>
                     <td></td>
                     <td></td>

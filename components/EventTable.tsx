@@ -1,10 +1,9 @@
 import React, {useState} from "react";
 import Link from 'next/link';
 
-
-
 import BrTable from "./brickroom/BrTable";
 import BrPagination from "./brickroom/BrPagination";
+import {mapUnit} from "../lib/mapUnit";
 
 const EventTable = ({economicEvents}:{economicEvents:Array<any>}) => {
   const [economicEventStartPage, seteconomicEventStartPage] = useState(0)
@@ -19,7 +18,7 @@ const EventTable = ({economicEvents}:{economicEvents:Array<any>}) => {
         <Link href={`/resource/${inventoried?.id}`}>
             <a>
                 <h4>{inventoried?.name}</h4>
-                <span>{`${action}d`} {quantity?.hasNumericalValue} {quantity?.hasUnit.label} {conform&&`of ${conform.name}`}</span>
+                <span>{`${action}d`} {quantity?.hasNumericalValue} {mapUnit(quantity?.hasUnit.label)} {conform&&`of ${conform.name}`}</span>
             </a>
         </Link>
     )

@@ -1,5 +1,6 @@
 import React from 'react';
 import {gql, useQuery} from "@apollo/client";
+import {mapUnits} from "../lib/mapUnit"
 
 
 const SelectUnit: any = (props: { handleSelect: Function }) => {
@@ -14,10 +15,11 @@ const SelectUnit: any = (props: { handleSelect: Function }) => {
             }
           `
     const units = useQuery(queryUnitsId).data?.unitsPages.edges
+    const mappedUnits = mapUnits(units)
 
     return (<>
         <select onChange={(e) => props.handleSelect(e)} className="select select-bordered">
-            {units?.map((unit: { id: string, label: string }) =>
+            {mappedUnits?.map((unit: { id: string, label: string }) =>
                 (<option key={unit?.id} value={unit?.id}>{unit?.label}</option>))}
         </select>
     </>)

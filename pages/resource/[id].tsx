@@ -1,11 +1,11 @@
 import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useRouter} from 'next/router'
-import Popup from "../../components/brickroom/popup";
 import base45 from "base45";
 import QRCode from "react-qr-code";
 import ActionsBlock from "../../components/ActionsBlock";
+import {mapUnit} from "../../lib/mapUnit";
 
 const Resource: NextPage = () => {
     const router = useRouter()
@@ -90,8 +90,8 @@ const Resource: NextPage = () => {
                     <h2>{resource?.name}</h2>
                     <p className="text-gray-500">{resource?.note}</p>
                     <p className="text-gray-500">
-                        {resource?.onhandQuantity?.hasNumericalValue} {resource?.onhandQuantity?.hasUnit.label}
-                        {resource?.conformsTo&&`of ${resource.conformsTo.name}`}
+                        {resource?.onhandQuantity?.hasNumericalValue} {mapUnit(resource?.onhandQuantity?.hasUnit.label)}
+                        {resource?.conformsTo && ` of ${resource.conformsTo.name}`}
                     </p>
                 </div>
                 <div>
