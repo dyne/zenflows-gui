@@ -1,10 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 
-import SideBarButton from "./brickroom/SideBarButton";
-import {useRouter} from "next/router";
 import {HomeIcon, UserGroupIcon, GlobeIcon} from "@heroicons/react/solid";
 import LoginBtn from "./LoginMenu";
+import SideBarMenu from "./brickroom/SideBarMenu";
 
 const SideBarProps = {
     newProcess: {text: "New Process",link:"/new_process"},
@@ -41,9 +40,6 @@ const SideBarProps = {
 }
 
 function Sidebar() {
-    const router = useRouter()
-    const isActive = (path: string) => path === router.asPath
-    console.log(router.asPath)
     return (<>
         <div className="title text-primary-content">
             <div className="w-full">
@@ -53,27 +49,8 @@ function Sidebar() {
                     </a>
                 </Link>
             </div>
-            <ul className="overflow-y-auto w-60 m-4 text-base-content border border-white rounded-md">
-                {SideBarProps.menu1.map((m) => <li key={m.name}>
-                    <SideBarButton
-                        text={m.name}
-                        link={m.link}
-                        active={isActive(m.link)}
-                        svg={m.svg}
-                /></li>)}
-            </ul>
-            <h4 className="ml-4 mt-8">
-                        MyReflow
-                    </h4>
-            <ul className="overflow-y-auto w-60 m-4 text-base-content mb-4 border border-white rounded-md">
-                {SideBarProps.menu.map((m) => <li key={m.name}>
-                    <SideBarButton
-                        text={m.name}
-                        link={m.link}
-                        active={isActive(m.link)}
-                        svg={m?.svg}
-                /></li>)}
-            </ul>
+            <SideBarMenu menu={SideBarProps.menu1}/>
+             <SideBarMenu menu={SideBarProps.menu} title={'MyReflow'}/>
             <Link href={SideBarProps.newProcess.link}>
                 <a className="btn btn-accent text-primary-content w-60 ml-4">
                     {SideBarProps.newProcess.text}

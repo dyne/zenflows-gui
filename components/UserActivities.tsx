@@ -27,6 +27,19 @@ const FETCH_USER_DATA = gql`
                     resourceConformsTo {name note}
                     resourceInventoriedAs {name id note}
                     toResourceInventoriedAs {name note}
+                    inputOf {
+                      id
+                      name
+                    }
+                    outputOf {
+                      id
+                      name
+                    }
+                    atLocation {
+                      id
+                      name
+                    }
+                    
                     action { id }
                     resourceQuantity {
                       hasNumericalValue

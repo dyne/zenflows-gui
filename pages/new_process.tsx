@@ -3,6 +3,7 @@ import {gql, useMutation} from "@apollo/client";
 import React, {ChangeEvent, useState} from "react";
 import BrTextField from "../components/brickroom/BrTextField";
 import BrInput from "../components/brickroom/BrInput";
+import {useRouter} from "next/router";
 
 const newProcessProps = {
     headline: {
@@ -38,10 +39,12 @@ const NewProcess: NextPage = () => {
           `
 
     const [newProcess, {data, loading, error}] = useMutation(NewProcessMutation)
+    const router = useRouter()
 
     function onSubmit(e: any) {
         e.preventDefault()
         newProcess({variables: {name: processName, note: processNote}})
+            .then((re:any)=>router.push(`/processes/${re.data?.createProcess.process.id}`))
     }
 
     return (<>
