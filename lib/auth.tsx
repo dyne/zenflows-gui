@@ -34,11 +34,14 @@ export const useAuth:any = () => {
 function useProvideAuth() {
   const {getItem, setItem } = useStorage()
   const [authToken, setAuthToken] = useState(null as string | null)
+  const [username, setUsername] = useState(null as string | null)
   const [authId, setAuthId] = useState(null as string | null)
   const storedToken =  getItem('token', 'local') !== ''? getItem('token', 'local') : null
   useEffect(() => setAuthToken(storedToken), [])
   const storedId =  getItem('authId', 'local') !== ''? getItem('authId', 'local') : null
   useEffect(() => setAuthId(storedId), [])
+  const storedUser =  getItem('user', 'local') !== ''? getItem('user', 'local') : null
+  useEffect(() => setUsername(storedUser), [])
 
   const isSignedIn = () => {
     if (authToken) {
@@ -78,7 +81,13 @@ function useProvideAuth() {
             mutation {
               login(emailOrUsername: "${username}", password: "${password}") {
                 token
-                currentUser {id}
+                currentUser {
+                id 
+                profile{
+                  name
+                  summary
+                  }
+                }
               }
             }
           `
@@ -90,8 +99,10 @@ function useProvideAuth() {
 
     if (result?.data?.login?.token) {
       setAuthToken(result.data.login.token)
+      setUsername(result.data.login.currentUser.profile.name)
       setItem('token',result.data.login.token, 'local')
       setItem('authId',result.data.login.currentUser.id, 'local')
+      setItem('username',result.data.login.currentUser.profile.name, 'local')
       setAuthId(result.data.login.currentUser.id)
     }
   }
@@ -100,6 +111,7 @@ function useProvideAuth() {
     setAuthToken(null)
     setItem('token','', 'local')
     setItem('authId','', 'local')
+    setItem('username','', 'local')
   }
 
   return {
@@ -109,5 +121,6 @@ function useProvideAuth() {
     signOut,
     createApolloClient,
     authId,
+    username
   }
 }
