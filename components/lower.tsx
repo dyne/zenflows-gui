@@ -3,7 +3,7 @@ import React from "react";
 import ActionForm from "./ActionForm";
 import {ActionsEnum} from "../lib/ActionsEnum";
 
-const Lower = (props:{processId:string}) => {
+const Lower = (props:{processId?:string}) => {
 
     const TRANSFER_MUTATION = gql`
             mutation (

@@ -2,16 +2,16 @@ import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
 import React from "react";
 import {useRouter} from 'next/router'
-import Popup from "../../components/popup";
+import Popup from "../../components/brickroom/popup";
 import Produce from "../../components/produce";
 import Raise from "../../components/raise";
 import Transfer from "../../components/transfer";
 import Use from "../../components/use";
 import Consume from "../../components/consume";
 import Lower from "../../components/lower";
-import EconomicEventCard from "../../components/EconomicEventCard";
 import {ActionsEnum} from "../../lib/ActionsEnum";
 import EventTable from "../../components/EventTable";
+import ActionsBlock from "../../components/ActionsBlock";
 
 
 const Process: NextPage = () => {
@@ -63,20 +63,18 @@ const Process: NextPage = () => {
         {name:ActionsEnum.Consume,component: <Consume processId={processId}/>},
         {name:ActionsEnum.Lower,component: <Lower processId={processId}/>},
         ]
-
-    console.log(process.data?.process.inputs)
   return (
-  <ul>
-      <li>{process.data?.process.name}</li>
-      <li>{processId}</li>
+  <>
+      <h2>{process.data?.process.name}</h2>
       <div className="divider"/>
-      {actions.map((a)=><li key={a.name} className="float-left mr-2">
-          <Popup name={a.name} action1={a.name}>{a.component}</Popup>
-      </li>)}
+      <ActionsBlock processId={processId}/>
       <div className="divider w-full"/>
-      <EventTable economicEvents={process.data?.process.inputs}/>
-      <EventTable economicEvents={process.data?.process.outputs}/>
-  </ul>
+      {(process.data?.process.inputs.length>0)&&(<><h2>inputs:</h2>
+      <EventTable economicEvents={process.data?.process.inputs}/></>)}
+      <div className="divider w-full"/>
+      {(process.data?.process.outputs.length>0)&&(<><h2>outputs:</h2>
+      <EventTable economicEvents={process.data?.process.outputs}/></>)}
+  </>
   )};
 
 export default Process

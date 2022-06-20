@@ -40,7 +40,7 @@ function useProvideAuth() {
   useEffect(() => setAuthToken(storedToken), [])
   const storedId =  getItem('authId', 'local') !== ''? getItem('authId', 'local') : null
   useEffect(() => setAuthId(storedId), [])
-  const storedUser =  getItem('user', 'local') !== ''? getItem('user', 'local') : null
+  const storedUser =  getItem('username', 'local') !== ''? getItem('username', 'local') : null
   useEffect(() => setUsername(storedUser), [])
 
   const isSignedIn = () => {

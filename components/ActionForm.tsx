@@ -6,6 +6,7 @@ import {DocumentNode, TypedDocumentNode, useMutation} from "@apollo/client";
 import SelectUser from "./SelectUser";
 import SelectInventoriedResource from "./SelectInventoriedResource";
 import {ActionsEnum} from "../lib/ActionsEnum";
+import BrInput from "./brickroom/BrInput";
 
 type ActionVariables = {
     inputOf?: string,
@@ -22,7 +23,7 @@ type ActionVariables = {
 
 type ActionFormProps = {
     MUTATION: DocumentNode | TypedDocumentNode,
-    processId: string,
+    processId?: string,
     type: ActionsEnum,
     inventoriedResource?: { name: string, id: string, onhandQuantity: any },
 }
@@ -98,6 +99,7 @@ const ActionForm = (props: ActionFormProps) => {
 
     return (<>
             <form onSubmit={onSubmit}>
+                {!props.processId&&<BrInput/>}
 
                 {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <><SelectResourceType
                     handleSelect={handleResource}/>
