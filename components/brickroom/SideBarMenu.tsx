@@ -1,28 +1,28 @@
 import React from 'react';
 
 import SideBarButton from "./SideBarButton";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 
-type SideBarMenuProps = {menu:Array<{name: string, link: string, svg?: any }>, title?: string}
+type SideBarMenuProps = { menu: Array<{ name: string, link: string, svg?: any }>, title?: string }
 
 
-function Sidebar({menu, title}:SideBarMenuProps) {
+function Sidebar({ menu, title }: SideBarMenuProps) {
     const router = useRouter()
     const isActive = (path: string) => path === router.asPath
     return (<>
-            <h4 className="ml-4 mt-8">
-                {title}
-                    </h4>
-            <ul className="overflow-y-auto w-60 m-4 text-base-content mb-4 border border-white rounded-md">
-                {menu.map((m) => <li key={m.name}>
-                    <SideBarButton
-                        text={m.name}
-                        link={m.link}
-                        active={isActive(m.link)}
-                        svg={m?.svg}
+        <h4 className="mt-8 ml-4">
+            {title}
+        </h4>
+        <ul className="m-4 mb-4 overflow-y-auto border border-white rounded-md w-60 text-base-content">
+            {menu.map((m) => <li key={m.name}>
+                <SideBarButton
+                    text={m.name}
+                    link={m.link}
+                    active={isActive(m.link)}
+                    svg={m?.svg}
                 /></li>)}
-            </ul>
-        </>
+        </ul>
+    </>
     )
 }
 
