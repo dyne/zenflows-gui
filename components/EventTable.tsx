@@ -48,7 +48,7 @@ const EventTable = ({economicEvents}:{economicEvents:Array<any>}) => {
                     /></td>
                   <td>{e.provider.displayUsername}</td>
                   <td>{e.receiver.displayUsername}</td>
-                    <td>{e.note}</td>
+                    <td className="whitespace-normal">{e.note}</td>
                 </tr>)}
 
 

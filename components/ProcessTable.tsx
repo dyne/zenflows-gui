@@ -17,9 +17,9 @@ const ProcessTable = ({processes}:{processes:Array<any>}) => {
   return (<>
    <BrTable headArray={processesHead}>
               {paginate(processes, processStartPage, processEndPage)?.map((p)=><tr key={p.id}>
-                  <th><Link href={`/processes/${p.id}`}><a>{p.name}</a></Link></th>
+                  <th className="whitespace-normal"><Link href={`/processes/${p.id}`}><a>{p.name}</a></Link></th>
                     <td>{p.finished? 'finished' : <div className="badge badge-success">active</div>}</td>
-                    <td>{p.note}</td>
+                    <td className="whitespace-normal">{p.note}</td>
                     <td>
                         <AvatarUsers/>
                     </td>
