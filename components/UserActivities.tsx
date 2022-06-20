@@ -3,6 +3,7 @@ import type {NextPage} from 'next'
 import {gql, useQuery} from '@apollo/client'
 import RenderActivities from "../components/renderActivities"
 import Link from "next/link";
+import NewProcessButton from "./NewProcessButton";
 
 
 const FETCH_USER_DATA = gql`
@@ -68,14 +69,11 @@ const User: NextPage = () => {
                     <p>{HomeProps.welcome.paragraph}</p>
                 </div>
                 <div className="w-80">
-                    <Link href="/new_process">
-                        <a className="btn btn-accent text-primary-content w-60 ml-4 mb-4">
-                            new process
-                        </a>
-                    </Link>
+
+                    <NewProcessButton/>
                     <Link href="/processes">
-                        <a className="btn btn-outline btn-primary w-60 ml-4">
-                            see all process
+                        <a className="btn btn-outline font-medium normal-case btn-primary w-60 ml-4">
+                            See all process
                         </a>
                     </Link>
                 </div>

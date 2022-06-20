@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {HomeIcon, UserGroupIcon, GlobeIcon} from "@heroicons/react/solid";
 import LoginBtn from "./LoginMenu";
 import SideBarMenu from "./brickroom/SideBarMenu";
+import NewProcessButton from "./NewProcessButton";
 
 const SideBarProps = {
     newProcess: {text: "New Process",link:"/new_process"},
@@ -51,11 +52,7 @@ function Sidebar() {
             </div>
             <SideBarMenu menu={SideBarProps.menu1}/>
              <SideBarMenu menu={SideBarProps.menu} title={'MyReflow'}/>
-            <Link href={SideBarProps.newProcess.link}>
-                <a className="btn btn-accent text-primary-content w-60 ml-4">
-                    {SideBarProps.newProcess.text}
-                </a>
-            </Link>
+            <NewProcessButton/>
             <br/>
             <LoginBtn/>
         </div></>

@@ -13,7 +13,7 @@ function Sidebar({ menu, title }: SideBarMenuProps) {
         <h4 className="mt-8 ml-4">
             {title}
         </h4>
-        <ul className="m-4 mb-4 overflow-y-auto border border-white rounded-md w-60 text-base-content">
+        <ul className="m-4 mb-4 overflow-y-auto border border-white rounded-xl w-60 text-base-content">
             {menu.map((m) => <li key={m.name}>
                 <SideBarButton
                     text={m.name}
