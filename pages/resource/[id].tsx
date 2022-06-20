@@ -50,7 +50,7 @@ const Resource: NextPage = () => {
                 note
                 conformsTo {
                  id
-                              name
+                 name
                 }
                 onhandQuantity {
                   id
@@ -89,14 +89,18 @@ const Resource: NextPage = () => {
                 <div>
                     <h2>{resource?.name}</h2>
                     <p className="text-gray-500">{resource?.note}</p>
+                    <p className="text-gray-500">
+                        {resource?.onhandQuantity?.hasNumericalValue} {resource?.onhandQuantity?.hasUnit.label}
+                        {resource?.conformsTo&&`of ${resource.conformsTo.name}`}
+                    </p>
                 </div>
                 <div>
                     <h4>Assigned to:</h4>
-                    <p className="text-gray-500">{resource?.primaryAccountable.name}</p>
+                    <p className="text-gray-500">{resource?.primaryAccountable?.name}</p>
                 </div>
                 <div>
                     <h4>Current Location:</h4>
-                    <p className="text-gray-500">{resource?.currentLocation.name}</p>
+                    <p className="text-gray-500">{resource?.currentLocation?.name}</p>
                 </div>
             </div>
             <div>{result && <QRCode value={result} className="mx-auto"/>}</div>

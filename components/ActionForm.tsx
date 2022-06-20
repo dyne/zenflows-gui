@@ -26,6 +26,7 @@ type ActionFormProps = {
     processId?: string,
     type: ActionsEnum,
     inventoriedResource?: { name: string, id: string, onhandQuantity: any },
+    intro?: {title:string, description:string}
 }
 
 
@@ -99,6 +100,10 @@ const ActionForm = (props: ActionFormProps) => {
 
     return (<>
             <form onSubmit={onSubmit}>
+                {props.intro&&(<>
+                    <h2>{props.intro.title}</h2>
+                    <p>{props.intro.description}</p>
+                    </>)}
                 {!props.processId&&<BrInput/>}
 
                 {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <><SelectResourceType

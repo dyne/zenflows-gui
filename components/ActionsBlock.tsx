@@ -11,20 +11,23 @@ import Lower from "./lower";
 
 type ActionBlockProps = {processId?:string}
 
+const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Neque pellentesque hendrerit ultrices mauris et non pellentesque suspendisse est. "
+
+type Action = {name:string, component:ReactNode};
 
 
 const ActionsBlock = ({processId}:ActionBlockProps) =>{
-    const actions:Array<{name:string, component:ReactNode}> = [
-        {name:ActionsEnum.Produce,component: <Produce processId={processId}/>},
-        {name:ActionsEnum.Raise,component: <Raise processId={processId}/>},
-        {name:ActionsEnum.Transfer,component: <Transfer processId={processId}/>},
-        {name:ActionsEnum.Use,component: <Use processId={processId}/>},
-        {name:ActionsEnum.Consume,component: <Consume processId={processId}/>},
-        {name:ActionsEnum.Lower,component: <Lower processId={processId}/>},
+    const actions:Array<Action> = [
+        {name:ActionsEnum.Produce,component: <Produce processId={processId} intro={{title:'Produce a resource', description:lorem}}/>},
+        {name:ActionsEnum.Raise,component: <Raise processId={processId} intro={{title:'Produce a resource', description:lorem}}/>},
+        {name:ActionsEnum.Transfer,component: <Transfer processId={processId} intro={{title:'Produce a resource', description:lorem}}/>},
+        {name:ActionsEnum.Use,component: <Use processId={processId} intro={{title:'Produce a resource', description:lorem}}/>},
+        {name:ActionsEnum.Consume,component: <Consume processId={processId} intro={{title:'Produce a resource', description:lorem}}/>},
+        {name:ActionsEnum.Lower,component: <Lower processId={processId} intro={{title:'Produce a resource', description:lorem}}/>},
         ]
     return (<Card>
             <span  className="float-left mr-2">
-            {actions?.map((a:{name:string, component:ReactNode})=><span key={a.name} className="mr-2">
+            {actions?.map((a:Action)=><span key={a.name} className="mr-2">
           <Popup  name={a.name} action1={a.name}>{a.component}</Popup></span>
       )}</span>
         </Card>

@@ -3,7 +3,7 @@ import React from "react";
 import ActionForm from "./ActionForm";
 import {ActionsEnum} from "../lib/ActionsEnum";
 
-const Produce = (props:{processId?:string}) => {
+const Produce = (props:{processId?:string, intro?:{title:string,description:string}}) => {
     const PRODUCE_MUTATION = gql`
             mutation (
               $outputOf: ID!
@@ -65,7 +65,7 @@ const Produce = (props:{processId?:string}) => {
           `
 
   return (
-      <ActionForm MUTATION={PRODUCE_MUTATION} processId={props.processId} type={ActionsEnum.Produce}/>
+      <ActionForm MUTATION={PRODUCE_MUTATION} processId={props.processId} type={ActionsEnum.Produce} intro={props.intro}/>
   )};
 
 export default Produce
