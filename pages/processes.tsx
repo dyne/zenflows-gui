@@ -11,6 +11,16 @@ const Processes: NextPage = () => {
                 id
                 name
                 note
+                inputs {
+                  id
+                  provider {displayUsername id}
+                  receiver {displayUsername id}
+                }
+                outputs {
+                  id 
+                  provider {displayUsername id}
+                  receiver {displayUsername id}
+                }
               }
             }
           `
@@ -18,7 +28,8 @@ const Processes: NextPage = () => {
     const processes = useQuery(ProcessesQuery).data?.processes
 
 
-  return (<ProcessTable processes={processes}/>)};
+    return (<ProcessTable processes={processes}/>)
+};
 
 export default Processes
 

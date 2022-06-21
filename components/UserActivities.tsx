@@ -19,6 +19,16 @@ const FETCH_USER_DATA = gql`
                         name 
                         note
                         finished
+                        inputs {
+                          id
+                          provider {displayUsername id}
+                          receiver {displayUsername id}
+                        }
+                        outputs {
+                          id 
+                          provider {displayUsername id}
+                          receiver {displayUsername id}
+                        }
                       }
                   ... on EconomicEvent {
                     id
