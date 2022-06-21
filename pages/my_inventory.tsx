@@ -15,6 +15,9 @@ const FETCH_INVENTORY = gql(`query($id: ID!) {
                                           __typename
                                           id
                                           name
+                                          conformsTo {
+                                            id name
+                                          }
                                           note
                                           image
                                           currentLocation {
@@ -22,6 +25,10 @@ const FETCH_INVENTORY = gql(`query($id: ID!) {
                                             id
                                             name
                                             mappableAddress
+                                          }
+                                          primaryAccountable {
+                                            id
+                                            name
                                           }
                                           onhandQuantity {
                                             __typename
