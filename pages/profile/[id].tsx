@@ -5,6 +5,7 @@ import {useRouter} from "next/router";
 import Tabs from "../../components/Tabs";
 import InventoriedResources from "../../components/InventoriedResources";
 import EventTable from "../../components/EventTable";
+import Spinner from "../../components/brickroom/Spinner";
 
 const Profile: NextPage = () => {
     const router = useRouter()
@@ -49,11 +50,12 @@ const Profile: NextPage = () => {
     ]
 
     return (<>
-        <ul>
+        {!user&&<Spinner/>}
+        {user&&<><ul>
             <li>name:{user?.name}</li>
         </ul>
         <div className="divider"/>
-        <Tabs tabsArray={tabsArray}/>
+        <Tabs tabsArray={tabsArray}/></>}
     </>)
 };
 

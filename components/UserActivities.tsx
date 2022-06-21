@@ -4,6 +4,7 @@ import {gql, useQuery} from '@apollo/client'
 import RenderActivities from "../components/renderActivities"
 import Link from "next/link";
 import NewProcessButton from "./NewProcessButton";
+import Spinner from "./brickroom/Spinner";
 
 
 const FETCH_USER_DATA = gql`
@@ -91,7 +92,7 @@ const User: NextPage = () => {
             {activities && <ul>
             <RenderActivities userActivities={activities}/>
         </ul>}
-        {!activities && <h2>Just a moment...</h2>}
+        {!activities && <Spinner/>}
 
     </>
 };
