@@ -3,7 +3,7 @@ import {useAuth} from "../lib/auth";
 import React from "react";
 
 export default function LoginBtn() {
-    const {signOut, username} = useAuth()
+    const {signOut, username, authId} = useAuth()
 
     return (
         <>
@@ -12,7 +12,7 @@ export default function LoginBtn() {
                 <div className="pl-0 grid grid-cols-2 p-2 items-center">
                      <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                         <div className="w-10 rounded-full">
-                            <img src="https://api.lorem.space/image/face?hash=33791"/>
+                            <img src={`https://api.lorem.space/image/face?hash=${authId}`} alt={username}/>
                         </div>
                     </label>
                     <div className="grid grid-cols-1 text-xs font-normal normal-case gap-y-1">
