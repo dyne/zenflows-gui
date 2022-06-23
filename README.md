@@ -1,17 +1,17 @@
 <p align="center">
   <a href="https://www.dyne.org">
-    <img alt="{project_name}" src="https://via.placeholder.com/150.png?text=LOGO" width="150" />
+    <img alt="Zenflow-gui" src="https://via.placeholder.com/150.png?text=LOGO" width="150" />
   </a>
 </p>
 
 <h1 align="center">
-  {project_name}</br>
-  <sub>{tagline}</sub>
+  Zenflow Gui</br>
+  <sub>Flow like water</sub>
 </h1>
 
 <p align="center">
-  <a href="https://travis-ci.com/DECODEproject/{project_name}">
-    <img src="https://travis-ci.com/DECODEproject/{project_name}.svg?branch=master" alt="Build Status">
+  <a href="https://travis-ci.com/DECODEproject/Zenflow-gui">
+    <img src="https://travis-ci.com/DECODEproject/Zenflow-gui.svg?branch=master" alt="Build Status">
   </a>
   <a href="https://dyne.org">
     <img src="https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%9D%A4%20by-Dyne.org-blue.svg" alt="Dyne.org">
@@ -45,7 +45,10 @@
 </h4>
 
 
-Abstract description like: 🚧 Zenroom is a software in **ALPHA stage** and are part of the [DECODE project](https://decodeproject.eu) about data-ownership and [technological sovereignty](https://www.youtube.com/watch?v=RvBRbwBm_nQ). Our effort is that of improving people's awareness of how their data is processed by algorithms, as well facilitate the work of developers to create along [privacy by design principles](https://decodeproject.eu/publications/privacy-design-strategies-decode-architecture) using algorithms that can be deployed in any situation without any change.
+Zenflow-Gui is an interface to interact with Reflow economic model. Create a process (make a Pie); Spawn all economic 
+events necessary to complete the Process(**Raise** or **Transfer** some flour from other agent, **Consume** flour and other 
+resouces in inventory, **Use** the oven to cook the pie). The outcome resource (the pie) will have a material Passport tracking 
+all the resources, events and agents involved in its production.
 
 
 <details id="toc">
@@ -126,7 +129,7 @@ Special thanks to Mr. W. White for his special contributions.
 ***
 ## 🌐 Links
 
-https://www.somelink.io/
+https://reflowproject.eu/
 
 https://dyne.org/
 
@@ -149,7 +152,7 @@ Please first take a look at the [Dyne.org - Contributor License Agreement](CONTR
 
 ***
 ## 💼 License
-    {project_name} - {tagline}
+    Zenflow-Gui - Flow like water
     Copyleft (ɔ) 2021 Dyne.org foundation, Amsterdam
 
     This program is free software: you can redistribute it and/or modify
