@@ -16,7 +16,7 @@ const ResourceTable = ({resources}: { resources: Array<any> }) => {
         return array?.filter((e, i) => (i < end && i > start))
     }
 
-    const resourcesPages = Math.floor(resources?.length / 10 + 1 | 1)
+    const resourcesPages = Math.floor((resources?.length / 10) + 1)
     return (<>
         <BrTable headArray={resourcesHead}>
             {paginate(resources, resourcesStartPage, resourcesEndPage)?.map((e) =>

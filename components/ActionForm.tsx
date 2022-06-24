@@ -1,12 +1,13 @@
 import SelectUnit from "./select_unit";
 import SelectResourceType from "./select_resource_type";
-import React, { useState } from "react";
-import { useAuth } from "../lib/auth";
+import React, {ChangeEvent, useState} from "react";
+import {useAuth} from "../lib/auth";
 import {DocumentNode, TypedDocumentNode, useMutation} from "@apollo/client";
 import SelectUser from "./SelectUser";
 import SelectInventoriedResource from "./SelectInventoriedResource";
 import {ActionsEnum} from "../lib/ActionsEnum";
 import BrInput from "./brickroom/BrInput";
+import BrTextField from "./brickroom/BrTextField";
 
 type ActionVariables = {
     inputOf?: string,
@@ -26,7 +27,7 @@ type ActionFormProps = {
     processId?: string,
     type: ActionsEnum,
     inventoriedResource?: { name: string, id: string, onhandQuantity: any },
-    intro?: {title:string, description:string}
+    intro?: { title: string, description: string }
 }
 
 
@@ -39,7 +40,7 @@ const ActionForm = (props: ActionFormProps) => {
     const [resourceNote, setResourceNote] = useState('')
     const [inventoriedResource, setInventoriedResource] = useState(props.inventoriedResource)
 
-    const { authId } = useAuth()
+    const {authId} = useAuth()
 
     const [performAction, {data, loading, error}] = useMutation(props.MUTATION)
 
@@ -100,29 +101,30 @@ const ActionForm = (props: ActionFormProps) => {
 
     return (<>
             <form onSubmit={onSubmit}>
-                {props.intro&&(<>
+                {props.intro && (<>
                     <h2>{props.intro.title}</h2>
                     <p>{props.intro.description}</p>
-                    </>)}
-                {!props.processId&&<BrInput/>}
+                </>)}
+                {!props.processId && <BrInput/>}
 
-                {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <><SelectResourceType
-                    handleSelect={handleResource}/>
-                    <input type="number"
-                           placeholder="Type here"
-                           className="input input-bordered"
-                           onChange={(e) => setQuantity(parseInt(e.target.value))}
-                    />
-                    <SelectUnit handleSelect={handleUnit}/>
-                    <textarea onChange={(e) => setResourceName!(e.target.value)}
-                              className="textarea textarea-bordered w-full" placeholder="Resource Descrption"/>
+                {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <>
+                    <SelectResourceType handleSelect={handleResource}/>
+                    <div className="grid grid-cols-2">
+                        <BrInput type="number" className="w-24" placeholder="Type here"
+                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value))}/>
+                        <SelectUnit handleSelect={handleUnit}/>
+                    </div>
+                    <BrTextField label="Resource Description" onChange={(e: any) => setResourceName!(e.target.value)}
+                                 placeholder="Resource Description"/>
+                    <BrTextField label="Note" onChange={(e: any) => setResourceName!(e.target.value)}
+                                 placeholder="Note"/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
                 {(props.type === ActionsEnum.Transfer) && <><input type="number"
-                                                         placeholder="Type here"
-                                                         className="input input-bordered"
-                                                         onChange={(e) => setQuantity(parseInt(e.target.value))}
+                                                                   placeholder="Type here"
+                                                                   className="input input-bordered"
+                                                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
                 />
                     <SelectUnit handleSelect={handleUnit} className="select select-bordered w-full"/>
                     <SelectResourceType handleSelect={handleResource}/>
@@ -133,8 +135,9 @@ const ActionForm = (props: ActionFormProps) => {
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 
 
-                {(props.type === ActionsEnum.Use) && <><SelectInventoriedResource inventoriedResource={props.inventoriedResource}
-                                                                        handleSelect={(e: any) => setInventoriedResource(e)}/>
+                {(props.type === ActionsEnum.Use) && <><SelectInventoriedResource
+                    inventoriedResource={props.inventoriedResource}
+                    handleSelect={(e: any) => setInventoriedResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
 

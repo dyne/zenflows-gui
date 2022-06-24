@@ -29,7 +29,7 @@ const ProcessTable = ({processes}: { processes: Array<any> }) => {
         return array?.filter((e, i) => (i < end && i > start))
     }
 
-    const processesPages = Math.floor(processes?.length / 10 + 1 | 1)
+    const processesPages = Math.floor((processes?.length / 10) + 1)
     return (<>
         {!(processes?.length>0)&&<Spinner/>}
         {processes&&<><BrTable headArray={processesHead}>
@@ -44,9 +44,9 @@ const ProcessTable = ({processes}: { processes: Array<any> }) => {
             </tr>)}
 
 
-        </BrTable></>}
+        </BrTable>
 
-        <BrPagination max={processesPages} handleStart={setProcessStartPage} handleEnd={setProcessEndPage}/>
+        <BrPagination max={processesPages} handleStart={setProcessStartPage} handleEnd={setProcessEndPage}/></>}
 
     </>)
 }

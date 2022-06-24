@@ -1,4 +1,5 @@
 import React, { ChangeEventHandler } from "react";
+import { ExclamationIcon } from '@heroicons/react/solid'
 
 type BrInputProps = {
     type?: 'number' | 'text' | 'password',
@@ -7,15 +8,15 @@ type BrInputProps = {
     onChange?: ChangeEventHandler,
     hint?: string,
     error?: string,
+    className?: string,
 }
-import { ExclamationIcon } from '@heroicons/react/solid'
 
 
 const BrInput = (props: BrInputProps) => {
 
     return (<>
 
-        <div className="w-full form-control">
+        <div className={`form-control ${props.className}`}>
             <label className="label">
                 <span className="label-text">{props.label}</span>
             </label>

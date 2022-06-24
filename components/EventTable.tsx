@@ -39,7 +39,8 @@ const EventTable = ({economicEvents}: { economicEvents: Array<any> }) => {
         return array?.filter((e, i) => (i < end && i > start))
     }
 
-    const economicEventsPages = Math.floor(economicEvents?.length / 10 + 1 | 1)
+    const economicEventsPages = Math.floor((economicEvents?.length / 10) + 1)
+
     return (<>
         <BrTable headArray={economicEventsHead}>
             {paginate(economicEvents, economicEventStartPage, economicEventEndPage)?.map((e) => <tr key={e.id}>
