@@ -74,22 +74,21 @@ const HomeProps = {
 const User: NextPage = () => {
     const activities = useQuery(FETCH_USER_DATA).data?.me?.user.userActivities
     return <>
-            <div className="flex justify-between">
-                <div className="w-80">
-                    <h2>{HomeProps.welcome.title}</h2>
-                    <p>{HomeProps.welcome.paragraph}</p>
-                </div>
-                <div className="w-80">
-
-                    <NewProcessButton/>
-                    <Link href="/processes">
-                        <a className="btn btn-outline font-medium normal-case btn-primary w-60 ml-4">
-                            See all process
-                        </a>
-                    </Link>
-                </div>
+        <div className="flex justify-between mb-6">
+            <div className="w-80">
+                <h2>{HomeProps.welcome.title}</h2>
+                <p>{HomeProps.welcome.paragraph}</p>
             </div>
-            {activities && <ul>
+            <div className="w-80">
+                <NewProcessButton/>
+                <Link href="/processes">
+                    <a className="btn btn-outline font-medium normal-case btn-primary w-60 ml-4">
+                        See all process
+                    </a>
+                </Link>
+            </div>
+        </div>
+        {activities && <ul>
             <RenderActivities userActivities={activities}/>
         </ul>}
         {!activities && <Spinner/>}

@@ -1,14 +1,11 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useState} from "react";
 import base45 from "base45";
 import QRCode from "react-qr-code";
 import Popup from "./popup";
 import Spinner from "./Spinner";
-import {Suspense} from "react";
 
 const QrCodeButton = ({id}: { id: any }) => {
-    const [result, setResult] = useState(undefined as string |undefined)
-
-    console.log(result)
+    const [result, setResult] = useState(undefined as string | undefined)
 
     const fetchQr = async () => {
         const data = {
@@ -45,6 +42,7 @@ const QrCodeButton = ({id}: { id: any }) => {
         <>
             <Popup name='fetchQr' action1="see Passport" action2={fetchQr}>
                 {result&&<div><QRCode value={result} className="mx-auto"/></div>}
+                {!result&&<Spinner/>}
             </Popup>
         </>
     )

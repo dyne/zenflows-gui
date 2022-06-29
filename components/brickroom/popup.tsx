@@ -9,12 +9,14 @@ type PopupPops = {
     children?: any,
     svg?:React.ReactNode,
     disabled?: boolean,
+    outlined?: boolean,
 }
 
 function Popup({ name, action1, action2, buttons, children, svg, disabled }: PopupPops) {
     const disabledClass = disabled ? 'btn-disabled' : ''
+    const outlinedClass = disabled ? 'btn-disabled' : ''
     return (<>
-        <label htmlFor={name} className={`btn modal-button text-normal font-medium normal-case ${disabledClass}`} onClick={action2}>{action1}{svg}</label>
+        <label htmlFor={name} className={`btn modal-button text-normal font-medium normal-case ${disabledClass} ${outlinedClass}`} onClick={action2}>{action1}{svg}</label>
         <input type="checkbox" id={name} className="modal-toggle" />
         <div className="modal">
             <div className="pt-10 modal-box">
