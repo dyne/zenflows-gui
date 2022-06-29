@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {useAuth} from "../lib/auth";
 import React from "react";
+import Avatar from "boring-avatars";
 
 export default function LoginBtn() {
     const {signOut, username, authId} = useAuth()
@@ -10,9 +11,14 @@ export default function LoginBtn() {
             <div className="btn btn-ghost btn-block text-white w-60">
             <span className="w-full text-left flex flex-row items-center pl-3">
                 <div className="pl-0 grid grid-cols-2 p-2 items-center">
-                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                     <label tabIndex={0} className="btn btn-ghost btn-circle avatar bordered border-accent">
                         <div className="w-10 rounded-full">
-                            <img src={`https://api.lorem.space/image/face?hash=${authId}`} alt={username}/>
+                            <Avatar
+                                size={'full'}
+                                name={username}
+                                variant="beam"
+                                colors={["#02E379", "#05244F", "#FFFFFF", "#405059"]}
+                            />;
                         </div>
                     </label>
                     <div className="grid grid-cols-1 text-xs font-normal normal-case gap-y-1">
@@ -26,7 +32,7 @@ export default function LoginBtn() {
                 </div>
             </span>
 
-        </div>
+            </div>
         </>
     )
 }

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import Link from 'next/link';
 
 import BrTable from "./brickroom/BrTable";
+import Avatar from "boring-avatars";
 import BrPagination from "./brickroom/BrPagination";
 import {mapUnit} from "../lib/mapUnit";
 
@@ -45,18 +46,23 @@ const EventTable = ({economicEvents}: { economicEvents: Array<any> }) => {
         <BrTable headArray={economicEventsHead}>
             {paginate(economicEvents, economicEventStartPage, economicEventEndPage)?.map((e) => <tr key={e.id}>
                 <td><ActionChip action={e.action.id}/></td>
-                <td><ProcessCell output={e.outputOf} input={e.inputOf}/></td>
-                <td><ResourceCell conform={e.resourceConformsTo}
-                                  inventoried={e.resourceInventoriedAs}
-                                  quantity={e.resourceQuantity}
-                                  action={e.action.id}
+                <td className="whitespace-normal"><ProcessCell output={e.outputOf} input={e.inputOf}/></td>
+                <td className="whitespace-normal"><ResourceCell conform={e.resourceConformsTo}
+                                                                inventoried={e.resourceInventoriedAs}
+                                                                quantity={e.resourceQuantity}
+                                                                action={e.action.id}
                 /></td>
                 <td>
                     <Link href={`/profile/${e.provider.id}`}>
                         <a className="pl-0 grid grid-cols-2 items-center">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar ml-4">
                                 <div className="w-10 rounded-full">
-                                    <img src={`https://api.lorem.space/image/face?hash=${e.provider.id}`} alt={e.provider.displayUsername}/>
+                                    <Avatar
+                                        size={'full'}
+                                        name={e.provider.displayUsername}
+                                        variant="beam"
+                                        colors={["#02E379", "#05244F", "#FFFFFF", "#405059"]}
+                                    />;
                                 </div>
                             </label>
                             {e.provider.displayUsername}
@@ -68,10 +74,15 @@ const EventTable = ({economicEvents}: { economicEvents: Array<any> }) => {
                         <a className="pl-0 grid grid-cols-2 items-center">
                             <label tabIndex={0} className="btn btn-ghost btn-circle avatar ml-4">
                                 <div className="w-10 rounded-full">
-                                    <img src={`https://api.lorem.space/image/face?hash=${e.receiver.id}`} alt={e.receiver.displayUsername}/>
+                                    <Avatar
+                                        size={'full'}
+                                        name={e.receiver.displayUsername}
+                                        variant="beam"
+                                        colors={["#02E379", "#05244F", "#FFFFFF", "#405059"]}
+                                    />;
                                 </div>
                             </label>
-                    {e.receiver.displayUsername}
+                            {e.receiver.displayUsername}
                         </a>
                     </Link></td>
                 <td className="whitespace-normal">{e.note}</td>

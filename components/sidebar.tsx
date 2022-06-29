@@ -36,8 +36,8 @@ const SideBarProps = {
             link: "/my_inventory",
         },
         {
-            name: "Local",
-            link: "/local",
+            name: "Zencode",
+            link: "/zencode",
         }]
 }
 

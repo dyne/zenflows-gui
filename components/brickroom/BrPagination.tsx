@@ -9,7 +9,7 @@ type BrPaginationProps = {
 const BrPagination = (props: BrPaginationProps) => {
     const [current, setCurrent] = useState(0)
     const isNearCurrent = (a:number)=>((current-2)<a)&&((current+2)>a)||(a===0)||(a===(props.max-1))
-    const isBeforeOrAfterCurrent = (a:number)=>((current-2)===a)||((current+2)===a)&&(a!==0)&&(a!==props.max)
+    const isBeforeOrAfterCurrent = (a:number)=>((current-2)===a)||((current+2)===a)&&(a!==0)&&(a!==props.max-1)
 
     return (<div className="grid grid-cols-1 gap-4 place-items-center">
         <div className="btn-group ">

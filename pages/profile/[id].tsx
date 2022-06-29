@@ -3,9 +3,10 @@ import {useAuth} from "../../lib/auth";
 import {gql, useQuery} from "@apollo/client";
 import {useRouter} from "next/router";
 import Tabs from "../../components/Tabs";
-import InventoriedResources from "../../components/InventoriedResources";
 import EventTable from "../../components/EventTable";
 import Spinner from "../../components/brickroom/Spinner";
+import ResourceTable from "../../components/ResourceTable";
+
 
 const Profile: NextPage = () => {
     const router = useRouter()
@@ -45,7 +46,7 @@ const Profile: NextPage = () => {
         {title: 'Activity', component: <EventTable economicEvents={user?.economicEvents}/>},
         {
             title: 'Inventory',
-            component: <InventoriedResources inventoriedResources={user?.inventoriedEconomicResources}/>
+            component: <ResourceTable resources={user?.inventoriedEconomicResources}/>
         }
     ]
 

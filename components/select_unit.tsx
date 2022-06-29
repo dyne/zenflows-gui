@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 import {gql, useQuery} from "@apollo/client";
 import {mapUnits} from "../lib/mapUnit"
+import BrSelect from "./brickroom/BrSelect";
 
 
-const SelectUnit: any = (props: { handleSelect: Function }) => {
+const SelectUnit: any = (props: { handleSelect: ChangeEventHandler }) => {
     const queryUnitsId = gql`
             query {
               unitsPages {
@@ -18,10 +19,7 @@ const SelectUnit: any = (props: { handleSelect: Function }) => {
     const mappedUnits = mapUnits(units)
 
     return (<>
-        <select onChange={(e) => props.handleSelect(e)} className="select select-bordered">
-            {mappedUnits?.map((unit: { id: string, label: string }) =>
-                (<option key={unit?.id} value={unit?.id}>{unit?.label}</option>))}
-        </select>
+        <BrSelect handleSelect={props.handleSelect} array={mappedUnits} label="Unit" hint="Pick a unit"/>
     </>)
 };
 

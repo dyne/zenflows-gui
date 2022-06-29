@@ -26,7 +26,7 @@ const mapUnit = (unit:string)=>{
 }
 
 const mapUnits = (units: Array<{id:string, label:string}>) =>{
-    const parsedUnits = units?.map((u)=>({id:u.id,label:mapUnit(u.label)}))
+    const parsedUnits = units?.map((u)=>({id:u.id,name:mapUnit(u.label)}))
     return parsedUnits
 }
 

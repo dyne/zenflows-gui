@@ -27,16 +27,6 @@
   <span> • </span>
   <a href="#-docker">🐋 Docker</a>
   <span> • </span>
-  <a href="#-api">🐝 API</a>
-  <span> • </span>
-  <a href="#-configuration">🔧 Configuration</a>
-  <span> • </span>
-  <a href="#-testing">📋 Testing</a>
-  <span> • </span>
-  <a href="#-troubleshooting--debugging">🐛 Troubleshooting & debugging</a>
-  <span> • </span>
-  <a href="#-acknowledgements">😍 Acknowledgements</a>
-  <span> • </span>
   <a href="#-links">🌐 Links</a>
   <span> • </span>
   <a href="#-contributing">👤 Contributing</a>

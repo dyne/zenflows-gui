@@ -2,7 +2,6 @@ import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
 import React from "react";
 import {useRouter} from 'next/router'
-import Popup from "../../components/brickroom/popup";
 import Produce from "../../components/produce";
 import Raise from "../../components/raise";
 import Transfer from "../../components/transfer";
@@ -12,11 +11,12 @@ import Lower from "../../components/lower";
 import {ActionsEnum} from "../../lib/ActionsEnum";
 import EventTable from "../../components/EventTable";
 import ActionsBlock from "../../components/ActionsBlock";
+import {ArrowNarrowLeftIcon} from "@heroicons/react/solid";
 
 
 const Process: NextPage = () => {
     const router = useRouter()
-    const { id } = router.query
+    const {id} = router.query
     const Process = gql`
             query {
               process(id:"${id}"){
@@ -56,25 +56,32 @@ const Process: NextPage = () => {
     const process = useQuery(Process)
     const processId = process.data?.process.id
     const actions = [
-        {name:ActionsEnum.Produce,component: <Produce processId={processId}/>},
-        {name:ActionsEnum.Raise,component: <Raise processId={processId}/>},
-        {name:ActionsEnum.Transfer,component: <Transfer processId={processId}/>},
-        {name:ActionsEnum.Use,component: <Use processId={processId}/>},
-        {name:ActionsEnum.Consume,component: <Consume processId={processId}/>},
-        {name:ActionsEnum.Lower,component: <Lower processId={processId}/>},
-        ]
-  return (
-  <>
-      <h2>{process.data?.process.name}</h2>
-      <div className="divider"/>
-      <ActionsBlock processId={processId}/>
-      <div className="divider w-full"/>
-      {(process.data?.process.inputs.length>0)&&(<><h2>inputs:</h2>
-      <EventTable economicEvents={process.data?.process.inputs}/></>)}
-      <div className="divider w-full"/>
-      {(process.data?.process.outputs.length>0)&&(<><h2>outputs:</h2>
-      <EventTable economicEvents={process.data?.process.outputs}/></>)}
-  </>
-  )};
+        {name: ActionsEnum.Produce, component: <Produce processId={processId}/>},
+        {name: ActionsEnum.Raise, component: <Raise processId={processId}/>},
+        {name: ActionsEnum.Transfer, component: <Transfer processId={processId}/>},
+        {name: ActionsEnum.Use, component: <Use processId={processId}/>},
+        {name: ActionsEnum.Consume, component: <Consume processId={processId}/>},
+        {name: ActionsEnum.Lower, component: <Lower processId={processId}/>},
+    ]
+    const back = () => {
+        router.back()
+    }
+    return (
+        <>
+            <button type={'button'} className="btn btn-outline" onClick={back}><ArrowNarrowLeftIcon
+                className="w-5 mr-1"/>Back
+            </button>
+            <br/><br/>
+            <h1>{process.data?.process.name}</h1>
+            <br/><br/>
+            <ActionsBlock processId={processId}/>
+            <br/><br/>
+            {(process.data?.process.inputs.length > 0) && (<>
+                <h2>Activity fo this process:</h2>
+                <br/><br/>
+                <EventTable economicEvents={process.data?.process.inputs.concat(process.data?.process.outputs)}/></>)}
+        </>
+    )
+};
 
 export default Process
