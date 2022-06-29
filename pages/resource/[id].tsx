@@ -77,12 +77,11 @@ const Resource: NextPage = () => {
                     <p className="text-gray-500">{resource?.currentLocation?.name}</p>
                 </div>
             </div>
-            <div className="divider"/>
+            <div className="my-6">
                 <QrCodeButton id={id} />
-            <div className="divider"/>
-
+            </div>
             <div>
-                <ActionsBlock/>
+                <ActionsBlock resourceId={String(id)}/>
             </div>
         </>
     )
