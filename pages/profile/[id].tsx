@@ -15,11 +15,27 @@ const Profile: NextPage = () => {
                                         agent(id:$id){
                                             id 
                                             name 
+                                            primaryLocation {
+                                              id
+                                              name
+                                            }
                                             inventoriedEconomicResources {
                                               id
                                               name
                                               note
-                                            }
+                                              conformsTo {
+                                                id
+                                                name
+                                               }
+                                              primaryAccountable{id name}
+                                              currentLocation {id name}
+                                              accountingQuantity{
+                                                hasUnit{
+                                                  id label
+                                                }
+                                                hasNumericalValue
+                                              }
+                                              }
                                             economicEvents{
                                                     __typename
                                                     id
@@ -27,6 +43,8 @@ const Profile: NextPage = () => {
                                                     provider {displayUsername id}
                                                     receiver {displayUsername id}
                                                     resourceConformsTo {name note}
+                                                    inputOf { id name }
+                                                    outputOf { id name }
                                                     resourceInventoriedAs {name id note}
                                                     toResourceInventoriedAs {name note}
                                                     action { id }
@@ -51,12 +69,10 @@ const Profile: NextPage = () => {
     ]
 
     return (<>
-        {!user&&<Spinner/>}
-        {user&&<><ul>
-            <li>name:{user?.name}</li>
-        </ul>
-        <div className="divider"/>
-        <Tabs tabsArray={tabsArray}/></>}
+        {!user && <Spinner/>}
+        {user && <>
+                <h3 className="mb-6">{user?.name}</h3>
+            <Tabs tabsArray={tabsArray}/></>}
     </>)
 };
 

@@ -45,6 +45,15 @@ const MyInventory: NextPage = () => {
     const {authId} = useAuth()
     const inventory = useQuery(FETCH_INVENTORY, {variables:{id:authId}}).data?.agent.inventoriedEconomicResources
 
-    return <><ResourceTable resources={inventory}/></>};
+    return <>
+        <div className="w-80 mb-6">
+            <h1>My Inventory</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Neque pellentesque hendrerit ultrices mauris et non pellentesque suspendisse est.
+            </p>
+        </div>
+        <ResourceTable resources={inventory}/>
+    </>};
 
 export default MyInventory

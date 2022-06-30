@@ -21,8 +21,10 @@ const FETCH_LOCAL_DATA = gql`
                 provider {displayUsername id}
                 receiver {displayUsername id}
                 resourceConformsTo {name note}
-                resourceInventoriedAs {name note}
-                toResourceInventoriedAs {name note}
+                resourceInventoriedAs {name id note}
+                toResourceInventoriedAs {name id note}
+                inputOf { id name }
+                outputOf { id name }
                 action { id }
                 resourceQuantity {
                   hasNumericalValue

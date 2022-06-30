@@ -4,7 +4,7 @@ import QRCode from "react-qr-code";
 import Popup from "./popup";
 import Spinner from "./Spinner";
 
-const QrCodeButton = ({id}: { id: any }) => {
+const QrCodeButton = ({id, outlined}: { id: string, outlined?: boolean}) => {
     const [result, setResult] = useState(undefined as string | undefined)
 
     const fetchQr = async () => {
@@ -40,7 +40,7 @@ const QrCodeButton = ({id}: { id: any }) => {
 
     return (
         <>
-            <Popup name='fetchQr' action1="see Passport" action2={fetchQr}>
+            <Popup name='fetchQr' action1="Generate" action2={fetchQr} outlined={outlined}>
                 {result&&<div><QRCode value={result} className="mx-auto"/></div>}
                 {!result&&<Spinner/>}
             </Popup>

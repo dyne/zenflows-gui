@@ -24,9 +24,9 @@ const ResourceTable = ({resources}: { resources: Array<any> }) => {
                 <tr key={e.id}>
                     <td>{e.conformsTo?.name}</td>
                     <td><Link href={`/resource/${e.id}`}><a>{e.name}</a></Link></td>
-                    <td>{e.onhandQuantity?.hasNumericalValue} {mapUnit(e.onhandQuantity?.hasUnit.label)}</td>
+                    <td>{e.onhandQuantity?.hasNumericalValue || e.accountingQuantity?.hasNumericalValue} {mapUnit(e.onhandQuantity?.hasUnit.label || e.accountingQuantity?.hasUnit.label)}</td>
                     <td className="whitespace-normal">{e.currentLocation?.name}</td>
-                    <td><QrCodeButton id={e.id}/></td>
+                    <td><QrCodeButton id={e.id} outlined={true}/></td>
                     <td className="p-1">
                         <Link href={`/profile/${e.primaryAccountable?.id}`}>
                             <a className="pl-0 grid grid-cols-1 items-center">

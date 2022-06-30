@@ -34,7 +34,7 @@ const ProcessTable = ({processes}: { processes: Array<any> }) => {
         {!(processes?.length>0)&&<Spinner/>}
         {processes&&<><BrTable headArray={processesHead}>
 
-            {paginate(processes, processStartPage, processEndPage)?.map((p) => <tr key={p.id}>
+            {paginate(processes, processStartPage, processEndPage)?.map((p) => <tr className="bg-['#F9F9F7']" key={p.id}>
                 <th className="whitespace-normal"><Link href={`/processes/${p.id}`}><a>{p.name}</a></Link></th>
                 <td>{p.finished ? 'finished' : <div className="badge badge-success">active</div>}</td>
                 <td className="whitespace-normal">{p.note}</td>
