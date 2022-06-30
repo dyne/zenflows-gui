@@ -1,18 +1,15 @@
 <p align="center">
   <a href="https://www.dyne.org">
-    <img alt="Zenflow-gui" src="https://via.placeholder.com/150.png?text=LOGO" width="150" />
+    <img alt="Interfacer-gui" src="/public/logo.png" width="150" />
   </a>
 </p>
 
 <h1 align="center">
-  Zenflow Gui</br>
-  <sub>Flow like water</sub>
+  Interfacer Gui</br>
+  <sub></sub>
 </h1>
 
 <p align="center">
-  <a href="https://travis-ci.com/DECODEproject/Zenflow-gui">
-    <img src="https://travis-ci.com/DECODEproject/Zenflow-gui.svg?branch=master" alt="Build Status">
-  </a>
   <a href="https://dyne.org">
     <img src="https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%9D%A4%20by-Dyne.org-blue.svg" alt="Dyne.org">
   </a>
@@ -25,8 +22,6 @@
   <span> • </span>
   <a href="#-quick-start">🎮 Quick start</a>
   <span> • </span>
-  <a href="#-docker">🐋 Docker</a>
-  <span> • </span>
   <a href="#-links">🌐 Links</a>
   <span> • </span>
   <a href="#-contributing">👤 Contributing</a>
@@ -35,10 +30,10 @@
 </h4>
 
 
-Zenflow-Gui is an interface to interact with Reflow economic model. Create a process (make a Pie); Spawn all economic 
-events necessary to complete the Process(**Raise** or **Transfer** some flour from other agent, **Consume** flour and other 
-resouces in inventory, **Use** the oven to cook the pie). The outcome resource (the pie) will have a material Passport tracking 
-all the resources, events and agents involved in its production.
+**Work in progress** 🚧: The **INTERFACER** project is a **EU EFRE**-funded project where four partners - **HSU, FCHH, Dyne.org** and **HIWW** teamed up to develop, test, publish and run the **Fab City OS** and collaborate on related issues, e.g. 
+promoting circular design or improving the **Open Source Hardware** tool chain. The Interfacer GUI is
+based on the <a href="https://www.valueflo.ws/">**ValueFlows vocabularies**</a> implementing REA (resource-event-agent) based economic 
+flows in distributed economic ecosystems. Furthermore, the outcome resource has a first POC of a Digital Product Passport, tracking all the resources, events and agents involved in its production.
 
 
 <details id="toc">
@@ -46,12 +41,6 @@ all the resources, events and agents involved in its production.
 
 * [Install](#-install)
 * [Quick start](#-quick-start)
-* [Docker](#-docker)
-* [API](#-api)
-* [Configuration](#-configuration)
-* [Testing](#-testing)
-* [Troubleshooting & debugging](#-troubleshooting--debugging)
-* [Acknowledgements](#-acknowledgements)
 * [Links](#-links)
 * [Contributing](#-contributing)
 * [License](#-license)
@@ -73,37 +62,9 @@ pnpm run start
 
 
 ***
-## 🐋 Docker
-
-```bash
-docker build -t {project_name} .
-docker run --rm -it {project_name}
-```
-
 **[🔝 back to top](#toc)**
 
-***
-## 🐝 API
 
-**[🔝 back to top](#toc)**
-
-***
-## 🔧 Configuration
-
-**[🔝 back to top](#toc)**
-
-***
-
-## 📋 Testing
-
-**[🔝 back to top](#toc)**
-
-***
-## 🐛 Troubleshooting & debugging
-
-**[🔝 back to top](#toc)**
-
-***
 ## 😍 Acknowledgements
 
 [![software by Dyne.org](https://files.dyne.org/software_by_dyne.png)](http://www.dyne.org)
