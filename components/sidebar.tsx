@@ -55,7 +55,7 @@ function Sidebar() {
                         </Link>
                     </div>
                     <SideBarMenu menu={SideBarProps.menu1}/>
-                    <SideBarMenu menu={SideBarProps.menu} title={'MyReflow'}/>
+                    <SideBarMenu menu={SideBarProps.menu} title={'My Interfacer'}/>
                     <NewProcessButton/>
                     <br/>
                     <LoginBtn/></>}

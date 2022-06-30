@@ -65,7 +65,7 @@ const FETCH_USER_DATA = gql`
         }`
 const HomeProps = {
     welcome: {
-        title: "Welcome to Reflow Demo",
+        title: "Welcome to Interfacer Alpha",
         paragraph: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Neque pellentesque hendrerit ultrices mauris et non pellentesque suspendisse est.",
     }
 }
@@ -75,7 +75,7 @@ const User: NextPage = () => {
     const activities = useQuery(FETCH_USER_DATA).data?.me?.user.userActivities
     return <>
         <div className="flex justify-between mb-6">
-            <div className="w-80">
+            <div className="w-96">
                 <h2>{HomeProps.welcome.title}</h2>
                 <p>{HomeProps.welcome.paragraph}</p>
             </div>

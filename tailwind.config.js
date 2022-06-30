@@ -6,15 +6,15 @@ module.exports = {
     daisyui: {
         themes: [{
             mytheme: {
-                primary: "#1D3D68",
-                "primary-focus": "#05244F",
+                primary: "#02604B",
+                "primary-focus": "#014837",
                 "primary-content": "#FFFFFF",
-                secondary: "#05244F",
-                "secondary-focus": "#05244F",
+                secondary: "#02604B",
+                "secondary-focus": "#014837",
                 "secondary-content": "#FFFFFF",
-                accent: "#5EF0BC",
-                "accent-focus": "#56D7A9",
-                "accent-content": "#05244F",
+                accent: "#F1BD4D",
+                "accent-focus": "#D8A946",
+                "accent-content": "#0B1324",
                 neutral: "#475467",
                 "neutral-focus": "#344054",
                 "neutral-content": "#FFFFFF",
