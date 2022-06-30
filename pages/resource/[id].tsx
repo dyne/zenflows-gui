@@ -90,7 +90,7 @@ const Resource: NextPage = () => {
                     mauris et non pellentesque.
                 </p>
                 <div className="w-40 mt-2">
-                    <QrCodeButton id={id}/>
+                    <QrCodeButton id={String(id)}/>
                 </div>
             </Card>
         </>

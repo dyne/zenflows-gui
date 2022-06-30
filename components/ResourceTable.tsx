@@ -19,7 +19,7 @@ const ResourceTable = ({resources}: { resources: Array<any> }) => {
     const resourcesPages = Math.floor((resources?.length / 10) + 1)
     return (<>
         <BrTable headArray={resourcesHead}>
-            {paginate(resources, resourcesStartPage, resourcesEndPage)?.map((e) =>
+            {(resources?.length !== 0) && <>{paginate(resources, resourcesStartPage, resourcesEndPage)?.map((e) =>
 
                 <tr key={e.id}>
                     <td>{e.conformsTo?.name}</td>
@@ -37,7 +37,31 @@ const ResourceTable = ({resources}: { resources: Array<any> }) => {
                     <td className="whitespace-normal">{e.note}</td>
 
                 </tr>
-            )}
+            )}</>}
+            {(resources?.length === 0) && <>
+                <tr className="disabled">
+                    <td>xxxxxxx</td>
+                    <td>xxxxxx xxxx</td>
+                    <td>xxxxxxxxxxxx xxx xxxxx</td>
+                    <td className="whitespace-normal">xxxxx, xxxxxx xx</td>
+                    <td><QrCodeButton id='' outlined={true}/></td>
+                    <td className="p-1">
+                        xxxxxxx
+                    </td>
+                    <td className="whitespace-normal">xxxxxxxxx xxxxxxxx xxxxxxxxxxxx xxxxxxxx xxxxxxxxxx xxxxxx xxxx
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colSpan={resourcesHead.length}>
+                        <h4>There’s nothing to display here.</h4>
+                        <p>
+                            This table will display the resources that you will have in inventory.
+                            Raise, transfer or Produce a resource and it will displayed here.
+                        </p>
+                    </td>
+                </tr>
+            </>}
 
 
         </BrTable>
