@@ -62,7 +62,7 @@ const EventTable = ({economicEvents, noProcess = false}: { economicEvents: Array
                                             size={'full'}
                                             name={e.provider.displayUsername}
                                             variant="beam"
-                                            colors={["#02E379", "#05244F", "#FFFFFF", "#405059"]}
+                                            colors={["#F1BD4D", "#D8A946", "#02604B", "#F3F3F3", "#014837"]}
                                         />;
                                     </div>
                                 </label>
@@ -79,7 +79,7 @@ const EventTable = ({economicEvents, noProcess = false}: { economicEvents: Array
                                             size={'full'}
                                             name={e.receiver.displayUsername}
                                             variant="beam"
-                                            colors={["#02E379", "#05244F", "#FFFFFF", "#405059"]}
+                                            colors={["#F1BD4D", "#D8A946", "#02604B", "#F3F3F3", "#014837"]}
                                         />;
                                     </div>
                                 </label>
