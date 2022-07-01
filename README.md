@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.dyne.org">
-    <img alt="Interfacer-gui" src="http://pangolin.dyne.org:11040/IF-Logo-black.svg" width="250" />
+    <img alt="Interfacer-gui" src="http://pangolin.dyne.org:11040/IF-Logo-Linear_black.png" width="250" />
   </a>
 </p>
 
