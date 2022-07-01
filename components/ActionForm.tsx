@@ -50,6 +50,9 @@ const ActionForm = (props: ActionFormProps) => {
     const {authId} = useAuth()
 
     const [performAction, {data, loading, error}] = useMutation(props.MUTATION)
+    if(error) {
+        console.log(error)
+    }
 
     const variables: () => ActionVariables | undefined = () => {
         switch (props.type) {
@@ -116,7 +119,7 @@ const ActionForm = (props: ActionFormProps) => {
                     <h2>{props.intro.title}</h2>
                     <p className="mb-2">{props.intro.description}</p>
                 </>)}
-                {!props.processId && <BrInput/>}
+                {!props.processId && <BrInput label="Select process"/>}
 
                 {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <>
                     <SelectResourceType handleSelect={handleResource}/>
@@ -125,7 +128,7 @@ const ActionForm = (props: ActionFormProps) => {
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value))}/>
                         <SelectUnit handleSelect={handleUnit} className="col-span-2"/>
                     </div>
-                    <BrTextField label="Resource Description" onChange={(e: any) => setResourceName!(e.target.value)}
+                    <BrInput label="Resource Name inside Inventory" onChange={(e: any) => setResourceName!(e.target.value)}
                                  placeholder="Resource Description"/>
                     <BrTextField label="Optional Notes:" onChange={(e: any) => setResourceNote!(e.target.value)}
                                  placeholder="Note"/>

@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://www.dyne.org">
-    <img alt="Interfacer-gui" src="/public/logo.png" width="150" />
+    <img alt="Interfacer-gui" src="http://pangolin.dyne.org:11040/IF-Logo-black.svg" width="250" />
   </a>
 </p>
 
@@ -79,8 +79,6 @@ Special thanks to Mr. W. White for his special contributions.
 
 ***
 ## 🌐 Links
-
-https://reflowproject.eu/
 
 https://dyne.org/
 

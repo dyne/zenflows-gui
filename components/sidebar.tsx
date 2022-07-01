@@ -36,8 +36,8 @@ const SideBarProps = {
             link: "/my_inventory",
         },
         {
-            name: "Zencode",
-            link: "/zencode",
+            name: "User Profile",
+            link: "/profile/my_profile",
         }]
 }
 

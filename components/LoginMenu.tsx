@@ -4,7 +4,7 @@ import React from "react";
 import Avatar from "boring-avatars";
 
 export default function LoginBtn() {
-    const {signOut, username, authId} = useAuth()
+    const {signOut, username} = useAuth()
 
     return (
         <>
@@ -23,9 +23,6 @@ export default function LoginBtn() {
                     </label>
                     <div className="grid grid-cols-1 text-xs font-normal normal-case gap-y-1">
                         <p className="text-base-400 whitespace-nowrap test-2xs">{username}</p>
-                        <Link href="/profile/my_profile">
-                            <a className="hover:text-accent">my profile</a>
-                        </Link>
                         <button className="hover:text-accent text-left" onClick={() => signOut()}>Sign Out</button>
                     </div>
 
