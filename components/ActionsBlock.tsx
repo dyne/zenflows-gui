@@ -63,7 +63,7 @@ const ActionsBlock = ({processId, resourceId}: ActionBlockProps) => {
                 <p>Lorem ipsum dolor sit amet process</p></>}
             <span className="float-left mr-2">
             {actions?.map((a: Action) => <span key={a.name} className="mr-2">
-                <Popup name={a.name} action1={a.name} svg={a.svg} disabled={a.disabled}>{a.component}</Popup></span>
+                <Popup name={a.name} action1={a.name} svg={a.svg} disabled={a.disabled} XL>{a.component}</Popup></span>
             )}</span>
         </Card>
     )

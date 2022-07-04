@@ -20,7 +20,7 @@ const SelectResourceType: any = (props: { handleSelect: ChangeEventHandler }) =>
     </option>))
 
     return (<>
-        <BrSelect handleSelect={props.handleSelect} array={types} label="Resource Type" hint="Pick a resource type"/>
+        <BrSelect handleSelect={props.handleSelect} array={types} label="Select Resource:" placeholder="pick a tipe of resource"/>
     </>)
 };
 

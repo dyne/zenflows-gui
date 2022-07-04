@@ -3,6 +3,7 @@ import React, { ReactElement, ReactNode } from 'react'
 export enum CardWidth {
     SM = 'w-24',
     LG = 'w-128',
+    XL = 'w-156',
     Full = 'w-full'
 }
 

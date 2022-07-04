@@ -76,10 +76,10 @@ const Process: NextPage = () => {
             <br/><br/>
             <ActionsBlock processId={processId}/>
             <br/><br/>
-            {(process.data?.process.inputs.length > 0) && (<>
+            {(process.data?.process.inputs.length > 0 || process.data?.process.outputs.length > 0) && (<>
                 <h2>Activity fo this process:</h2>
                 <br/><br/>
-                <EventTable economicEvents={process.data?.process.inputs.concat(process.data?.process.outputs)}/></>)}
+                <EventTable economicEvents={process.data?.process.inputs.concat(process.data?.process.outputs)} noProcess={true}/></>)}
         </>
     )
 };

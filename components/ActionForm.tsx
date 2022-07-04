@@ -8,6 +8,7 @@ import SelectInventoriedResource from "./SelectInventoriedResource";
 import {ActionsEnum} from "../lib/ActionsEnum";
 import BrInput from "./brickroom/BrInput";
 import BrTextField from "./brickroom/BrTextField";
+import {useRouter} from "next/router";
 
 type ActionVariables = {
     inputOf?: string,
@@ -39,6 +40,8 @@ const ActionForm = (props: ActionFormProps) => {
     const [resourceName, setResourceName] = useState('')
     const [resourceNote, setResourceNote] = useState('')
     const [inventoriedResource, setInventoriedResource] = useState(props.inventoriedResource)
+
+    const router = useRouter()
 
     const {authId} = useAuth()
 
@@ -87,7 +90,11 @@ const ActionForm = (props: ActionFormProps) => {
 
     function onSubmit() {
         //TODO: handle error and response
-        performAction({variables: variables()})
+        const vars = variables()
+        performAction({variables: vars}).then((r:any)=>{
+            const economicEvent = r.data?.createEconomicEvent.economicEvent
+            router.push(`/processes/${economicEvent.outputOf?.id || economicEvent.inputOf?.id}`)
+        })
     }
 
     const handleUnit = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,7 +107,7 @@ const ActionForm = (props: ActionFormProps) => {
     }
 
     return (<>
-            <form onSubmit={onSubmit}>
+            <form>
                 {props.intro && (<>
                     <h2>{props.intro.title}</h2>
                     <p>{props.intro.description}</p>
@@ -109,18 +116,16 @@ const ActionForm = (props: ActionFormProps) => {
 
                 {(props.type === ActionsEnum.Produce || props.type === ActionsEnum.Raise) && <>
                     <SelectResourceType handleSelect={handleResource}/>
-                    <div className="grid grid-cols-2">
-                        <BrInput type="number" className="w-24" placeholder="Type here"
+                    <div className="grid grid-cols-3 gap-2">
+                        <BrInput type="number" placeholder="0" label="Quantity"
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value))}/>
-                        <SelectUnit handleSelect={handleUnit}/>
+                        <SelectUnit handleSelect={handleUnit} className="col-span-2"/>
                     </div>
                     <BrTextField label="Resource Description" onChange={(e: any) => setResourceName!(e.target.value)}
                                  placeholder="Resource Description"/>
-                    <BrTextField label="Note" onChange={(e: any) => setResourceName!(e.target.value)}
+                    <BrTextField label="Optional Notes:" onChange={(e: any) => setResourceNote!(e.target.value)}
                                  placeholder="Note"/>
-                    <textarea onChange={(e) => setResourceNote(e.target.value)}
-                              className="textarea textarea-bordered w-full" placeholder="Note"/></>}
-
+                </>}
                 {(props.type === ActionsEnum.Transfer) && <><input type="number"
                                                                    placeholder="Type here"
                                                                    className="input input-bordered"
@@ -154,7 +159,7 @@ const ActionForm = (props: ActionFormProps) => {
                 <input onChange={(e) => setHasPointInTime(e.target.value)} type="date" placeholder="Date 1"
                        className="input input-bordered"/>
                 <input type="date" placeholder="Date 2" className="input input-bordered"/>
-                <button type="submit" className="btn btn-primary float-right">{props.type}</button>
+                <button type="button" onClick={onSubmit} className="btn btn-primary float-right">{props.type}</button>
             </form>
         </>
     )

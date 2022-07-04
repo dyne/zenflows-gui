@@ -4,7 +4,7 @@ import {mapUnits} from "../lib/mapUnit"
 import BrSelect from "./brickroom/BrSelect";
 
 
-const SelectUnit: any = (props: { handleSelect: ChangeEventHandler }) => {
+const SelectUnit: any = (props: { handleSelect: ChangeEventHandler, className: string }) => {
     const queryUnitsId = gql`
             query {
               unitsPages {
@@ -19,7 +19,7 @@ const SelectUnit: any = (props: { handleSelect: ChangeEventHandler }) => {
     const mappedUnits = mapUnits(units)
 
     return (<>
-        <BrSelect handleSelect={props.handleSelect} array={mappedUnits} label="Unit" hint="Pick a unit"/>
+        <BrSelect handleSelect={props.handleSelect} array={mappedUnits} label="Unit" className={`w-full ${props.className}`}/>
     </>)
 };
 

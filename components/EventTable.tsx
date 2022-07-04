@@ -5,12 +5,11 @@ import BrTable from "./brickroom/BrTable";
 import Avatar from "boring-avatars";
 import BrPagination from "./brickroom/BrPagination";
 import {mapUnit} from "../lib/mapUnit";
-import QrCodeButton from "./brickroom/QrCodeButton";
 
-const EventTable = ({economicEvents}: { economicEvents: Array<any> }) => {
+const EventTable = ({economicEvents, noProcess = false}: { economicEvents: Array<any>, noProcess?:boolean}) => {
     const [economicEventStartPage, seteconomicEventStartPage] = useState(0)
     const [economicEventEndPage, seteconomicEventEndPage] = useState(10)
-    const economicEventsHead = ['activity', 'process', 'resource', 'provider', 'receiver', 'notes']
+    const economicEventsHead = noProcess? ['activity', 'resource', 'provider', 'receiver', 'notes'] : ['activity', 'process', 'resource', 'provider', 'receiver', 'notes']
     const ActionChip = ({action}: { action: string }) => <span
         className="bg-[#E5E7EB] py-2 px-4 rounded">{action}</span>
     const ResourceCell = ({conform, inventoried, quantity, action}: {
@@ -48,7 +47,7 @@ const EventTable = ({economicEvents}: { economicEvents: Array<any> }) => {
             {(economicEvents?.length > 0) && (<>{paginate(economicEvents, economicEventStartPage, economicEventEndPage)?.map((e) =>
                 <tr key={e.id}>
                     <td><ActionChip action={e.action.id}/></td>
-                    <td className="whitespace-normal"><ProcessCell output={e.outputOf} input={e.inputOf}/></td>
+                    {!noProcess&&<td className="whitespace-normal"><ProcessCell output={e.outputOf} input={e.inputOf}/></td>}
                     <td className="whitespace-normal"><ResourceCell conform={e.resourceConformsTo}
                                                                     inventoried={e.resourceInventoriedAs}
                                                                     quantity={e.resourceQuantity}

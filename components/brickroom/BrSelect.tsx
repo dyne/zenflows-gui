@@ -20,8 +20,9 @@ const BrSelect = (props: BrSelectProps) => {
             <label className="label">
                 <span className="label-text">{props.label}</span>
             </label>
-            <select onSelect={(e: React.ChangeEvent<HTMLSelectElement>) => props.handleSelect(e)}
+            <select onChange={(e: React.ChangeEvent<HTMLSelectElement>) => props.handleSelect(e)}
                     className="select select-bordered">
+                <option disabled selected className="disabled" value="">{props.placeholder}</option>
                 {props.array?.map((unit: { id: string, name: string }) =>
                     (<option key={unit?.id} value={unit?.id}>{unit?.name}</option>))}
             </select>
