@@ -9,6 +9,7 @@ import {ActionsEnum} from "../lib/ActionsEnum";
 import BrInput from "./brickroom/BrInput";
 import BrTextField from "./brickroom/BrTextField";
 import {useRouter} from "next/router";
+import SelectDate from "./SelectDate";
 
 type ActionVariables = {
     inputOf?: string,
@@ -37,6 +38,8 @@ const ActionForm = (props: ActionFormProps) => {
     const [quantity, setQuantity] = useState(0)
     const [resourceType, setResourceType] = useState('')
     const [hasPointInTime, setHasPointInTime] = useState('')
+    const [hasBeginning, setHasBeginning] = useState('')
+    const [hasEnd, setHasEnd] = useState('')
     const [resourceName, setResourceName] = useState('')
     const [resourceNote, setResourceNote] = useState('')
     const [inventoriedResource, setInventoriedResource] = useState(props.inventoriedResource)
@@ -155,10 +158,7 @@ const ActionForm = (props: ActionFormProps) => {
                     <SelectInventoriedResource handleSelect={(e: any) => setInventoriedResource(e)}/>
                     <textarea onChange={(e) => setResourceNote(e.target.value)}
                               className="textarea textarea-bordered w-full" placeholder="Note"/></>}
-
-                <input onChange={(e) => setHasPointInTime(e.target.value)} type="date" placeholder="Date 1"
-                       className="input input-bordered"/>
-                <input type="date" placeholder="Date 2" className="input input-bordered"/>
+                <SelectDate handleHasPointInTime={setHasPointInTime} handleHasBeginning={setHasBeginning} handleHasEnd={setHasEnd}/>
                 <button type="button" onClick={onSubmit} className="btn btn-primary float-right">{props.type}</button>
             </form>
         </>

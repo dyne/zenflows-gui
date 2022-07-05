@@ -2,7 +2,7 @@ import React, { ChangeEventHandler } from "react";
 import { ExclamationIcon } from '@heroicons/react/solid'
 
 type BrInputProps = {
-    type?: 'number' | 'text' | 'password',
+    type?: 'number' | 'text' | 'password' |'date',
     placeholder?: string,
     label?: string,
     onChange?: ChangeEventHandler,
@@ -30,7 +30,6 @@ const BrInput = (props: BrInputProps) => {
                     <ExclamationIcon className='w-5 h-5' />
                     {props.error}</span>}
                 {props.hint && <span className="label-text-alt">{props.hint}</span>}
-
             </label>
         </div>
     </>)
