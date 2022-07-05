@@ -61,7 +61,7 @@ const Consume = (props:{processId?:string, intro?:{title:string,description:stri
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Consume}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Consume} intro={props.intro}/>
   )};
 
 export default Consume

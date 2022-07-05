@@ -37,6 +37,7 @@ const ActionForm = (props: ActionFormProps) => {
     const [unitId, setUnitId] = useState('')
     const [quantity, setQuantity] = useState(0)
     const [resourceType, setResourceType] = useState('')
+    const [user, setUser] = useState('')
     const [hasPointInTime, setHasPointInTime] = useState('')
     const [hasBeginning, setHasBeginning] = useState('')
     const [hasEnd, setHasEnd] = useState('')
@@ -129,18 +130,18 @@ const ActionForm = (props: ActionFormProps) => {
                     <BrTextField label="Optional Notes:" onChange={(e: any) => setResourceNote!(e.target.value)}
                                  placeholder="Note"/>
                 </>}
-                {(props.type === ActionsEnum.Transfer) && <><input type="number"
-                                                                   placeholder="Type here"
-                                                                   className="input input-bordered"
-                                                                   onChange={(e) => setQuantity(parseInt(e.target.value))}
-                />
-                    <SelectUnit handleSelect={handleUnit} className="select select-bordered w-full"/>
+                {(props.type === ActionsEnum.Transfer) && <>
+                    <div className="grid grid-cols-3 gap-2">
+                        <BrInput type="number" placeholder="0" label="Quantity"
+                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value))}/>
+                        <SelectUnit handleSelect={handleUnit} className="col-span-2"/>
+                    </div>
                     <SelectResourceType handleSelect={handleResource}/>
-                    <SelectUser/>
-                    <textarea onChange={(e) => setResourceNote(e.target.value)}
-                              className="textarea textarea-bordered w-full" placeholder="Note"/>
-                    <textarea onChange={(e) => setResourceNote(e.target.value)}
-                              className="textarea textarea-bordered w-full" placeholder="Note"/></>}
+                    <SelectUser handleUserSelect={(e:React.ChangeEvent<HTMLSelectElement>)=>setUser(e.target.value)}/>
+                    <BrTextField label="Resource Description" onChange={(e: any) => setResourceName!(e.target.value)}
+                                 placeholder="Resource Description"/>
+                    <BrTextField label="Optional Notes:" onChange={(e: any) => setResourceNote!(e.target.value)}
+                                 placeholder="Note"/></>}
 
 
                 {(props.type === ActionsEnum.Use) && <><SelectInventoriedResource

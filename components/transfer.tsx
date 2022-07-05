@@ -66,7 +66,7 @@ const Transfer = (props:{processId?:string, intro?:{title:string,description:str
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Transfer}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Transfer} intro={props.intro}/>
   )};
 
 export default Transfer

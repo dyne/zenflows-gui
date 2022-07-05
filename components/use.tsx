@@ -66,7 +66,7 @@ const Use = (props:{processId?:string, intro?:{title:string,description:string}}
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Use}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Use} intro={props.intro}/>
   )};
 
 export default Use

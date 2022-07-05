@@ -34,27 +34,27 @@ const ActionsBlock = ({processId, resourceId}: ActionBlockProps) => {
         },
         {
             name: ActionsEnum.Raise,
-            component: <Raise processId={processId} intro={{title: 'Produce a resource', description: lorem}}/>,
+            component: <Raise processId={processId} intro={{title: 'Raise a resource', description: lorem}}/>,
             svg: <TrendingUpIcon className={svgCss}/>
         },
         {
             name: ActionsEnum.Transfer,
-            component: <Transfer processId={processId} intro={{title: 'Produce a resource', description: lorem}}/>,
+            component: <Transfer processId={processId} intro={{title: 'Transfer a resource', description: lorem}}/>,
             svg: <SwitchHorizontalIcon className={svgCss}/>
         },
         {
             name: ActionsEnum.Use,
-            component: <Use processId={processId} intro={{title: 'Produce a resource', description: lorem}}/>,
+            component: <Use processId={processId} intro={{title: 'Use a resource', description: lorem}}/>,
             svg: <LightningBoltIcon className={svgCss}/>
         },
         {
             name: ActionsEnum.Consume,
-            component: <Consume processId={processId} intro={{title: 'Produce a resource', description: lorem}}/>,
+            component: <Consume processId={processId} intro={{title: 'Consume a resource', description: lorem}}/>,
             svg: <ChartPieIcon className={svgCss}/>
         },
         {
             name: ActionsEnum.Lower,
-            component: <Lower processId={processId} intro={{title: 'Produce a resource', description: lorem}}/>,
+            component: <Lower processId={processId} intro={{title: 'Lower a resource', description: lorem}}/>,
             svg: <TrendingDownIcon className={svgCss}/>
         },
     ]

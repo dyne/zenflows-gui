@@ -59,7 +59,7 @@ const Lower = (props:{processId?:string, intro?:{title:string,description:string
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Lower}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Lower} intro={props.intro}/>
   )};
 
 export default Lower
