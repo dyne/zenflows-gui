@@ -29,7 +29,7 @@ const EventTable = ({economicEvents, noProcess = false}: { economicEvents: Array
         input?: { id: string, name: string },
         output?: { id: string, name: string }
     }) => (
-        <Link href={`processes/${input?.id || output?.id}`}>
+        <Link href={`/processes/${input?.id || output?.id}`}>
             <a>
                 {input && `input of ${input.name}`}
                 {output && `outcome of ${output.name}`}

@@ -114,7 +114,7 @@ const ActionForm = (props: ActionFormProps) => {
             <form>
                 {props.intro && (<>
                     <h2>{props.intro.title}</h2>
-                    <p>{props.intro.description}</p>
+                    <p className="mb-2">{props.intro.description}</p>
                 </>)}
                 {!props.processId && <BrInput/>}
 
@@ -144,21 +144,21 @@ const ActionForm = (props: ActionFormProps) => {
                                  placeholder="Note"/></>}
 
 
-                {(props.type === ActionsEnum.Use) && <><SelectInventoriedResource
-                    inventoriedResource={props.inventoriedResource}
-                    handleSelect={(e: any) => setInventoriedResource(e)}/>
-                    <textarea onChange={(e) => setResourceNote(e.target.value)}
-                              className="textarea textarea-bordered w-full" placeholder="Note"/></>}
+                {(props.type === ActionsEnum.Use) && <>
+                    <SelectInventoriedResource inventoriedResource={props.inventoriedResource}
+                                               handleSelect={(e: any) => setInventoriedResource(e)}/>
+                    <BrTextField label="Optional Notes:" onChange={(e: any) => setResourceNote!(e.target.value)}
+                                 placeholder="Note"/></>}
 
-                {(props.type === "consume" || props.type === "lower") && <><input type="number"
-                                                                                  placeholder="Type here"
-                                                                                  className="input input-bordered"
-                                                                                  onChange={(e) => setQuantity(parseInt(e.target.value))}
-                />
-                    <SelectUnit handleSelect={handleUnit}/>
+                {(props.type === "consume" || props.type === "lower") && <>
+                    <div className="grid grid-cols-3 gap-2">
+                        <BrInput type="number" placeholder="0" label="Quantity"
+                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setQuantity(parseInt(e.target.value))}/>
+                        <SelectUnit handleSelect={handleUnit} className="col-span-2"/>
+                    </div>
                     <SelectInventoriedResource handleSelect={(e: any) => setInventoriedResource(e)}/>
-                    <textarea onChange={(e) => setResourceNote(e.target.value)}
-                              className="textarea textarea-bordered w-full" placeholder="Note"/></>}
+                    <BrTextField label="Optional Notes:" onChange={(e: any) => setResourceNote!(e.target.value)}
+                                 placeholder="Note"/></>}
                 <SelectDate handleHasPointInTime={setHasPointInTime} handleHasBeginning={setHasBeginning} handleHasEnd={setHasEnd}/>
                 <button type="button" onClick={onSubmit} className="btn btn-primary float-right">{props.type}</button>
             </form>
