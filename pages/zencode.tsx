@@ -3,6 +3,8 @@ import {ChangeEvent, useState} from "react";
 import BrInput from "../components/brickroom/BrInput";
 import useStorage from "../lib/useStorage";
 import {gql, useMutation} from "@apollo/client";
+import sign from "../zencode/src/sign"
+import generateKeyring from "../zencode/src/generateKeyring";
 
 
 const Zencode = () => {
@@ -16,87 +18,22 @@ const Zencode = () => {
     const [email, setEmail] = useState("")
     const [user, setUser] = useState("")
     const [header, setHeader] = useState("")
+    const [hash, setHash] = useState("")
 
-    const query = `mutation (
-                          $name: String!
-                          $user: String! 
-                          $email: String!
-                          $eddsa_public_key: String!
-                          $ethereum_address: String!
-                          $reflow_public_key: String!
-                          $schnorr_public_key: String!
-                        ) {
-                          createPerson(person: {
-                            name: $name
-                            user: $user
-                            email: $email
-                            eddsa_public_key: $eddsa_public_key
-                            ethereum_address: $ethereum_address
-                            reflow_public_key: $reflow_public_key
-                            schnorr_public_key: $schnorr_public_key
-                        
-                          }) {
-                          agent{
-                            id
-                            name
-                            user
-                            email
-                            eddsa_public_key
-                            ethereum_address
-                            reflow_public_key
-                            schnorr_public_key
-                          }
-                          }
-                        }`
+    const query = `mutation ($label: String! $symbol: String!) {
+  createUnit(unit: {
+    label: $label symbol: $symbol
+  }) {
+    unit { id label symbol }
+  }
+}`
 
     const CREATE_USER = gql`${query}`
 
     const [newUser, {data, loading, error}] = useMutation(CREATE_USER)
 
 
-    const smartContract = `Scenario 'ecdh': Create the key
-                        Scenario 'ethereum': Create key
-                        Scenario 'reflow': Create the key
-                        Scenario 'schnorr': Create the key
-                        Scenario 'eddsa': Create the key
-                        Scenario 'qp': Create the key
-                        
-                        Given nothing
-                        
-                        # Here we are creating the keys
-                        When I create the ecdh key
-                        When I create the ethereum key 
-                        When I create the reflow key
-                        When I create the schnorr key
-                        When I create the bitcoin key
-                        When I create the eddsa key
-                        When I create the dilithium key
-                        
-                        # Generating the public keys
-                        When I create the ecdh public key
-                        When I create the reflow public key
-                        When I create the schnorr public key
-                        When I create the bitcoin public key
-                        When I create the eddsa public key
-                        
-                        # With Ethereum the 'ethereum address' is what we want to create, rather than a public key
-                        When I create the ethereum address
-                        When I create the bitcoin address
-                        
-                        When I create the dilithium public key
-                        
-                        Then print the 'keyring'
-                        
-                        # Then print the 'ecdh public key' 
-                        # Then print the 'dilithium public key' 
-                        # Then print the 'bitcoin address' 
-                        Then print the 'reflow public key' 
-                        Then print the 'schnorr public key' 
-                        Then print the 'eddsa public key' 
-                        Then print the 'ethereum address'`
-
-
-    const zencodeExec = ()=> {zencode_exec(smartContract).then(({result}) => {
+    const zencodeExec = ()=> {zencode_exec(generateKeyring).then(({result}) => {
         const r = JSON.parse(result)
         const k = r.keyring
         setItem("ecdh_key", k.ecdh, "local")
@@ -113,46 +50,46 @@ const Zencode = () => {
         setResult(JSON.stringify(r, null, 2))
     })}
 
-    const sign = async (zenData:string, zenKeys: string ) => {
-        return await zencode_exec(`Scenario eddsa: sign a graph query
-                    Given I have a 'base64' named 'gql'
-                    Given I have a 'keyring'
-                    When I create the eddsa signature of 'gql'
-                    Then print 'eddsa signature' as 'base64'
-                    Then print 'gql' as 'base64'`, {data: zenData ,keys:zenKeys})
+    const signBody = async (zenData:string, zenKeys: string ) => {
+        return await zencode_exec(sign(), {data: zenData ,keys:zenKeys})
     }
 
     const createUser = async () => {
         const variables = {
-            name,
-            user,
-            email,
-            eddsa_public_key,
-            ethereum_address,
-            reflow_public_key,
-            schnorr_public_key,
+            label: "kilogram",
+            symbol: "kg",
         }
-        const body = {query,variables}
+        const body = {"variables":{"label":"kilogram","symbol":"kg"},"query":"mutation ($label: String!, $symbol: String!) {\n  createUnit(unit: {label: $label, symbol: $symbol}) {\n    unit {\n      id\n      label\n      symbol\n    }\n  }\n}"}
+        console.log(body)
+        console.log(query)
         const str = JSON.stringify(body)
+        console.log(str)
         const zenKeys = `
             {
                 "keyring": {
-                                "eddsa": "AnGkdziUacroGGb7zVYZgwAMHQjdLg1PcU6wpEYGx3qT"
+                                "eddsa": "3gRTjzoek4LnumEAsE58ycBiiMo7sQWBa5T7CMN7LbE9",
                             }
             }
         `
-
         const zenData = `
             {
                     "gql": "${Buffer.from(str, 'utf8').toString('base64')}"
             }
         `
-        await sign(zenData, zenKeys)
-            .then(({result}) => {setHeader(result)})
-            .then(()=>{
-                 newUser({variables, context: {headers: {'zenflows-sign': header}}})
+        await signBody(zenData, zenKeys)
+            .then(({result}) => {
+                console.log(str)
+                console.log(Buffer.from(str, 'utf8').toString('base64'))
+                console.log(body)
+                console.log('hash:',JSON.parse(result).hash)
+                console.log('signature:',JSON.parse(result).eddsa_signature)
+                setHeader(JSON.parse(result).eddsa_signature)
+                setHash(JSON.parse(result).hash)
             })
-    }
+            .then(()=>{
+                 return newUser({variables, context: {headers: {'zenflows-sign': header, 'zenflows-user': 'anosolare', 'zenflows-hash': hash}}})
+            }).then(console.log)}
+
 
     return (
         <div>
