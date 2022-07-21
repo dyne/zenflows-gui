@@ -3,6 +3,7 @@ import { ExclamationIcon } from '@heroicons/react/solid'
 
 type BrInputProps = {
     type?: 'number' | 'text' | 'password' |'date',
+    value?: string,
     placeholder?: string,
     label?: string,
     onChange?: ChangeEventHandler,
@@ -24,6 +25,7 @@ const BrInput = (props: BrInputProps) => {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
                 className="w-full input input-bordered focus:input-primary"
+               value={props.value}
             />
             <label className="label">
                 {props.error && <span className="flex flex-row items-center justify-between label-text-alt text-warning">
