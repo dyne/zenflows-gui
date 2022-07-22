@@ -6,7 +6,7 @@ describe('Navigation', () => {
     cy.get('form input:first').type(Cypress.env('user_name'))
     cy.get('form input[placeholder="Type your password"]').type(Cypress.env('user_password'))
     cy.get('form button').click()
-    cy.contains('Process')
+    cy.contains('Welcome')
   })
 
   it('should render a basic layout', () => {
@@ -28,7 +28,7 @@ describe('Navigation', () => {
      cy.url().should('include', '/processes')
      cy.get('.flex.flex-row.items-center.w-full.pl-3.text-left').contains('Process').click()
      cy.url().should('include', '/processes')
-     cy.wait(12000)
+     cy.wait(30000)
      cy.get('th>a').first().click()
      cy.url().should('include', '/processes/')
      cy.get('.btn.modal-button.text-normal.font-medium.normal-case').first().click()
