@@ -2,6 +2,7 @@
 
 describe('Navigation', () => {
   it('Should render a login Form. Should render index after login', () => {
+    cy.viewport('macbook-13')
     cy.visit('/')
     cy.get('form input:first').type(Cypress.env('user_name'))
     cy.get('form input[placeholder="Type your password"]').type(Cypress.env('user_password'))
@@ -10,6 +11,7 @@ describe('Navigation', () => {
   })
 
   it('should render a basic layout', () => {
+    cy.viewport('macbook-13')
     cy.visit('/')
     cy.get('form input:first').type(Cypress.env('user_name'))
     cy.get('form input[placeholder="Type your password"]').type(Cypress.env('user_password'))
