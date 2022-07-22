@@ -51,8 +51,8 @@ const Zencode = () => {
 
     const createUnit = async () => {
         const variables = {
-            label: "kilogram",
-            symbol: "kg",
+            label: label,
+            symbol: symbol,
         }
 
         await SignRequest({query, variables})
@@ -61,7 +61,7 @@ const Zencode = () => {
                 console.log('hash:',JSON.parse(result).hash)
                 console.log('signature:',JSON.parse(result).eddsa_signature)
                 console.log('gql:',Buffer.from(JSON.parse(result).gql, 'base64').toString('utf8'))
-                return newUnit({variables, context: {headers: {'zenflows-sign': JSON.parse(result).eddsa_signature, 'zenflows-user': 'anosolare', 'zenflows-hash': JSON.parse(result).hash}}})
+                newUnit({variables, context: {headers: {'zenflows-sign': JSON.parse(result).eddsa_signature, 'zenflows-user': 'anosolare', 'zenflows-hash': JSON.parse(result).hash}}})
             }).then(console.log)}
 
 

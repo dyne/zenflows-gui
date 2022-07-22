@@ -5,9 +5,10 @@ import sign from "../zenflows-crypto/src/sign";
 
 
 const SignRequest = async ({query, variables}:{query:string, variables?:any}) => {
-    const body = JSON.stringify({"variables":variables, "query":query});
+    const body = `{"variables":${JSON.stringify(variables)},"query":"${query}"}`
+    const uuuu = `{"variables":{"label":"kilogram","symbol":"kg"},"query":"mutation($label:String!,$symbol:String!){createUnit(unit:{label:$label,symbol:$symbol}){unit{idlabelsymbol}}}"}`
     const {getItem, setItem } = useStorage()
-    setItem('eddsa_key','3gRTjzoek4LnumEAsE58ycBiiMo7sQWBa5T7CMN7LbE9', 'local')
+    setItem('eddsa_key','FQbTMYYqMGqiDMFyygPC7Ccf2wFh2EZSXt1myQZuaUQj', 'local')
     const zenKeys = `
         {
             "keyring": {

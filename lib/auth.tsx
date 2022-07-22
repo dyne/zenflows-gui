@@ -1,11 +1,11 @@
 import React, {useState, useContext, createContext, useEffect} from 'react'
-
 import {
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
   HttpLink,
   gql,
+  ApolloLink, concat
 } from '@apollo/client'
 
 import useStorage from "./useStorage";
@@ -31,6 +31,12 @@ export const useAuth:any = () => {
   return useContext(authContext)
 }
 
+const middleware = new ApolloLink((operation, forward) => {
+  // add the authorization to the headers
+  console.log('middleware', JSON.stringify({"variables":operation.variables, "query":operation.query.loc?.source.body}))
+  return forward(operation);
+})
+
 function useProvideAuth() {
   const {getItem, setItem } = useStorage()
   const [authToken, setAuthToken] = useState(null as string | null)
@@ -52,21 +58,18 @@ function useProvideAuth() {
   }
 
   const getAuthHeaders = () => {
-    if (!authToken) return null
+    return null
 
-    return {
-      authorization: `Bearer ${authToken}`,
-    }
   }
 
   const createApolloClient = () => {
     const link = new HttpLink({
-      uri: process.env.GRAPHQL,
+      uri: 'http://65.109.11.42:8000/api',
       headers: getAuthHeaders(),
     })
 
     return new ApolloClient({
-      link,
+      link: concat(middleware,link),
       ssrMode: typeof window === 'undefined',
       cache: new InMemoryCache({
     addTypename: false
