@@ -3,8 +3,10 @@ import {useAuth} from "../../lib/auth";
 import {gql, useQuery} from "@apollo/client";
 import {useRouter} from "next/router";
 import Tabs from "../../components/Tabs";
-import InventoriedResources from "../../components/InventoriedResources";
-import RenderActivities from "../../components/renderActivities";
+import EventTable from "../../components/EventTable";
+import Spinner from "../../components/brickroom/Spinner";
+import ResourceTable from "../../components/ResourceTable";
+
 
 const Profile: NextPage = () => {
     const router = useRouter()
@@ -13,11 +15,27 @@ const Profile: NextPage = () => {
                                         agent(id:$id){
                                             id 
                                             name 
+                                            primaryLocation {
+                                              id
+                                              name
+                                            }
                                             inventoriedEconomicResources {
                                               id
                                               name
                                               note
-                                            }
+                                              conformsTo {
+                                                id
+                                                name
+                                               }
+                                              primaryAccountable{id name}
+                                              currentLocation {id name}
+                                              accountingQuantity{
+                                                hasUnit{
+                                                  id label
+                                                }
+                                                hasNumericalValue
+                                              }
+                                              }
                                             economicEvents{
                                                     __typename
                                                     id
@@ -25,6 +43,8 @@ const Profile: NextPage = () => {
                                                     provider {displayUsername id}
                                                     receiver {displayUsername id}
                                                     resourceConformsTo {name note}
+                                                    inputOf { id name }
+                                                    outputOf { id name }
                                                     resourceInventoriedAs {name id note}
                                                     toResourceInventoriedAs {name note}
                                                     action { id }
@@ -41,21 +61,18 @@ const Profile: NextPage = () => {
     const idToBeFetch = isUser ? authId : id
     const user = useQuery(FETCH_USER, {variables: {id: idToBeFetch}}).data?.agent
     const tabsArray = [
-        {title: 'Activity', component: <>
-                {user?.economicEvents.map((e:any, i:number)=><RenderActivities key={i} userActivity={e}/>)}
-            </>},
+        {title: 'Activity', component: <EventTable economicEvents={user?.economicEvents}/>},
         {
             title: 'Inventory',
-            component: <InventoriedResources inventoriedResources={user?.inventoriedEconomicResources}/>
+            component: <ResourceTable resources={user?.inventoriedEconomicResources}/>
         }
     ]
 
     return (<>
-        <ul>
-            <li>name:{user?.name}</li>
-        </ul>
-        <div className="divider"/>
-        <Tabs tabsArray={tabsArray}/>
+        {!user && <Spinner/>}
+        {user && <>
+                <h3 className="mb-6">{user?.name}</h3>
+            <Tabs tabsArray={tabsArray}/></>}
     </>)
 };
 

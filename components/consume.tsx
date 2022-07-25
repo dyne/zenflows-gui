@@ -3,7 +3,7 @@ import React from "react";
 import ActionForm from "./ActionForm";
 import {ActionsEnum} from "../lib/ActionsEnum";
 
-const Consume = (props:{processId:string}) => {
+const Consume = (props:{processId?:string, intro?:{title:string,description:string}}) => {
 
     const TRANSFER_MUTATION = gql`
             mutation (
@@ -61,7 +61,7 @@ const Consume = (props:{processId:string}) => {
           `
 
   return (
-            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Consume}/>
+            <ActionForm MUTATION={TRANSFER_MUTATION} processId={props.processId} type={ActionsEnum.Consume} intro={props.intro}/>
   )};
 
 export default Consume

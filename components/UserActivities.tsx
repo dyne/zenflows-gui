@@ -3,6 +3,8 @@ import type {NextPage} from 'next'
 import {gql, useQuery} from '@apollo/client'
 import RenderActivities from "../components/renderActivities"
 import Link from "next/link";
+import NewProcessButton from "./NewProcessButton";
+import Spinner from "./brickroom/Spinner";
 
 
 const FETCH_USER_DATA = gql`
@@ -18,6 +20,16 @@ const FETCH_USER_DATA = gql`
                         name 
                         note
                         finished
+                        inputs {
+                          id
+                          provider {displayUsername id}
+                          receiver {displayUsername id}
+                        }
+                        outputs {
+                          id 
+                          provider {displayUsername id}
+                          receiver {displayUsername id}
+                        }
                       }
                   ... on EconomicEvent {
                     id
@@ -27,6 +39,19 @@ const FETCH_USER_DATA = gql`
                     resourceConformsTo {name note}
                     resourceInventoriedAs {name id note}
                     toResourceInventoriedAs {name note}
+                    inputOf {
+                      id
+                      name
+                    }
+                    outputOf {
+                      id
+                      name
+                    }
+                    atLocation {
+                      id
+                      name
+                    }
+                    
                     action { id }
                     resourceQuantity {
                       hasNumericalValue
@@ -49,30 +74,24 @@ const HomeProps = {
 const User: NextPage = () => {
     const activities = useQuery(FETCH_USER_DATA).data?.me?.user.userActivities
     return <>
-        <div className="container p-4">
-            <div className="flex justify-between">
-                <div className="w-80">
-                    <h2>{HomeProps.welcome.title}</h2>
-                    <p>{HomeProps.welcome.paragraph}</p>
-                </div>
-                <div className="w-80">
-                    <Link href="/new_process">
-                        <a className="btn btn-accent text-primary-content w-60 ml-4 mb-4">
-                            new process
-                        </a>
-                    </Link>
-                    <Link href="/processes">
-                        <a className="btn btn-outline btn-primary w-60 ml-4">
-                            see all process
-                        </a>
-                    </Link>
-                </div>
+        <div className="flex justify-between mb-6">
+            <div className="w-80">
+                <h2>{HomeProps.welcome.title}</h2>
+                <p>{HomeProps.welcome.paragraph}</p>
             </div>
-            {activities && <ul>
+            <div className="w-80">
+                <NewProcessButton/>
+                <Link href="/processes">
+                    <a className="btn btn-outline font-medium normal-case btn-primary w-60 ml-4">
+                        See all process
+                    </a>
+                </Link>
+            </div>
+        </div>
+        {activities && <ul>
             <RenderActivities userActivities={activities}/>
         </ul>}
-        {!activities && <h2>Just a moment...</h2>}
-        </div>
+        {!activities && <Spinner/>}
 
     </>
 };

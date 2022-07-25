@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {ChangeEventHandler} from 'react';
 import {gql, useQuery} from "@apollo/client";
+import BrSelect from "./brickroom/BrSelect";
 
 
-const SelectResourceType: any = (props: { handleSelect: Function }) => {
+const SelectResourceType: any = (props: { handleSelect: ChangeEventHandler }) => {
     const queryTypes = gql`
             query {
               resourceSpecifications{
@@ -19,10 +20,7 @@ const SelectResourceType: any = (props: { handleSelect: Function }) => {
     </option>))
 
     return (<>
-        <select onChange={(e) => props.handleSelect(e)}
-                className="select select-bordered w-full">
-            {options}
-        </select>
+        <BrSelect handleSelect={props.handleSelect} array={types} label="Select Resource:" placeholder="pick a tipe of resource"/>
     </>)
 };
 

@@ -1,23 +1,25 @@
 import React from 'react';
 import Link from 'next/link';
 
-import SideBarButton from "./brickroom/SideBarButton";
+import {HomeIcon, UserGroupIcon, GlobeIcon, ArrowNarrowRightIcon, ArrowNarrowLeftIcon} from "@heroicons/react/solid";
+import LoginBtn from "./LoginMenu";
+import SideBarMenu from "./brickroom/SideBarMenu";
+import NewProcessButton from "./NewProcessButton";
 import {useRouter} from "next/router";
-import {HomeIcon, UserGroupIcon, GlobeIcon} from "@heroicons/react/solid";
 
 const SideBarProps = {
-    newProcess: {text: "New Process",link:"/new_process"},
+    newProcess: {text: "New Process", link: "/new_process"},
     menu1: [{
-            name: "Home",
-            link: "/",
-            svg: <HomeIcon className="w-5 h-5 float-left mr-2"/>
-        },
-    {
+        name: "Home",
+        link: "/",
+        svg: <HomeIcon className="w-5 h-5 float-left mr-2"/>
+    },
+        {
             name: "Local",
-            link: "/loc",
+            link: "/local",
             svg: <UserGroupIcon className="w-5 h-5 float-left mr-2"/>
         },
-    {
+        {
             name: "Federation",
             link: "/fed",
             svg: <GlobeIcon className="w-5 h-5 float-left mr-2"/>
@@ -34,53 +36,48 @@ const SideBarProps = {
             link: "/my_inventory",
         },
         {
-            name: "Local",
-            link: "/local",
+            name: "Zencode",
+            link: "/zencode",
         }]
 }
 
 function Sidebar() {
     const router = useRouter()
-    const isActive = (path: string) => path === router.asPath
-    console.log(router.asPath)
+    const isNewProcess = router.asPath === '/new_process'
     return (<>
-        <div className="title text-primary-content">
-            <div className="w-full">
-                <Link href="/">
-                    <a>
-                        <div className="logo mx-auto my-4"/>
-                    </a>
-                </Link>
+            <div className="title text-primary-content">
+                {!isNewProcess && <>
+                    <div className="w-full">
+                        <Link href="/">
+                            <a>
+                                <div className="logo mx-auto my-4"/>
+                            </a>
+                        </Link>
+                    </div>
+                    <SideBarMenu menu={SideBarProps.menu1}/>
+                    <SideBarMenu menu={SideBarProps.menu} title={'MyReflow'}/>
+                    <NewProcessButton/>
+                    <br/>
+                    <LoginBtn/></>}
+                {isNewProcess && <>
+                    <button type="button"
+                            className="btn btn-outline text-white w-80 my-4 mx-4"
+                            onClick={() => router.back()}
+                    >
+                    <span className="flex flex-row items-center w-full pl-3 text-left normal-case font-medium">
+                    <ArrowNarrowLeftIcon className="w-5 h-5 mr-3"/>
+                     Go back and discard
+                    </span>
+                    </button>
+                    <div className="grid grid-cols-1 w-80 mx-4 mt-20">
+                        <img src="/new_process.png" sizes="21px 21px"/>
+                        <h2>How to create a good process</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                            Neque pellentesque hendrerit ultrices mauris et non pellentesque suspendisse est. </p>
+                    </div>
+                </>}
             </div>
-
-
-            <ul className="overflow-y-auto w-60 m-4 text-base-content border border-white rounded-md">
-                {SideBarProps.menu1.map((m) => <li key={m.name}>
-                    <SideBarButton
-                        text={m.name}
-                        link={m.link}
-                        active={isActive(m.link)}
-                        svg={m.svg}
-                /></li>)}
-            </ul>
-            <h4 className="ml-4 mt-8">
-                        MyReflow
-                    </h4>
-            <ul className="overflow-y-auto w-60 m-4 text-base-content mb-4 border border-white rounded-md">
-                {SideBarProps.menu.map((m) => <li key={m.name}>
-                    <SideBarButton
-                        text={m.name}
-                        link={m.link}
-                        active={isActive(m.link)}
-                        svg={m?.svg}
-                /></li>)}
-            </ul>
-            <Link href={SideBarProps.newProcess.link}>
-                <a className="btn btn-accent text-primary-content w-60 ml-4">
-                    {SideBarProps.newProcess.text}
-                </a>
-            </Link>
-        </div></>
+        </>
     )
 }
 
