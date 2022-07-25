@@ -4,7 +4,6 @@ import BrInput from "../components/brickroom/BrInput";
 import useStorage from "../lib/useStorage";
 import {gql, useMutation} from "@apollo/client";
 import generateKeyring from "../zenflows-crypto/src/generateKeyring";
-import SignRequest from "../lib/SignRequest";
 
 
 const Zencode = () => {
@@ -54,15 +53,7 @@ const Zencode = () => {
             label: label,
             symbol: symbol,
         }
-
-        await SignRequest({query, variables})
-            .then(({result}) => {
-                console.log(JSON.stringify({variables, "query":query}))
-                console.log('hash:',JSON.parse(result).hash)
-                console.log('signature:',JSON.parse(result).eddsa_signature)
-                console.log('gql:',Buffer.from(JSON.parse(result).gql, 'base64').toString('utf8'))
-                newUnit({variables, context: {headers: {'zenflows-sign': JSON.parse(result).eddsa_signature, 'zenflows-user': 'anosolare', 'zenflows-hash': JSON.parse(result).hash}}})
-            }).then(console.log)}
+        await newUnit({variables})}
 
 
     return (
