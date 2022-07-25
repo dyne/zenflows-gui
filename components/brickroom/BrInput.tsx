@@ -2,7 +2,7 @@ import React, { ChangeEventHandler } from "react";
 import { ExclamationIcon } from '@heroicons/react/solid'
 
 type BrInputProps = {
-    type?: 'number' | 'text' | 'password' |'date',
+    type?: 'number' | 'text' | 'password' |'date' | 'email',
     value?: string,
     placeholder?: string,
     label?: string,

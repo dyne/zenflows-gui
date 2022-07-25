@@ -118,6 +118,31 @@ function useProvideAuth() {
         }
     }
 
+    const signUp = async({name, user, email, eddsaPublicKey}:{name:string, user:string, email:string, eddsaPublicKey:string}) => {
+        const client = createApolloClient()
+        const SignUpMutation = gql`mutation  {
+              createPerson(person: {
+                name: "${name}"
+                user: "${user}"
+                email: "${email}"
+                eddsaPublicKey: "${eddsaPublicKey}"
+              }) {
+              agent{
+                id
+                name
+                user
+                email
+                eddsaPublicKey
+              }
+              }
+            }`
+
+        const result = await client.mutate({
+            mutation: SignUpMutation,
+            context: {headers: {'zenflows-admin': 'b4a7a8b0a87a8df133ceded44a5c624f1dae19024d72f931b65122a8463a69e6be7ae8bbd51a330182fde04e3e441371a051c7c800147837f31dff27c78cf246'}},
+        })
+    }
+
     const signOut = () => {
         setAuthToken(null)
         setItem('token', '', 'local')
@@ -129,6 +154,7 @@ function useProvideAuth() {
         setAuthToken,
         isSignedIn,
         signIn,
+        signUp,
         signOut,
         createApolloClient,
         authId,
