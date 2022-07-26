@@ -4,9 +4,18 @@ import React, {ChangeEvent, useState} from "react";
 import useStorage from "../lib/useStorage";
 import {zencode_exec} from "zenroom";
 import generateKeyring from "../zenflows-crypto/src/generateKeyring";
+import keypairoomClient from "../zenflows-crypto/src/keypairoomClient";
+import {useRouter} from "next/router";
+import {useAuth} from "../lib/auth";
 
-const KeyringGeneration = ({setStep1, setEddsaPublicKey}: { setStep1: Function, setEddsaPublicKey: Function }) => {
 
+const KeyringGeneration = ({
+                               setStep1,
+                               email,
+                               name,
+                               user
+                           }: { setStep1: Function, email: string, name: string, user: string }) => {
+    const {signUp} = useAuth()
     const keyringGenProps: any = {
         title: "Welcome!",
         presentation: "Answer the questions",
@@ -18,51 +27,58 @@ const KeyringGeneration = ({setStep1, setEddsaPublicKey}: { setStep1: Function, 
             question: "",
             answer: "Sign In"
         },
-        button: "Step two",
+        button: "Sign Up",
         question1: "Where my parents met?",
         question2: "What is the name of your first pet?",
         question3: "What is your home town?",
         question4: "What is the name of your first teacher?",
         question5: "What is the surname of your mother before wedding?"
     }
+    const [eddsaPublicKey, setEddsaPublicKey] = useState('')
+    const [seed, setSeed] = useState('')
     const [question1, setQuestion1] = React.useState('null')
     const [question2, setQuestion2] = React.useState('null')
     const [question3, setQuestion3] = React.useState('null')
     const [question4, setQuestion4] = React.useState('null')
     const [question5, setQuestion5] = React.useState('null')
-    const [email, setEmail] = React.useState('')
     const {getItem, setItem} = useStorage()
     const [result, setResult] = useState("")
+    const router = useRouter()
 
-    const isEnough = () => {
-
+    const onSignUp = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault()
+        signUp({name, user, email, seed})
     }
-
-    const onSubmit = async () => {
-        const zenData =`
+    const onSubmit = (e: { preventDefault: () => void; }) => {
+        e.preventDefault()
+        const zenData = `
             {
-                "userChallanges": {
-                    "question1":${question1},
-                    "question2":${question2},
-                    "question3":${question3},
-                    "question4":${question4},
-                    "question5":${question5}
+                "userChallenges": {
+                    "question1":"${question1}",
+                    "question2":"${question2}",
+                    "question3":"${question3}",
+                    "question4":"${question4}",
+                    "question5":"${question5}",
                 },
-                "username": ${email},
+                "username": "${email}",
                 "key_derivation": "qf3skXnPGFMrE28UJS7S8BdT8g=="
             }`
 
 
-        await zencode_exec(generateKeyring)
+        zencode_exec(keypairoomClient, {data: zenData})
             .then(({result}) => {
+                console.log(result)
                 const res = JSON.parse(result)
-                setEddsaPublicKey(res.publicKey)
+                console.log(res)
+                setEddsaPublicKey(res.eddsa_public_key)
                 setItem('eddsa_key', res.keyring.eddsa, 'local')
                 setItem('ethereum_address', res.keyring.ethereum, 'local')
                 setItem('reflow', res.keyring.reflow, 'local')
                 setItem('schnorr', res.keyring.schnorr, 'local')
                 setItem('eddsa', res.keyring.eddsa, 'local')
-            }).then(() => setStep1(false))
+                setSeed(res.concatenedHashes)
+            }).then(() => signUp({name, user, email, eddsaPublicKey})
+            .then(() => router.push('/')))
     }
 
 
@@ -73,11 +89,6 @@ const KeyringGeneration = ({setStep1, setEddsaPublicKey}: { setStep1: Function, 
             <>
                 <p>{keyringGenProps.presentation}</p>
                 <form onSubmit={onSubmit}>
-                    <BrInput type="email"
-                             placeholder={keyringGenProps.email.placeholder}
-                             label={keyringGenProps.email.label}
-                             onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                    />
                     <BrInput type="text"
                              label={keyringGenProps.question1}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setQuestion1(e.target.value)}/>

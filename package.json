@@ -34,7 +34,7 @@
     "react-dom": "18.1.0",
     "react-qr-code": "^2.0.7",
     "sass": "^1.52.3",
-    "zenroom": "2.2.3-44c3e5b9"
+    "zenroom": "next"
   },
   "devDependencies": {
     "@commitlint/cli": "^16.2.4",
