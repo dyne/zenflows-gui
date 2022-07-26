@@ -7,6 +7,7 @@ import {LinkIcon} from "@heroicons/react/solid";
 import {zencode_exec} from "zenroom";
 import generateKeyring from "../zenflows-crypto/src/generateKeyring";
 import useStorage from "../lib/useStorage";
+import KeyringGeneration from "../components/KeyringGeneration";
 
 
 export default function SignIn() {
@@ -15,10 +16,11 @@ export default function SignIn() {
     const [email, setEmail] = useState('')
     const [user, setUser] = useState('')
     const [eddsaPublicKey, setEddsaPublicKey] = useState('')
+    const [isStep1, setIsStep1] = useState(true)
 
     const router = useRouter()
     const signUpTextProps: any = {
-        title: "Welcome!",
+        title: "Second step",
         presentation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna.",
         name: {
             label: "name",
@@ -43,19 +45,14 @@ export default function SignIn() {
 
     async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
-        await zencode_exec(generateKeyring)
-            .then(({result}) => {
-                const res = JSON.parse(result)
-                setEddsaPublicKey(res.publicKey)
-                setItem('eddsa_key', res.keyring.eddsa, 'local')
-            })
-            .then(await signUp({name, user, email, eddsaPublicKey}))
+        await signUp({name, user, email, eddsaPublicKey})
             .then(() => router.push('/'))
     }
 
     return (
             <div className="container mx-auto h-screen grid place-items-center">
-                <Card title={signUpTextProps.title}
+                {isStep1&&<KeyringGeneration setStep1={setIsStep1}/>}
+                {!isStep1&&<Card title={signUpTextProps.title}
                       width={CardWidth.LG}
                       className="px-16 py-[4.5rem]">
                     <>
@@ -83,7 +80,7 @@ export default function SignIn() {
                             {signUpTextProps.register.answer}
                         </p>
                     </>
-                </Card>
+                </Card>}
             </div>
     )
 }
