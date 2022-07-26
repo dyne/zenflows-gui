@@ -57,6 +57,8 @@ function useProvideAuth() {
     const storedUser = getItem('username', 'local') !== '' ? getItem('username', 'local') : null
     useEffect(() => setUsername(storedUser), [])
 
+
+
     const isSignedIn = () => {
         if (authToken) {
             return true

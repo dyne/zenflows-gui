@@ -4,6 +4,7 @@ import {useRouter} from "next/router";
 import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import {LinkIcon} from "@heroicons/react/solid";
+import Link from "next/link";
 
 
 export default function SignIn() {
@@ -59,7 +60,9 @@ export default function SignIn() {
               <p className="flex flex-row items-center justify-between">
                 {signInTextProps.register.question}
                 <LinkIcon className='h-5 w-5 ml-6'/>
-                {signInTextProps.register.answer}
+                <Link href="/sign_up">
+                  <a>{signInTextProps.register.answer}</a>
+                </Link>
               </p>
             </>
           </Card>
