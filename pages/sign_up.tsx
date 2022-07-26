@@ -9,6 +9,7 @@ import generateKeyring from "../zenflows-crypto/src/generateKeyring";
 import useStorage from "../lib/useStorage";
 import KeyringGeneration from "../components/KeyringGeneration";
 import SeedCard from "../components/SeedCard";
+import {gql, useMutation} from "@apollo/client";
 
 
 export default function SignUp() {
@@ -19,6 +20,12 @@ export default function SignUp() {
     const [eddsaPublicKey, setEddsaPublicKey] = useState('')
     const [step, setStep] = useState(0)
     const [seed, setSeed] = useState('')
+    const [pdfk, setPdfk] = useState('')
+
+    const PDFK_MUTATION = gql`mutation {
+                  keypairoomServer(userData: "${Buffer.from(email, 'utf8').toString('base64')}")
+                }
+                `
 
     const router = useRouter()
     const signUpTextProps: any = {
@@ -40,23 +47,22 @@ export default function SignUp() {
             question: "✌️  yet regisetered?",
             answer: "Sign In"
         },
-        button: "Sign Up"
+        button: "Next Step"
     }
+    const [keypairoomServer, {data, loading, error}] = useMutation(PDFK_MUTATION)
+
 
     const {signUp} = useAuth()
 
     async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
-
+        const key = await keypairoomServer().then(res => res.data.keypairoomServer)
+        setPdfk(key)
         setStep(1)
     }
 
     return (
         <div className="container mx-auto h-screen grid place-items-center">
-            {(step === 1) &&
-            <KeyringGeneration setStep1={setStep} setEddsaPublicKey={setEddsaPublicKey} email={email}
-                               user={user} name={name}/>}
-            {(step === 3) && <SeedCard seed={seed}/>}
             {(step === 0) && <Card title={signUpTextProps.title}
                                    width={CardWidth.LG}
                                    className="px-16 py-[4.5rem]">
@@ -86,6 +92,8 @@ export default function SignUp() {
                     </p>
                 </>
             </Card>}
+            {(step === 1) &&
+            <KeyringGeneration email={email} user={user} name={name} pdfk={pdfk}/>}
         </div>
     )
 }

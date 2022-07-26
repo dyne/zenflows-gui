@@ -3,22 +3,21 @@ import BrInput from "./brickroom/BrInput";
 import React, {ChangeEvent, useState} from "react";
 import useStorage from "../lib/useStorage";
 import {zencode_exec} from "zenroom";
-import generateKeyring from "../zenflows-crypto/src/generateKeyring";
 import keypairoomClient from "../zenflows-crypto/src/keypairoomClient";
 import {useRouter} from "next/router";
 import {useAuth} from "../lib/auth";
 
 
 const KeyringGeneration = ({
-                               setStep1,
                                email,
                                name,
-                               user
-                           }: { setStep1: Function, email: string, name: string, user: string }) => {
+                               user,
+                               pdfk,
+                           }: { email: string, name: string, user: string, pdfk: string }) => {
     const {signUp} = useAuth()
     const keyringGenProps: any = {
         title: "Welcome!",
-        presentation: "Answer the questions",
+        presentation: "Answer at least three question",
         email: {
             label: "Email",
             placeholder: "alice@email.com"
@@ -27,7 +26,8 @@ const KeyringGeneration = ({
             question: "",
             answer: "Sign In"
         },
-        button: "Sign Up",
+        button: "Check",
+        button2: "Sign Up",
         question1: "Where my parents met?",
         question2: "What is the name of your first pet?",
         question3: "What is your home town?",
@@ -41,17 +41,31 @@ const KeyringGeneration = ({
     const [question3, setQuestion3] = React.useState('null')
     const [question4, setQuestion4] = React.useState('null')
     const [question5, setQuestion5] = React.useState('null')
+    const [notEnoughtAnswers, setNotEnoughtAnswers] = React.useState(false)
     const {getItem, setItem} = useStorage()
-    const [result, setResult] = useState("")
     const router = useRouter()
 
     const onSignUp = async (e: { preventDefault: () => void; }) => {
+
+
         e.preventDefault()
         signUp({name, user, email, seed})
     }
+    const nullAnswers = [question1, question2, question3, question4, question5].reduce((nullOccs, question) => {
+        return (question === 'null') ? nullOccs + 1 : nullOccs
+    }, 0)
+
+    const fillMoreAnswer = (q:string)=> {
+        const filledAnswer = (q === 'null') || (q === '')
+        return (notEnoughtAnswers&&filledAnswer) ? `Fill at least ${nullAnswers-2} more answers` : undefined
+    }
+
     const onSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        const zenData = `
+        if (nullAnswers > 3) {
+            setNotEnoughtAnswers(true)
+        } else {
+            const zenData = `
             {
                 "userChallenges": {
                     "question1":"${question1}",
@@ -61,24 +75,24 @@ const KeyringGeneration = ({
                     "question5":"${question5}",
                 },
                 "username": "${email}",
-                "key_derivation": "qf3skXnPGFMrE28UJS7S8BdT8g=="
+                "key_derivation": "${pdfk}"
             }`
 
 
-        zencode_exec(keypairoomClient, {data: zenData})
-            .then(({result}) => {
-                console.log(result)
-                const res = JSON.parse(result)
-                console.log(res)
-                setEddsaPublicKey(res.eddsa_public_key)
-                setItem('eddsa_key', res.keyring.eddsa, 'local')
-                setItem('ethereum_address', res.keyring.ethereum, 'local')
-                setItem('reflow', res.keyring.reflow, 'local')
-                setItem('schnorr', res.keyring.schnorr, 'local')
-                setItem('eddsa', res.keyring.eddsa, 'local')
-                setSeed(res.concatenedHashes)
-            }).then(() => signUp({name, user, email, eddsaPublicKey})
-            .then(() => router.push('/')))
+            zencode_exec(keypairoomClient, {data: zenData})
+                .then(({result}) => {
+                    console.log(result)
+                    const res = JSON.parse(result)
+                    console.log(res)
+                    setEddsaPublicKey(res.eddsa_public_key)
+                    setItem('eddsa_key', res.keyring.eddsa, 'local')
+                    setItem('ethereum_address', res.keyring.ethereum, 'local')
+                    setItem('reflow', res.keyring.reflow, 'local')
+                    setItem('schnorr', res.keyring.schnorr, 'local')
+                    setItem('eddsa', res.keyring.eddsa, 'local')
+                    setSeed(res.concatenatedHashes)
+                })
+        }
     }
 
 
@@ -90,18 +104,23 @@ const KeyringGeneration = ({
                 <p>{keyringGenProps.presentation}</p>
                 <form onSubmit={onSubmit}>
                     <BrInput type="text"
+                             error={fillMoreAnswer(question1)}
                              label={keyringGenProps.question1}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setQuestion1(e.target.value)}/>
                     <BrInput type="text"
                              label={keyringGenProps.question2}
+                             error={fillMoreAnswer(question2)}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setQuestion2(e.target.value)}/>
                     <BrInput type="text"
+                             error={fillMoreAnswer(question3)}
                              label={keyringGenProps.question3}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setQuestion3(e.target.value)}/>
                     <BrInput type="text"
+                             error={fillMoreAnswer(question4)}
                              label={keyringGenProps.question4}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setQuestion4(e.target.value)}/>
                     <BrInput type="text"
+                             error={fillMoreAnswer(question5)}
                              label={keyringGenProps.question5}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setQuestion5(e.target.value)}/>
 
@@ -111,6 +130,14 @@ const KeyringGeneration = ({
                     {keyringGenProps.register.question}
                     {keyringGenProps.register.answer}
                 </p>
+                {(seed !== '') && <>
+                    <p>
+                        {seed}
+                    </p>
+                    <button className="btn btn-block" type="button" onClick={onSignUp}>
+                        {keyringGenProps.button2}
+                    </button>
+                </>}
             </>
         </Card>
     )
