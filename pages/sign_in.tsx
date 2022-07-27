@@ -5,68 +5,82 @@ import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import {LinkIcon} from "@heroicons/react/solid";
 import Link from "next/link";
+import KeyringGeneration from "../components/KeyringGeneration";
 
 
-export default function SignIn() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+export default function Sign_in() {
+    const [isPassprhase, setIsPassphrase] = useState(false)
+    const [step, setStep] = useState(0)
+    const [email, setEmail] = useState('')
+    const [pdfk, setPdfk] = useState('')
 
-  const router = useRouter()
-  const signInTextProps:any ={
-    title:"Welcome Back!",
-    presentation:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna.",
-    username: {
-      label: "Email address or @username",
-      placeholder: "alice@email.com"
-    },
-    password: {
-      label: "Password (min 8 characters)",
-      placeholder: "Type your password"
-    },
-    register:{
-      question:"✌️ You don’t have an account yet?",
-      answer:"Sign Up"
-    },
-    button: "Sign In"
-  }
+    const {askPdfk, signIn} = useAuth()
 
-  const { signIn } = useAuth()
+    const viaPassphrase = () => {
+        setIsPassphrase(true)
+        setStep(1)
+    }
 
-  async function  onSubmit(e: { preventDefault: () => void; }) {
-    e.preventDefault()
-    await signIn({ username, password }).then(()=> router.push('/'))
-  }
 
-  return (
-    <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('/reflow_background.jpeg')"}}>
-      <div className="container mx-auto h-screen grid place-items-center">
-          <Card title={signInTextProps.title}
-                width={CardWidth.LG}
-                className="px-16 py-[4.5rem]">
-            <>
-              <p>{signInTextProps.presentation}</p>
-              <form onSubmit={onSubmit}>
-                <BrInput type="text"
-                         label={signInTextProps.username.label}
-                         placeholder={signInTextProps.username.placeholder}
-                         onChange={(e:ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
-                <BrInput type="password"
-                         placeholder={signInTextProps.password.placeholder}
-                         label={signInTextProps.password.label}
-                         onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                />
-                  <button className="btn btn-block" type="submit">{signInTextProps.button}</button>
-              </form>
-              <p className="flex flex-row items-center justify-between">
-                {signInTextProps.register.question}
-                <LinkIcon className='h-5 w-5 ml-6'/>
-                <Link href="/sign_up">
-                  <a>{signInTextProps.register.answer}</a>
-                </Link>
-              </p>
-            </>
-          </Card>
-      </div>
-    </div>
-  )
+    const viaQuestions = () => {
+        setIsPassphrase(false)
+        setStep(1)
+    }
+    const toQuestions = async () => {
+        const key = await askPdfk(email)
+        setPdfk(key)
+        setStep(2)
+    }
+
+    const router = useRouter()
+    const signInTextProps: any = {
+        title: "Welcome!",
+        presentation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna.",
+        button1: "Sign In via passprhase",
+        button2: "Sign In answering some questions",
+        button3: "Sign Up",
+        button4: "Next",
+        email: {
+            label: "Email address",
+            placeholder: "alice@email.com"
+        }
+    }
+
+    async function onSubmit(e: { preventDefault: () => void; }) {
+        e.preventDefault()
+    }
+
+    return (
+        <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('/reflow_background.jpeg')"}}>
+            <div className="container mx-auto h-screen grid place-items-center">
+                <Card title={signInTextProps.title}
+                      width={CardWidth.LG}
+                      className="px-16 py-[4.5rem]">
+                    <>
+                        {step === 0 && <><p>{signInTextProps.presentation}</p>
+                            <button className="btn btn-block" type="button"
+                                    onClick={() => viaPassphrase()}>{signInTextProps.button1}</button>
+                            <button className="btn btn-block my-4" type="button"
+                                    onClick={() => viaQuestions()}>{signInTextProps.button2}</button>
+                            <Link href={'/sign_up'}>
+                                <a className="btn btn-block">{signInTextProps.button3}</a>
+                            </Link></>}
+                        {step === 1 && <>
+                            <BrInput type="email" label={signInTextProps.email.label}
+                                     placeholder={signInTextProps.email.placeholder}
+                                     onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
+                            {!isPassprhase && <>
+                                <button className="btn btn-block" type="button" onClick={() => toQuestions()}>
+                                    {signInTextProps.button4}
+                                </button>
+                            </>}
+                        </>}
+                    </>
+                </Card>
+                {step === 2 && <>
+                    <KeyringGeneration email={email} pdfk={pdfk}/>
+                </>}
+            </div>
+        </div>
+    )
 }

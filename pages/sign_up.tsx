@@ -10,7 +10,7 @@ import useStorage from "../lib/useStorage";
 import KeyringGeneration from "../components/KeyringGeneration";
 import SeedCard from "../components/SeedCard";
 import {gql, useMutation} from "@apollo/client";
-
+import {result} from "lodash";
 
 export default function SignUp() {
     const {getItem, setItem} = useStorage()
@@ -52,11 +52,11 @@ export default function SignUp() {
     const [keypairoomServer, {data, loading, error}] = useMutation(PDFK_MUTATION)
 
 
-    const {signUp} = useAuth()
+    const {signUp, askPdfk} = useAuth()
 
     async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
-        const key = await keypairoomServer().then(res => res.data.keypairoomServer)
+        const key = await askPdfk(email)
         setPdfk(key)
         setStep(1)
     }
@@ -93,7 +93,7 @@ export default function SignUp() {
                 </>
             </Card>}
             {(step === 1) &&
-            <KeyringGeneration email={email} user={user} name={name} pdfk={pdfk}/>}
+            <KeyringGeneration email={email} user={user} name={name} pdfk={pdfk} isSignUp={true}/>}
         </div>
     )
 }

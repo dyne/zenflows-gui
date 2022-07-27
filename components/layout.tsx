@@ -3,7 +3,6 @@ import Sidebar from "./sidebar"
 import Topbar from "./topbar";
 import {useAuth} from "../lib/auth";
 import SignIn from "../pages/sign_in";
-import SignUp from "../pages/sign_up";
 import {useRouter} from 'next/router'
 
 

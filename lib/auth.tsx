@@ -5,12 +5,14 @@ import {
     InMemoryCache,
     HttpLink,
     gql,
-    ApolloLink, concat
+    ApolloLink, concat, useMutation
 } from '@apollo/client'
 
 import useStorage from "./useStorage";
 import SignRequest from "./SignRequest";
 import {setContext} from "@apollo/client/link/context";
+import {zencode_exec} from "zenroom";
+import keypairoomClient from "../zenflows-crypto/src/keypairoomClient";
 
 
 // @ts-ignore
@@ -32,31 +34,25 @@ export const useAuth: any = () => {
     return useContext(authContext)
 }
 
-const headersMiddleware = setContext(async(operation, { headers }) => {
-    const variables = operation.variables
-    const query = operation.query.loc?.source.body!
-    const completeHeaders = await SignRequest({query, variables}).then(({result}) => ({
-    ...headers,
-    'zenflows-sign': JSON.parse(result).eddsa_signature,
-    'zenflows-user': 'anosolare',
-    'zenflows-hash': JSON.parse(result).hash
-  }))
-return {headers: completeHeaders}
-}
+
+const headersMiddleware = setContext(async (operation, {headers}) => {
+        const variables = operation.variables
+        const query = operation.query.loc?.source.body!
+        const completeHeaders = await SignRequest({query, variables}).then(({result}) => ({
+            ...headers,
+            'zenflows-sign': JSON.parse(result).eddsa_signature,
+            'zenflows-user': 'anosolare',
+            'zenflows-hash': JSON.parse(result).hash
+        }))
+        return {headers: completeHeaders}
+    }
 );
 
 function useProvideAuth() {
     const {getItem, setItem} = useStorage()
     const [authToken, setAuthToken] = useState(null as string | null)
-    const [username, setUsername] = useState(null as string | null)
-    const [authId, setAuthId] = useState(null as string | null)
-    const storedToken = getItem('token', 'local') !== '' ? getItem('token', 'local') : null
-    useEffect(() => setAuthToken(storedToken), [])
-    const storedId = getItem('authId', 'local') !== '' ? getItem('authId', 'local') : null
-    useEffect(() => setAuthId(storedId), [])
-    const storedUser = getItem('username', 'local') !== '' ? getItem('username', 'local') : null
-    useEffect(() => setUsername(storedUser), [])
-
+    const storedEddsaKey = getItem('eddsa_key', 'local') !== '' ? getItem('eddsa_key', 'local') : null
+    useEffect(() => setAuthToken(storedEddsaKey), [])
 
 
     const isSignedIn = () => {
@@ -69,8 +65,8 @@ function useProvideAuth() {
 
     const getAuthHeaders = () => {
         return null
-
     }
+
 
     const createApolloClient = () => {
         const link = new HttpLink({
@@ -88,39 +84,62 @@ function useProvideAuth() {
         })
     }
 
-    const signIn = async ({username, password}: { username: string, password: string }) => {
+    const askPdfk = async (email: string) => {
         const client = createApolloClient()
-        const LoginMutation = gql`
-            mutation {
-              login(emailOrUsername: "${username}", password: "${password}") {
-                token
-                currentUser {
-                id 
-                profile{
-                  name
-                  summary
-                  }
-                }
-              }
-            }
-          `
-
-        const result = await client.mutate({
-            mutation: LoginMutation,
-            variables: {username, password},
-        })
-
-        if (result?.data?.login?.token) {
-            setAuthToken(result.data.login.token)
-            setUsername(result.data.login.currentUser.profile.name)
-            setItem('token', result.data.login.token, 'local')
-            setItem('authId', result.data.login.currentUser.id, 'local')
-            setItem('username', result.data.login.currentUser.profile.name, 'local')
-            setAuthId(result.data.login.currentUser.id)
+        const PDFK_MUTATION = gql`mutation {
+            keypairoomServer(userData: "${Buffer.from(email, 'utf8').toString('base64')}")
+        }
+        `
+        const result = await client.mutate({mutation: PDFK_MUTATION})
+        if (result?.data?.keypairoomServer) {
+            return result.data?.keypairoomServer
         }
     }
 
-    const signUp = async({name, user, email, eddsaPublicKey}:{name:string, user:string, email:string, eddsaPublicKey:string}) => {
+    const signIn = async ({
+                              question1,
+                              question2,
+                              question3,
+                              question4,
+                              question5,
+                              email,
+                              pdfk
+                          }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, pdfk: string }) => {
+        const zenData = `
+            {
+                "userChallenges": {
+                    "question1":"${question1}",
+                    "question2":"${question2}",
+                    "question3":"${question3}",
+                    "question4":"${question4}",
+                    "question5":"${question5}",
+                },
+                "username": "${email}",
+                "key_derivation": "${pdfk}"
+            }`
+
+
+        zencode_exec(keypairoomClient, {data: zenData})
+            .then(({result}) => {
+                console.log(result)
+                const res = JSON.parse(result)
+                console.log(res)
+                setItem('eddsa_public_key',res.eddsa_public_key, 'local')
+                setItem('eddsa_key', res.keyring.eddsa, 'local')
+                setItem('ethereum_address', res.keyring.ethereum, 'local')
+                setItem('reflow', res.keyring.reflow, 'local')
+                setItem('schnorr', res.keyring.schnorr, 'local')
+                setItem('eddsa', res.keyring.eddsa, 'local')
+                setItem('seed', res.concatenatedHashes, 'local')
+            })
+    }
+
+    const signUp = async ({
+                              name,
+                              user,
+                              email,
+                              eddsaPublicKey
+                          }: { name: string, user: string, email: string, eddsaPublicKey: string }) => {
         const client = createApolloClient()
         const SignUpMutation = gql`mutation  {
               createPerson(person: {
@@ -139,17 +158,18 @@ function useProvideAuth() {
               }
             }`
 
-        const result = await client.mutate({
-            mutation: SignUpMutation,
-            context: {headers: {'zenflows-admin': 'b4a7a8b0a87a8df133ceded44a5c624f1dae19024d72f931b65122a8463a69e6be7ae8bbd51a330182fde04e3e441371a051c7c800147837f31dff27c78cf246'}},
-        })
+        const result = await client.mutate({mutation: SignUpMutation})
     }
 
     const signOut = () => {
         setAuthToken(null)
-        setItem('token', '', 'local')
-        setItem('authId', '', 'local')
-        setItem('username', '', 'local')
+        setItem('eddsa_public_key','', 'local')
+        setItem('eddsa_key','', 'local')
+        setItem('ethereum_address', '', 'local')
+        setItem('reflow', '', 'local')
+        setItem('schnorr', '', 'local')
+        setItem('eddsa', '', 'local')
+        setItem('seed','', 'local')
     }
 
     return {
@@ -159,7 +179,6 @@ function useProvideAuth() {
         signUp,
         signOut,
         createApolloClient,
-        authId,
-        username
+        askPdfk,
     }
 }

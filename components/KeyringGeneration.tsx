@@ -13,8 +13,9 @@ const KeyringGeneration = ({
                                name,
                                user,
                                pdfk,
-                           }: { email: string, name: string, user: string, pdfk: string }) => {
-    const {signUp} = useAuth()
+                               isSignUp
+                           }: { email: string, name?: string, user?: string, pdfk: string, isSignUp?:boolean }) => {
+    const {signUp, signIn} = useAuth()
     const keyringGenProps: any = {
         title: "Welcome!",
         presentation: "Answer at least three question",
@@ -46,10 +47,9 @@ const KeyringGeneration = ({
     const router = useRouter()
 
     const onSignUp = async (e: { preventDefault: () => void; }) => {
-
-
         e.preventDefault()
-        signUp({name, user, email, seed})
+        const key = getItem('eddsa_public_key', 'local')
+        signUp({name, user, email, key})
     }
     const nullAnswers = [question1, question2, question3, question4, question5].reduce((nullOccs, question) => {
         return (question === 'null') ? nullOccs + 1 : nullOccs
@@ -62,36 +62,12 @@ const KeyringGeneration = ({
 
     const onSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        if (nullAnswers > 3) {
+        if (nullAnswers > 2) {
             setNotEnoughtAnswers(true)
         } else {
-            const zenData = `
-            {
-                "userChallenges": {
-                    "question1":"${question1}",
-                    "question2":"${question2}",
-                    "question3":"${question3}",
-                    "question4":"${question4}",
-                    "question5":"${question5}",
-                },
-                "username": "${email}",
-                "key_derivation": "${pdfk}"
-            }`
-
-
-            zencode_exec(keypairoomClient, {data: zenData})
-                .then(({result}) => {
-                    console.log(result)
-                    const res = JSON.parse(result)
-                    console.log(res)
-                    setEddsaPublicKey(res.eddsa_public_key)
-                    setItem('eddsa_key', res.keyring.eddsa, 'local')
-                    setItem('ethereum_address', res.keyring.ethereum, 'local')
-                    setItem('reflow', res.keyring.reflow, 'local')
-                    setItem('schnorr', res.keyring.schnorr, 'local')
-                    setItem('eddsa', res.keyring.eddsa, 'local')
-                    setSeed(res.concatenatedHashes)
-                })
+            signIn(question1, question2, question3, question4, question5, email, pdfk).then(() => {
+                    setEddsaPublicKey(getItem('eddsa_public_key', 'local'))
+                    setSeed(getItem('seed', 'local'))})
         }
     }
 
@@ -101,7 +77,7 @@ const KeyringGeneration = ({
               width={CardWidth.LG}
               className="px-16 py-[4.5rem]">
             <>
-                <p>{keyringGenProps.presentation}</p>
+                {(seed === '') && <>  <p>{keyringGenProps.presentation}</p>
                 <form onSubmit={onSubmit}>
                     <BrInput type="text"
                              error={fillMoreAnswer(question1)}
@@ -129,14 +105,17 @@ const KeyringGeneration = ({
                 <p className="flex flex-row items-center justify-between">
                     {keyringGenProps.register.question}
                     {keyringGenProps.register.answer}
-                </p>
+                </p></>}
                 {(seed !== '') && <>
                     <p>
                         {seed}
                     </p>
-                    <button className="btn btn-block" type="button" onClick={onSignUp}>
+                    {isSignUp&&<button className="btn btn-block" type="button" onClick={onSignUp}>
                         {keyringGenProps.button2}
-                    </button>
+                    </button>}
+                    {!isSignUp&&<p>
+                        logged in
+                    </p>}
                 </>}
             </>
         </Card>
