@@ -27,15 +27,24 @@ const VerifySeed = ({
     }
     const [eddsaPublicKey, setEddsaPublicKey] = useState('')
     const [seed, setSeed] = useState('')
+    const [error, setError] = useState('')
     const {getItem, setItem} = useStorage()
     const router = useRouter()
 
+    const validateSeed = (seed:string) => {
+        const isValid = seed.split(' ').length === 12
+        if (isValid) {
+            setSeed(seed)
+            setError('')
+        }
+        else {setError('Invalid pass phrase')}
+    }
 
     const onSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         const zenData = `
             {
-                "seed": "${Buffer.from(seed, 'utf8').toString('base64')}",
+                "seed": "${seed}",
                 "seedServerSideShard.HMAC": "${HMAC}"
             }`
         await zencode_exec(keypairoomClientRecreateKeys, {data: zenData}).then(({result}) => {
@@ -47,9 +56,10 @@ const VerifySeed = ({
                 setItem('schnorr', res.keyring.schnorr, 'local')
                 setItem('eddsa', res.keyring.eddsa, 'local')
                 setItem('seed', res.seed, 'local')
-            }).then(() => {router.push('/')})
+            }).then(() =>{
+                location.replace(`/logged_in`);
+                })
     }
-
 
     return (
 
@@ -57,9 +67,10 @@ const VerifySeed = ({
                 <p>{VerifySeedProps.presentation}</p>
                 <form onSubmit={onSubmit}>
                     <BrInput type="text"
+                             error={error}
                              label={VerifySeedProps.label}
                              placeholder={VerifySeedProps.placeholder}
-                             onChange={(e: ChangeEvent<HTMLInputElement>) => setSeed(e.target.value)}/>
+                             onChange={(e: ChangeEvent<HTMLInputElement>) => validateSeed(e.target.value)}/>
                     <button className="btn btn-block" type="submit">{VerifySeedProps.button}</button>
                 </form>
 
