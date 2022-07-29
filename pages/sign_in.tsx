@@ -3,7 +3,6 @@ import {useAuth} from "../lib/auth";
 import {useRouter} from "next/router";
 import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
-import {LinkIcon} from "@heroicons/react/solid";
 import Link from "next/link";
 import KeyringGeneration from "../components/KeyringGeneration";
 
@@ -13,9 +12,11 @@ export default function Sign_in() {
     const [step, setStep] = useState(0)
     const [email, setEmail] = useState('')
     const [pdfk, setPdfk] = useState('')
+    const [isMailExisting, setIsMailExising] = useState(true)
 
-    const {askPdfk, signIn} = useAuth()
+    const {askKeypairoomServer, signIn} = useAuth()
 
+    const errorMail = isMailExisting ? undefined : 'this email doesn\'t exists'
     const viaPassphrase = () => {
         setIsPassphrase(true)
         setStep(1)
@@ -27,9 +28,17 @@ export default function Sign_in() {
         setStep(1)
     }
     const toQuestions = async () => {
-        const key = await askPdfk(email)
-        setPdfk(key)
-        setStep(2)
+        const result = await askKeypairoomServer(email, false)
+        if (await result?.keypairoomServer) {
+            setPdfk(result?.keypairoomServer)
+            setStep(2)
+            console.log(result)
+        } else {
+            setIsMailExising(false)
+            console.log(result)
+        }
+        // setPdfk(key)
+        // setStep(2)
     }
 
     const router = useRouter()
@@ -67,6 +76,7 @@ export default function Sign_in() {
                             </Link></>}
                         {step === 1 && <>
                             <BrInput type="email" label={signInTextProps.email.label}
+                                     error={errorMail}
                                      placeholder={signInTextProps.email.placeholder}
                                      onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
                             {!isPassprhase && <>

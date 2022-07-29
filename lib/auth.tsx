@@ -5,14 +5,14 @@ import {
     InMemoryCache,
     HttpLink,
     gql,
-    ApolloLink, concat, useMutation
+    concat
 } from '@apollo/client'
 
 import useStorage from "./useStorage";
 import SignRequest from "./SignRequest";
 import {setContext} from "@apollo/client/link/context";
 import {zencode_exec} from "zenroom";
-import keypairoomClient from "../zenflows-crypto/src/keypairoomClient";
+import keypairoomClient from "../zenflows-crypto/src/keypairoomClient-8-9-10-11-12";
 
 
 // @ts-ignore
@@ -75,7 +75,7 @@ function useProvideAuth() {
         })
 
         return new ApolloClient({
-            link: concat(headersMiddleware, link),
+            link: isSignedIn()? concat(headersMiddleware, link) : link,
             ssrMode: typeof window === 'undefined',
             cache: new InMemoryCache({
                 addTypename: false
@@ -84,16 +84,22 @@ function useProvideAuth() {
         })
     }
 
-    const askPdfk = async (email: string) => {
+    const askKeypairoomServer = async (email: string, firstRegistration: boolean) => {
         const client = createApolloClient()
-        const PDFK_MUTATION = gql`mutation {
-            keypairoomServer(userData: "${Buffer.from(email, 'utf8').toString('base64')}")
-        }
+        const KEYPAIROOM_SERVER_MUTATION = gql`mutation {
+  keypairoomServer(firstRegistration: ${firstRegistration}, userData: "{\\"email\\": \\"${email}\\"}")
+}
         `
-        const result = await client.mutate({mutation: PDFK_MUTATION})
-        if (result?.data?.keypairoomServer) {
-            return result.data?.keypairoomServer
-        }
+        return await client.mutate({mutation: KEYPAIROOM_SERVER_MUTATION})
+            .then(({data}) => data)
+            .catch((error) => {
+                if (`${error}`.includes("email doesn't exists")) {
+                     return "email doesn't exists"
+                }
+                else if (`${error}`.includes("email exists")) {
+                    return "email has already been registered"
+                }
+            })
     }
 
     const signIn = async ({
@@ -103,8 +109,8 @@ function useProvideAuth() {
                               question4,
                               question5,
                               email,
-                              pdfk
-                          }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, pdfk: string }) => {
+                              keypairoomServer
+                          }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, keypairoomServer: string }) => {
         const zenData = `
             {
                 "userChallenges": {
@@ -115,7 +121,7 @@ function useProvideAuth() {
                     "question5":"${question5}",
                 },
                 "username": "${email}",
-                "key_derivation": "${pdfk}"
+                "key_derivation": "${keypairoomServer}"
             }`
 
 
@@ -124,7 +130,7 @@ function useProvideAuth() {
                 console.log(result)
                 const res = JSON.parse(result)
                 console.log(res)
-                setItem('eddsa_public_key',res.eddsa_public_key, 'local')
+                setItem('eddsa_public_key', res.eddsa_public_key, 'local')
                 setItem('eddsa_key', res.keyring.eddsa, 'local')
                 setItem('ethereum_address', res.keyring.ethereum, 'local')
                 setItem('reflow', res.keyring.reflow, 'local')
@@ -158,18 +164,21 @@ function useProvideAuth() {
               }
             }`
 
-        const result = await client.mutate({mutation: SignUpMutation})
+        const result = await client.mutate({
+            mutation: SignUpMutation,
+            context: {headers: {'zenflows-admin': 'b4a7a8b0a87a8df133ceded44a5c624f1dae19024d72f931b65122a8463a69e6be7ae8bbd51a330182fde04e3e441371a051c7c800147837f31dff27c78cf246'}}
+        })
     }
 
     const signOut = () => {
         setAuthToken(null)
-        setItem('eddsa_public_key','', 'local')
-        setItem('eddsa_key','', 'local')
+        setItem('eddsa_public_key', '', 'local')
+        setItem('eddsa_key', '', 'local')
         setItem('ethereum_address', '', 'local')
         setItem('reflow', '', 'local')
         setItem('schnorr', '', 'local')
         setItem('eddsa', '', 'local')
-        setItem('seed','', 'local')
+        setItem('seed', '', 'local')
     }
 
     return {
@@ -179,6 +188,6 @@ function useProvideAuth() {
         signUp,
         signOut,
         createApolloClient,
-        askPdfk,
+        askKeypairoomServer,
     }
 }

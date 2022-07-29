@@ -3,7 +3,7 @@ import BrInput from "./brickroom/BrInput";
 import React, {ChangeEvent, useState} from "react";
 import useStorage from "../lib/useStorage";
 import {zencode_exec} from "zenroom";
-import keypairoomClient from "../zenflows-crypto/src/keypairoomClient";
+import keypairoomClient from "../zenflows-crypto/src/keypairoomClient-8-9-10-11-12";
 import {useRouter} from "next/router";
 import {useAuth} from "../lib/auth";
 
@@ -48,8 +48,7 @@ const KeyringGeneration = ({
 
     const onSignUp = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        const key = getItem('eddsa_public_key', 'local')
-        signUp({name, user, email, key})
+        signUp({name, user, email, eddsaPublicKey})
     }
     const nullAnswers = [question1, question2, question3, question4, question5].reduce((nullOccs, question) => {
         return (question === 'null') ? nullOccs + 1 : nullOccs

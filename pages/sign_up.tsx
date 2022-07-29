@@ -5,7 +5,7 @@ import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import {LinkIcon} from "@heroicons/react/solid";
 import {zencode_exec} from "zenroom";
-import generateKeyring from "../zenflows-crypto/src/generateKeyring";
+import generateKeyring from "../zenflows-crypto/src/keypairoomClient-8-9-10-11-12";
 import useStorage from "../lib/useStorage";
 import KeyringGeneration from "../components/KeyringGeneration";
 import SeedCard from "../components/SeedCard";
@@ -20,12 +20,9 @@ export default function SignUp() {
     const [eddsaPublicKey, setEddsaPublicKey] = useState('')
     const [step, setStep] = useState(0)
     const [seed, setSeed] = useState('')
-    const [pdfk, setPdfk] = useState('')
-
-    const PDFK_MUTATION = gql`mutation {
-                  keypairoomServer(userData: "${Buffer.from(email, 'utf8').toString('base64')}")
-                }
-                `
+    const [HMAC, setHMAC] = useState('')
+    const [yetRegisteredEmail, setYetRegisteredEmail] = useState('')
+    const [emailValid, setEmailValid] = useState('')
 
     const router = useRouter()
     const signUpTextProps: any = {
@@ -49,17 +46,29 @@ export default function SignUp() {
         },
         button: "Next Step"
     }
-    const [keypairoomServer, {data, loading, error}] = useMutation(PDFK_MUTATION)
 
 
-    const {signUp, askPdfk} = useAuth()
+    const {signUp, askKeypairoomServer} = useAuth()
 
     async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
-        const key = await askPdfk(email)
-        setPdfk(key)
-        setStep(1)
+         setStep(1)
     }
+    async function verifyEmail({email}: { email: string }) {
+        const result = await askKeypairoomServer(email, true)
+        if (result?.keypairoomServer) {
+            setYetRegisteredEmail('')
+            if (email.includes('@')) {setEmailValid('✅ email is free')}
+            else {setEmailValid('')}
+            setHMAC(result?.keypairoomServer)
+        }
+        else {
+            setEmailValid('')
+            setYetRegisteredEmail(result)
+        }
+    }
+
+    const isButtonEnabled = (HMAC==='')? 'btn-disabled': ''
 
     return (
         <div className="container mx-auto h-screen grid place-items-center">
@@ -69,6 +78,13 @@ export default function SignUp() {
                 <>
                     <p>{signUpTextProps.presentation}</p>
                     <form onSubmit={onSubmit}>
+                        <BrInput type="email"
+                                 error={yetRegisteredEmail}
+                                 hint={emailValid}
+                                 placeholder={signUpTextProps.email.placeholder}
+                                 label={signUpTextProps.email.label}
+                                 onChange={(e: ChangeEvent<HTMLInputElement>) => verifyEmail({email:e.target.value})}
+                        />
                         <BrInput type="text"
                                  label={signUpTextProps.name.label}
                                  placeholder={signUpTextProps.name.placeholder}
@@ -78,12 +94,7 @@ export default function SignUp() {
                                  label={signUpTextProps.user.label}
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(e.target.value)}
                         />
-                        <BrInput type="email"
-                                 placeholder={signUpTextProps.email.placeholder}
-                                 label={signUpTextProps.email.label}
-                                 onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                        />
-                        <button className="btn btn-block" type="submit">{signUpTextProps.button}</button>
+                        <button className={`btn btn-block ${isButtonEnabled}`} type="submit">{signUpTextProps.button}</button>
                     </form>
                     <p className="flex flex-row items-center justify-between">
                         {signUpTextProps.register.question}
@@ -93,7 +104,7 @@ export default function SignUp() {
                 </>
             </Card>}
             {(step === 1) &&
-            <KeyringGeneration email={email} user={user} name={name} pdfk={pdfk} isSignUp={true}/>}
+            <KeyringGeneration email={email} user={user} name={name} pdfk={HMAC} isSignUp={true}/>}
         </div>
     )
 }
