@@ -5,6 +5,7 @@ import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import Link from "next/link";
 import KeyringGeneration from "../components/KeyringGeneration";
+import VerifySeed from "../components/VerifySeed";
 
 
 export default function Sign_in() {
@@ -27,11 +28,11 @@ export default function Sign_in() {
         setIsPassphrase(false)
         setStep(1)
     }
-    const toQuestions = async () => {
+    const toNextStep = async (step:number) => {
         const result = await askKeypairoomServer(email, false)
         if (await result?.keypairoomServer) {
             setPdfk(result?.keypairoomServer)
-            setStep(2)
+            setStep(step)
             console.log(result)
         } else {
             setIsMailExising(false)
@@ -80,16 +81,25 @@ export default function Sign_in() {
                                      placeholder={signInTextProps.email.placeholder}
                                      onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
                             {!isPassprhase && <>
-                                <button className="btn btn-block" type="button" onClick={() => toQuestions()}>
+                                <button className="btn btn-block" type="button" onClick={() => toNextStep(2)}>
+                                    {signInTextProps.button4}
+                                </button>
+                            </>}
+                            {isPassprhase && <>
+                                <button className="btn btn-block" type="button" onClick={() => toNextStep(3)}>
                                     {signInTextProps.button4}
                                 </button>
                             </>}
                         </>}
+                        {step === 3 && <>
+                    <VerifySeed email={email} HMAC={pdfk}/>
+                </>}
                     </>
                 </Card>
                 {step === 2 && <>
-                    <KeyringGeneration email={email} pdfk={pdfk}/>
+                    <KeyringGeneration email={email} HMAC={pdfk}/>
                 </>}
+
             </div>
         </div>
     )
