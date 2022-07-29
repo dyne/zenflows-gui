@@ -1,7 +1,7 @@
 import React from 'react';
 import useStorage from "../lib/useStorage";
 import {zencode_exec} from "zenroom";
-import sign from "../zenflows-crypto/src/sign";
+import sign from "../zenflows-crypto/src/sign_graphql";
 
 
 const SignRequest = async ({query, variables}:{query:string, variables?:any}) => {

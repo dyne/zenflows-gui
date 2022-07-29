@@ -12,9 +12,9 @@ const KeyringGeneration = ({
                                email,
                                name,
                                user,
-                               pdfk,
+                               HMAC,
                                isSignUp
-                           }: { email: string, name?: string, user?: string, pdfk: string, isSignUp?:boolean }) => {
+                           }: { email: string, name?: string, user?: string, HMAC: string, isSignUp?:boolean }) => {
     const {signUp, signIn} = useAuth()
     const keyringGenProps: any = {
         title: "Welcome!",
@@ -64,7 +64,7 @@ const KeyringGeneration = ({
         if (nullAnswers > 2) {
             setNotEnoughtAnswers(true)
         } else {
-            signIn(question1, question2, question3, question4, question5, email, pdfk).then(() => {
+            signIn({question1, question2, question3, question4, question5, email, HMAC}).then(() => {
                     setEddsaPublicKey(getItem('eddsa_public_key', 'local'))
                     setSeed(getItem('seed', 'local'))})
         }
@@ -107,7 +107,7 @@ const KeyringGeneration = ({
                 </p></>}
                 {(seed !== '') && <>
                     <p>
-                        {seed}
+                        <b>passphrase:</b> {seed}
                     </p>
                     {isSignUp&&<button className="btn btn-block" type="button" onClick={onSignUp}>
                         {keyringGenProps.button2}

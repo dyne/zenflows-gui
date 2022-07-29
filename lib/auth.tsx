@@ -109,34 +109,33 @@ function useProvideAuth() {
                               question4,
                               question5,
                               email,
-                              keypairoomServer
-                          }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, keypairoomServer: string }) => {
+                              HMAC
+                          }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, HMAC: string }) => {
+        console.log('cccc',question1, question2, question3, question4, question5, email, HMAC)
         const zenData = `
             {
                 "userChallenges": {
-                    "question1":"${question1}",
-                    "question2":"${question2}",
-                    "question3":"${question3}",
-                    "question4":"${question4}",
-                    "question5":"${question5}",
+                    "whereParentsMet":"${question1}",
+                    "nameFirstPet":"${question2}",
+                    "nameFirstTeacher":"${question3}",
+                    "whereHomeTown":"${question4}",
+                    "nameMotherMaid":"${question5}",
                 },
                 "username": "${email}",
-                "key_derivation": "${keypairoomServer}"
+                "seedServerSideShard.HMAC": "${HMAC}"
             }`
 
 
-        zencode_exec(keypairoomClient, {data: zenData})
+        return await zencode_exec(keypairoomClient, {data: zenData})
             .then(({result}) => {
-                console.log(result)
                 const res = JSON.parse(result)
-                console.log(res)
                 setItem('eddsa_public_key', res.eddsa_public_key, 'local')
                 setItem('eddsa_key', res.keyring.eddsa, 'local')
                 setItem('ethereum_address', res.keyring.ethereum, 'local')
                 setItem('reflow', res.keyring.reflow, 'local')
                 setItem('schnorr', res.keyring.schnorr, 'local')
                 setItem('eddsa', res.keyring.eddsa, 'local')
-                setItem('seed', res.concatenatedHashes, 'local')
+                setItem('seed', res.seed, 'local')
             })
     }
 

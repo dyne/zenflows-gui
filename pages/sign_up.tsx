@@ -60,7 +60,8 @@ export default function SignUp() {
             setYetRegisteredEmail('')
             if (email.includes('@')) {setEmailValid('✅ email is free')}
             else {setEmailValid('')}
-            setHMAC(result?.keypairoomServer)
+            setEmail(email)
+            setHMAC(result.keypairoomServer)
         }
         else {
             setEmailValid('')
@@ -104,7 +105,7 @@ export default function SignUp() {
                 </>
             </Card>}
             {(step === 1) &&
-            <KeyringGeneration email={email} user={user} name={name} pdfk={HMAC} isSignUp={true}/>}
+            <KeyringGeneration email={email} user={user} name={name} HMAC={HMAC} isSignUp={true}/>}
         </div>
     )
 }
