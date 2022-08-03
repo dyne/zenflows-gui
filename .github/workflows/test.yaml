@@ -23,8 +23,7 @@ jobs:
           submodules: true
       - name: Git Sumbodule Update
         run: |
-          git pull --recurse-submodules
-          git submodule update --remote --recursive
+          git submodule add --force https://github.com/dyne/zenflows-crypto
       - name: Set up pnpm
         uses: pnpm/action-setup@v2
         with:
