@@ -1,10 +1,15 @@
+import { NextPage } from 'next';
 import React from 'react';
+import useStorage from "../lib/useStorage";
 
 
-const logged_in = () => {
+
+const Logged_in: NextPage = () => {
+    const {getItem, setItem} = useStorage()
+    const username = getItem('authName', 'local')
 
     return (
-        <h1>Welcome back</h1>
+        <h1>Welcome {username}</h1>
     )
 }
-export default logged_in;
+export default Logged_in;

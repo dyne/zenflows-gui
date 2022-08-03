@@ -3,7 +3,6 @@ import {ChangeEvent, useState} from "react";
 import BrInput from "../components/brickroom/BrInput";
 import useStorage from "../lib/useStorage";
 import {gql, useMutation} from "@apollo/client";
-import generateKeyring from "../zenflows-crypto/src/generateKeyring";
 
 
 const Zencode = () => {
@@ -31,22 +30,7 @@ const Zencode = () => {
     const [newUnit, {data, loading, error}] = useMutation(CREATE_UNIT)
 
 
-    const zencodeExec = ()=> {zencode_exec(generateKeyring).then(({result}) => {
-        const r = JSON.parse(result)
-        const k = r.keyring
-        setItem("ecdh_key", k.ecdh, "local")
-        setItem("ethereum_key", k.ethereum, "local")
-        setItem("reflow_key", k.reflow, "local")
-        setItem("schnorr_key", k.schnorr, "local")
-        setItem("bitcoin_key", k.bitcoin, "local")
-        setItem("eddsa_key", k.eddsa, "local")
-        setItem("dilithium_key", k.dilithium, "local")
-        setReflowPublicKey(r.reflow_public_key)
-        setSchnorrPublicKey(r.schnorr_public_key)
-        setEddsaPublicKey(r.eddsa_public_key)
-        setEthereumAddress(r.ethereum_address)
-        setResult(JSON.stringify(r, null, 2))
-    })}
+
 
     const createUnit = async () => {
         const variables = {
@@ -64,7 +48,7 @@ const Zencode = () => {
             </p>
             <div className={'divider'}/>
             <h2>generate the keys</h2>
-            <button onClick={zencodeExec} className="btn btn-accent">Generate</button>
+            <button className="btn btn-accent">Generate</button>
             <p>Private keys: {result}</p>
             <div className={'divider'}/>
             <h2>Create Unit</h2>

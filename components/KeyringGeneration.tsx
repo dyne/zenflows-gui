@@ -15,7 +15,7 @@ const KeyringGeneration = ({
                                HMAC,
                                isSignUp
                            }: { email: string, name?: string, user?: string, HMAC: string, isSignUp?:boolean }) => {
-    const {signUp, signIn} = useAuth()
+    const {signUp, generateKeys, signIn} = useAuth()
     const keyringGenProps: any = {
         title: "Welcome!",
         presentation: "Answer at least three question",
@@ -25,7 +25,7 @@ const KeyringGeneration = ({
         },
         register: {
             question: "",
-            answer: "Sign In"
+            answer: ""
         },
         button: "Check",
         button2: "Sign Up",
@@ -42,13 +42,14 @@ const KeyringGeneration = ({
     const [question3, setQuestion3] = React.useState('null')
     const [question4, setQuestion4] = React.useState('null')
     const [question5, setQuestion5] = React.useState('null')
+    const [error, setError] = useState('')
     const [notEnoughtAnswers, setNotEnoughtAnswers] = React.useState(false)
     const {getItem, setItem} = useStorage()
     const router = useRouter()
 
     const onSignUp = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        signUp({name, user, email, eddsaPublicKey})
+        signUp({name, user, email, eddsaPublicKey}).catch((err:string) => setError(err)).then(() => router.push('/logged_in'))
     }
     const nullAnswers = [question1, question2, question3, question4, question5].reduce((nullOccs, question) => {
         return (question === 'null') ? nullOccs + 1 : nullOccs
@@ -64,10 +65,19 @@ const KeyringGeneration = ({
         if (nullAnswers > 2) {
             setNotEnoughtAnswers(true)
         } else {
-            signIn({question1, question2, question3, question4, question5, email, HMAC}).then(() => {
+            generateKeys({question1, question2, question3, question4, question5, email, HMAC}).then(() => {
                     setEddsaPublicKey(getItem('eddsa_public_key', 'local'))
                     setSeed(getItem('seed', 'local'))})
         }
+    }
+
+    const completeSignIn = (e: { preventDefault: () => void; }) => {
+        e.preventDefault()
+
+        signIn({question1, question2, question3, question4, question5, email, HMAC}).then(() => {
+                setEddsaPublicKey(getItem('eddsa_public_key', 'local'))
+                setSeed(getItem('seed', 'local'))})
+
     }
 
 
@@ -113,7 +123,7 @@ const KeyringGeneration = ({
                         {keyringGenProps.button2}
                     </button>}
                     {!isSignUp&&<p>
-                        logged in
+                        <button className="btn btn-block" type="button" onClick={completeSignIn}>complete signin</button>
                     </p>}
                 </>}
             </>

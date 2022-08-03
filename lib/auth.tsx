@@ -53,10 +53,22 @@ function useProvideAuth() {
     const [authToken, setAuthToken] = useState(null as string | null)
     const storedEddsaKey = getItem('eddsa_key', 'local') !== '' ? getItem('eddsa_key', 'local') : null
     useEffect(() => setAuthToken(storedEddsaKey), [])
+    const [authId, setAuthId] = useState(null as string | null)
+    const storedAuthId = getItem('authId', 'local') !== '' ? getItem('authId', 'local') : null
+    useEffect(() => setAuthId(storedAuthId), [])
+    const [authUsername, setAuthUsername] = useState(null as string | null)
+    const storedAuthUsername = getItem('authUsername', 'local') !== '' ? getItem('authUsername', 'local') : null
+    useEffect(() => setAuthUsername(storedAuthUsername), [])
+    const [authEmail, setAuthEmail] = useState(null as string | null)
+    const storedAuthEmail = getItem('authEmail', 'local') !== '' ? getItem('authEmail', 'local') : null
+    useEffect(() => setAuthEmail(storedAuthEmail), [])
+    const [authName, setAuthName] = useState(null as string | null)
+    const storedAuthName = getItem('authName', 'local') !== '' ? getItem('authName', 'local') : null
+    useEffect(() => setAuthName(storedAuthName), [])
 
 
     const isSignedIn = () => {
-        if (authToken) {
+        if (authId) {
             return true
         } else {
             return false
@@ -102,7 +114,7 @@ function useProvideAuth() {
             })
     }
 
-    const signIn = async ({
+    const generateKeys = async ({
                               question1,
                               question2,
                               question3,
@@ -139,6 +151,26 @@ function useProvideAuth() {
             })
     }
 
+
+    const signIn = async ({email}:{email:string})=> {
+        const client = createApolloClient()
+        const SignInMutation = gql`query ($email: String!  $pubkey: String!) {
+                                      personExists(email: $email, eddsaPublicKey: $pubkey) {
+                                        name
+                                        user
+                                        email
+                                        id
+                                      }
+                                    }`
+        const result = await client.query({query: SignInMutation, variables: {email, pubkey: getItem('eddsa_public_key', 'local')}})
+            .then(({data}) => {
+                setItem('authId', data?.createPerson.agent.id, 'local')
+                setItem('authName', data?.createPerson.agent.name, 'local')
+                setItem('authUsername', data?.createPerson.agent.user, 'local')
+                setItem('authEmail', data?.createPerson.agent.email, 'local')
+            })
+    }
+
     const signUp = async ({
                               name,
                               user,
@@ -166,6 +198,11 @@ function useProvideAuth() {
         const result = await client.mutate({
             mutation: SignUpMutation,
             context: {headers: {'zenflows-admin': 'b4a7a8b0a87a8df133ceded44a5c624f1dae19024d72f931b65122a8463a69e6be7ae8bbd51a330182fde04e3e441371a051c7c800147837f31dff27c78cf246'}}
+        }).then(({data}) => {
+            setItem('authId', data?.createPerson.agent.id, 'local')
+            setItem('authName', data?.createPerson.agent.name, 'local')
+            setItem('authUsername', data?.createPerson.agent.user, 'local')
+            setItem('authEmail', data?.createPerson.agent.email, 'local')
         })
     }
 
@@ -178,15 +215,22 @@ function useProvideAuth() {
         setItem('schnorr', '', 'local')
         setItem('eddsa', '', 'local')
         setItem('seed', '', 'local')
+        setItem('authId', '', 'local')
+        setItem('authName', '', 'local')
+        setItem('authUsername', '', 'local')
+        window.location.reload()
     }
 
     return {
         setAuthToken,
         isSignedIn,
-        signIn,
+        generateKeys,
         signUp,
         signOut,
         createApolloClient,
         askKeypairoomServer,
+        signIn,
+        authId,
+        authUsername
     }
 }
