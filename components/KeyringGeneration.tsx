@@ -49,7 +49,7 @@ const KeyringGeneration = ({
 
     const onSignUp = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
-        signUp({name, user, email, eddsaPublicKey}).catch((err:string) => setError(err)).then(() => router.push('/logged_in'))
+        signUp({name, user, email, eddsaPublicKey}).catch((err:string) => setError(err)).then(() => window.location.replace('/logged_in'))
     }
     const nullAnswers = [question1, question2, question3, question4, question5].reduce((nullOccs, question) => {
         return (question === 'null') ? nullOccs + 1 : nullOccs

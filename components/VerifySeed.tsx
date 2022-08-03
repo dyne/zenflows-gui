@@ -57,7 +57,7 @@ const VerifySeed = ({
                 setItem('eddsa', res.keyring.eddsa, 'local')
                 setItem('seed', res.seed, 'local')
             }).then(() =>{
-                location.replace(`/logged_in`);
+                window.location.replace(`/logged_in`);
                 })
     }
 

@@ -164,10 +164,10 @@ function useProvideAuth() {
                                     }`
         const result = await client.query({query: SignInMutation, variables: {email, pubkey: getItem('eddsa_public_key', 'local')}})
             .then(({data}) => {
-                setItem('authId', data?.createPerson.agent.id, 'local')
-                setItem('authName', data?.createPerson.agent.name, 'local')
-                setItem('authUsername', data?.createPerson.agent.user, 'local')
-                setItem('authEmail', data?.createPerson.agent.email, 'local')
+                setItem('authId', data?.createPerson.personExists.id, 'local')
+                setItem('authName', data?.createPerson.personExists.name, 'local')
+                setItem('authUsername', data?.createPerson.personExists.user, 'local')
+                setItem('authEmail', data?.createPerson.personExists.email, 'local')
             })
     }
 
