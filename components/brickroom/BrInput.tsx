@@ -7,6 +7,7 @@ type BrInputProps = {
     placeholder?: string,
     label?: string,
     onChange?: ChangeEventHandler,
+    onBlur?: ChangeEventHandler,
     hint?: string,
     error?: string,
     className?: string,
@@ -24,6 +25,7 @@ const BrInput = (props: BrInputProps) => {
             <input type={props.type}
                 placeholder={props.placeholder}
                 onChange={props.onChange}
+                onBlur={props.onBlur}
                 className="w-full input input-bordered focus:input-primary"
                value={props.value}
             />

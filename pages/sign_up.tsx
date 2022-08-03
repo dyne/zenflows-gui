@@ -84,7 +84,7 @@ export default function SignUp() {
                                  hint={emailValid}
                                  placeholder={signUpTextProps.email.placeholder}
                                  label={signUpTextProps.email.label}
-                                 onChange={(e: ChangeEvent<HTMLInputElement>) => verifyEmail({email:e.target.value})}
+                                 onBlur={(e: ChangeEvent<HTMLInputElement>) => verifyEmail({email:e.target.value})}
                         />
                         <BrInput type="text"
                                  label={signUpTextProps.name.label}
