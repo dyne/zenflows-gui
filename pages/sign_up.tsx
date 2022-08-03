@@ -52,31 +52,34 @@ export default function SignUp() {
 
     async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
-         setStep(1)
+        setStep(1)
     }
+
     async function verifyEmail({email}: { email: string }) {
         const result = await askKeypairoomServer(email, true)
         if (result?.keypairoomServer) {
             setYetRegisteredEmail('')
-            if (email.includes('@')) {setEmailValid('✅ email is free')}
-            else {setEmailValid('')}
+            if (email.includes('@')) {
+                setEmailValid('✅ email is free')
+            } else {
+                setEmailValid('')
+            }
             setEmail(email)
             setHMAC(result.keypairoomServer)
-        }
-        else {
+        } else {
             setEmailValid('')
             setYetRegisteredEmail(result)
         }
     }
 
-    const isButtonEnabled = (HMAC==='')? 'btn-disabled': ''
+    const isButtonEnabled = (HMAC === '') ? 'btn-disabled' : ''
 
     return (
         <div className="container mx-auto h-screen grid place-items-center">
-            {(step === 0) && <Card title={signUpTextProps.title}
-                                   width={CardWidth.LG}
-                                   className="px-16 py-[4.5rem]">
-                <>
+            <Card title={signUpTextProps.title}
+                  width={CardWidth.LG}
+                  className="px-16 py-[4.5rem]">
+                {(step === 0) && <>
                     <p>{signUpTextProps.presentation}</p>
                     <form onSubmit={onSubmit}>
                         <BrInput type="email"
@@ -84,7 +87,7 @@ export default function SignUp() {
                                  hint={emailValid}
                                  placeholder={signUpTextProps.email.placeholder}
                                  label={signUpTextProps.email.label}
-                                 onBlur={(e: ChangeEvent<HTMLInputElement>) => verifyEmail({email:e.target.value})}
+                                 onBlur={(e: ChangeEvent<HTMLInputElement>) => verifyEmail({email: e.target.value})}
                         />
                         <BrInput type="text"
                                  label={signUpTextProps.name.label}
@@ -95,17 +98,19 @@ export default function SignUp() {
                                  label={signUpTextProps.user.label}
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(e.target.value)}
                         />
-                        <button className={`btn btn-block ${isButtonEnabled}`} type="submit">{signUpTextProps.button}</button>
+                        <button className={`btn btn-block ${isButtonEnabled}`}
+                                type="submit">{signUpTextProps.button}</button>
                     </form>
                     <p className="flex flex-row items-center justify-between">
                         {signUpTextProps.register.question}
                         <LinkIcon className='h-5 w-5 ml-28'/>
                         {signUpTextProps.register.answer}
                     </p>
-                </>
-            </Card>}
-            {(step === 1) &&
-            <KeyringGeneration email={email} user={user} name={name} HMAC={HMAC} isSignUp={true}/>}
+                </>}
+                {(step === 1) &&
+                <KeyringGeneration email={email} user={user} name={name} HMAC={HMAC} isSignUp={true}/>}
+            </Card>
+            
         </div>
     )
 }

@@ -164,10 +164,10 @@ function useProvideAuth() {
                                     }`
         const result = await client.query({query: SignInMutation, variables: {email, pubkey: getItem('eddsa_public_key', 'local')}})
             .then(({data}) => {
-                setItem('authId', data?.createPerson.personExists.id, 'local')
-                setItem('authName', data?.createPerson.personExists.name, 'local')
-                setItem('authUsername', data?.createPerson.personExists.user, 'local')
-                setItem('authEmail', data?.createPerson.personExists.email, 'local')
+                setItem('authId', data?.personExists.id, 'local')
+                setItem('authName', data?.personExists.name, 'local')
+                setItem('authUsername', data?.personExists.user, 'local')
+                setItem('authEmail', data?.personExists.email, 'local')
             })
     }
 
@@ -217,8 +217,9 @@ function useProvideAuth() {
         setItem('seed', '', 'local')
         setItem('authId', '', 'local')
         setItem('authName', '', 'local')
+        setItem('authEmail', '', 'local')
         setItem('authUsername', '', 'local')
-        window.location.reload()
+        window.location.replace('/')
     }
 
     return {

@@ -42,6 +42,7 @@ const KeyringGeneration = ({
     const [question3, setQuestion3] = React.useState('null')
     const [question4, setQuestion4] = React.useState('null')
     const [question5, setQuestion5] = React.useState('null')
+    const [step, setStep] = useState(0)
     const [error, setError] = useState('')
     const [notEnoughtAnswers, setNotEnoughtAnswers] = React.useState(false)
     const {getItem, setItem} = useStorage()
@@ -67,26 +68,22 @@ const KeyringGeneration = ({
         } else {
             generateKeys({question1, question2, question3, question4, question5, email, HMAC}).then(() => {
                     setEddsaPublicKey(getItem('eddsa_public_key', 'local'))
-                    setSeed(getItem('seed', 'local'))})
+                    setSeed(getItem('seed', 'local'))
+                    setStep(1)
+            })
         }
     }
 
-    const completeSignIn = (e: { preventDefault: () => void; }) => {
+    const completeSignIn = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
 
-        signIn({question1, question2, question3, question4, question5, email, HMAC}).then(() => {
-                setEddsaPublicKey(getItem('eddsa_public_key', 'local'))
-                setSeed(getItem('seed', 'local'))})
-
+        await signIn({email}).then(() => {window.location.replace('/logged_in')})
     }
 
 
     return (
-        <Card title={keyringGenProps.title}
-              width={CardWidth.LG}
-              className="px-16 py-[4.5rem]">
             <>
-                {(seed === '') && <>  <p>{keyringGenProps.presentation}</p>
+                {(step === 0) && <>  <p>{keyringGenProps.presentation}</p>
                 <form onSubmit={onSubmit}>
                     <BrInput type="text"
                              error={fillMoreAnswer(question1)}
@@ -115,7 +112,7 @@ const KeyringGeneration = ({
                     {keyringGenProps.register.question}
                     {keyringGenProps.register.answer}
                 </p></>}
-                {(seed !== '') && <>
+                {(step === 1) && <>
                     <p>
                         <b>passphrase:</b> {seed}
                     </p>
@@ -127,7 +124,6 @@ const KeyringGeneration = ({
                     </p>}
                 </>}
             </>
-        </Card>
     )
 }
 

@@ -28,6 +28,7 @@ const VerifySeed = ({
     const [eddsaPublicKey, setEddsaPublicKey] = useState('')
     const [seed, setSeed] = useState('')
     const [error, setError] = useState('')
+    const [isButtonEnabled, setIsButtonEnabled] = useState(false)
     const {getItem, setItem} = useStorage()
     const router = useRouter()
 
@@ -38,6 +39,11 @@ const VerifySeed = ({
             setError('')
         }
         else {setError('Invalid pass phrase')}
+    }
+    const completeSignIn = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault()
+
+        await signIn({email}).then(() => {window.location.replace('/logged_in')})
     }
 
     const onSubmit = async (e: { preventDefault: () => void; }) => {
@@ -56,9 +62,8 @@ const VerifySeed = ({
                 setItem('schnorr', res.keyring.schnorr, 'local')
                 setItem('eddsa', res.keyring.eddsa, 'local')
                 setItem('seed', res.seed, 'local')
-            }).then(() =>{
-                window.location.replace(`/logged_in`);
-                })
+                setIsButtonEnabled(true)
+            })
     }
 
     return (
@@ -71,7 +76,8 @@ const VerifySeed = ({
                              label={VerifySeedProps.label}
                              placeholder={VerifySeedProps.placeholder}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => validateSeed(e.target.value)}/>
-                    <button className="btn btn-block" type="submit">{VerifySeedProps.button}</button>
+                    <button className="btn btn-block" type="submit" onClick={onSubmit}>{VerifySeedProps.button}</button>
+                    {isButtonEnabled&&<button className="btn btn-block mt-4" type="submit" onClick={completeSignIn}>Complete signin</button>}
                 </form>
 
             </>

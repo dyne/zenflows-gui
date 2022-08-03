@@ -56,6 +56,7 @@ export default function Sign_in() {
         }
     }
 
+
     async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
     }
@@ -94,11 +95,12 @@ export default function Sign_in() {
                         {step === 3 && <>
                     <VerifySeed email={email} HMAC={pdfk}/>
                 </>}
-                    </>
-                </Card>
-                {step === 2 && <>
+                        {step === 2 && <>
                     <KeyringGeneration email={email} HMAC={pdfk}/>
                 </>}
+                    </>
+                </Card>
+
 
             </div>
         </div>
