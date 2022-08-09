@@ -8,8 +8,10 @@ const Logged_in: NextPage = () => {
     const {getItem, setItem} = useStorage()
     const username = getItem('authName', 'local')
 
-    return (
-        <h1>Welcome {username}</h1>
+    return (<>
+        <h1>Hello {username}</h1>
+        <h2>How do you arrive here? This app is still under construction!</h2>
+        </>
     )
 }
 export default Logged_in;

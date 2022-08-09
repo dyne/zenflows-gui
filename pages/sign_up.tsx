@@ -110,7 +110,6 @@ export default function SignUp() {
                 {(step === 1) &&
                 <KeyringGeneration email={email} user={user} name={name} HMAC={HMAC} isSignUp={true}/>}
             </Card>
-            
         </div>
     )
 }

@@ -6,6 +6,7 @@ type BrTextFieldProps = {
     onChange?: ChangeEventHandler,
     hint?: string,
     error?: string,
+    value?: string
 }
 import { ExclamationIcon } from '@heroicons/react/solid'
 
@@ -22,6 +23,7 @@ const BrTextField = (props: BrTextFieldProps) => {
                 placeholder={props.placeholder}
                 onChange={props.onChange}
                 className="w-full textarea textarea-bordered focus:textarea-primary"
+                value={props.value}
             />
             <label className="label">
                 {props.error && <span className="flex flex-row items-center justify-between label-text-alt text-warning">
