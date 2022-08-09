@@ -5,6 +5,7 @@ import BrTextField from "../components/brickroom/BrTextField";
 import BrInput from "../components/brickroom/BrInput";
 import {useRouter} from "next/router";
 import BrRadio from "../components/brickroom/BrRadio";
+import TagSelector from "../components/brickroom/TagSelector";
 
 const newAssetProps = {
     headline: {
@@ -130,8 +131,7 @@ const NewAsset: NextPage = () => {
                 <BrInput label={newAssetProps.repositoryOrId.label} hint={newAssetProps.repositoryOrId.hint}
                          value={repositoryOrId}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
-                <BrTextField label={newAssetProps.assetTags.label} hint={newAssetProps.assetTags.hint} value={assetTags}
-                             onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetTags(e.target.value)}/>
+                <TagSelector label={newAssetProps.assetTags.label} hint={newAssetProps.assetTags.hint}/>
                 <BrInput label={newAssetProps.location.label} hint={newAssetProps.location.hint} value={location}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}/>
                 <BrInput label={newAssetProps.price.label} hint={newAssetProps.price.hint} value={price}
