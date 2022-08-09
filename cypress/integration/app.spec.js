@@ -18,7 +18,7 @@ describe('Authentication', () => {
     cy.get('button').first().click()
     cy.get('input:first').type(Cypress.env('mail'))
     cy.get('button').first().click()
-    cy.wait('@api').its('response.body.data.keypairoomServer').should('include', "eSw8I5PjVE/4EbMhP4dcYw6NIqjy+P5EO5hoENpxzeY=")
+    cy.wait('@api').its('response.body.data.keypairoomServer').should('include', Cypress.env('HMAC'))
   })
 
   it('At sign in Should render error if passhprase is != 12 words', () => {
@@ -65,9 +65,9 @@ describe('Authentication', () => {
     cy.get('input:first').type(Cypress.env('mail'))
     cy.get('button').first().click()
     cy.wait('@api')
-    cy.get('input').eq(0).type('risposta1')
-    cy.get('input').eq(1).type('risposta2')
-    cy.get('input').eq(2).type('risposta3')
+    cy.get('input').eq(0).type(Cypress.env('answer1'))
+    cy.get('input').eq(1).type(Cypress.env('answer2'))
+    cy.get('input').eq(2).type(Cypress.env('answer3'))
     cy.get('button').first().click().should(() => {
       expect(localStorage.getItem('reflow')).to.eq(Cypress.env('reflow'))
       expect(localStorage.getItem('eddsa_public_key')).to.eq(Cypress.env('eddsa_public_key'))
