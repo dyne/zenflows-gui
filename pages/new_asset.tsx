@@ -124,17 +124,20 @@ const NewAsset: NextPage = () => {
                 <BrRadio array={newAssetProps.assetType.array} label={newAssetProps.assetType.label}
                          hint={newAssetProps.assetType.hint} onChange={setAssetType} value={assetType}/>
                 <BrInput label={newAssetProps.assetName.label} hint={newAssetProps.assetName.hint} value={assetName}
-                         onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetName(e.target.value)}/>
+                         onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetName(e.target.value)}
+                         placeholder={newAssetProps.assetName.placeholder}/>
                 <BrTextField label={newAssetProps.assetDescription.label} hint={newAssetProps.assetDescription.hint}
-                             value={assetDescription}
+                             value={assetDescription} placeholder={newAssetProps.assetDescription.placeholder}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
                 <BrInput label={newAssetProps.repositoryOrId.label} hint={newAssetProps.repositoryOrId.hint}
-                         value={repositoryOrId}
+                         value={repositoryOrId} placeholder={newAssetProps.repositoryOrId.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
                 <TagSelector label={newAssetProps.assetTags.label} hint={newAssetProps.assetTags.hint}/>
                 <BrInput label={newAssetProps.location.label} hint={newAssetProps.location.hint} value={location}
+                         placeholder={newAssetProps.location.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}/>
                 <BrInput label={newAssetProps.price.label} hint={newAssetProps.price.hint} value={price}
+                         placeholder={newAssetProps.price.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}/>
                 <button type="submit" className="btn btn-primary">{newAssetProps.button}</button>
             </form>
