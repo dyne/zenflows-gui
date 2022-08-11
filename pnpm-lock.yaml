@@ -23,6 +23,7 @@ specifiers:
   cz-conventional-changelog: ^3.3.0
   daisyui: ^2.14.2
   dayjs: ^1.11.2
+  debug: ^4.3.4
   deepmerge: ^4.2.2
   eslint: 8.14.0
   eslint-config-next: 12.1.5
@@ -43,7 +44,7 @@ specifiers:
   start-server-and-test: ^1.14.0
   tailwindcss: ^3.0.24
   typescript: 4.6.3
-  zenroom: next
+  zenroom: 2.2.3-6d846494
 
 dependencies:
   '@apollo/client': 3.6.8_7oyq4t3ocdziwagw7zfqg4youi
@@ -55,6 +56,7 @@ dependencies:
   base45: 2.0.1
   boring-avatars: 1.7.0
   dayjs: 1.11.3
+  debug: 4.3.4
   deepmerge: 4.2.2
   graphql: 16.5.0
   graphql-upload: 13.0.0_graphql@16.5.0
@@ -65,7 +67,7 @@ dependencies:
   react-dom: 18.1.0_react@18.1.0
   react-qr-code: 2.0.7_react@18.1.0
   sass: 1.52.3
-  zenroom: 2.2.3-bf6efedf
+  zenroom: 2.2.3-6d846494
 
 devDependencies:
   '@commitlint/cli': 16.3.0
@@ -2133,7 +2135,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-    dev: true
 
   /debug/4.3.4_supports-color@8.1.1:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
@@ -3971,12 +3972,11 @@ packages:
     dev: true
 
   /ms/2.0.0:
-    resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
+    resolution: {integrity: sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g=}
     dev: true
 
   /ms/2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
-    dev: true
 
   /ms/2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -6003,6 +6003,6 @@ packages:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
     dev: false
 
-  /zenroom/2.2.3-bf6efedf:
-    resolution: {integrity: sha512-WyDfixkgm9kEiDDXhpZxS4HuKJ5FT9YL3vcoczsVyxYYRHqsMqBisMs8xgrSvVBdKs0q959XDbbIHCkopx034A==}
+  /zenroom/2.2.3-6d846494:
+    resolution: {integrity: sha512-+vHgStfm/9+bLsxr0bVGpsaRbC/yeJAoPBKRWJ6c4cmp6T2IoKnxuj3NKLUQyfzODzHCtJBmGAqiGpHuCmzPmA==}
     dev: false
