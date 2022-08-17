@@ -4,22 +4,13 @@ import {useRouter} from "next/router";
 import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import {LinkIcon} from "@heroicons/react/solid";
-import {zencode_exec} from "zenroom";
-import generateKeyring from "../zenflows-crypto/src/keypairoomClient-8-9-10-11-12";
-import useStorage from "../lib/useStorage";
 import KeyringGeneration from "../components/KeyringGeneration";
-import SeedCard from "../components/SeedCard";
-import {gql, useMutation} from "@apollo/client";
-import {result} from "lodash";
 
 export default function SignUp() {
-    const {getItem, setItem} = useStorage()
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [user, setUser] = useState('')
-    const [eddsaPublicKey, setEddsaPublicKey] = useState('')
     const [step, setStep] = useState(0)
-    const [seed, setSeed] = useState('')
     const [HMAC, setHMAC] = useState('')
     const [yetRegisteredEmail, setYetRegisteredEmail] = useState('')
     const [emailValid, setEmailValid] = useState('')
@@ -56,7 +47,7 @@ export default function SignUp() {
     }
 
     async function verifyEmail({email}: { email: string }) {
-        const result = await askKeypairoomServer(email, true)
+        const result = await askKeypairoomServer(email, true, name)
         if (result?.keypairoomServer) {
             setYetRegisteredEmail('')
             if (email.includes('@')) {

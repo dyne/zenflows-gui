@@ -13,6 +13,7 @@ import SignRequest from "./SignRequest";
 import {setContext} from "@apollo/client/link/context";
 import {zencode_exec} from "zenroom";
 import keypairoomClient from "../zenflows-crypto/src/keypairoomClient-8-9-10-11-12";
+import devLog from "./devLog";
 
 
 // @ts-ignore
@@ -36,14 +37,19 @@ export const useAuth: any = () => {
 
 
 const headersMiddleware = setContext(async (operation, {headers}) => {
+        const {getItem} = useStorage()
         const variables = operation.variables
         const query = operation.query.loc?.source.body!
-        const completeHeaders = await SignRequest({query, variables}).then(({result}) => ({
+        const completeHeaders = await SignRequest({query, variables}).then(({result, logs}) => {
+            devLog('signing request...')
+            devLog(logs)
+            devLog('result',result)
+            return{
             ...headers,
             'zenflows-sign': JSON.parse(result).eddsa_signature,
-            'zenflows-user': 'anosolare',
+            'zenflows-user': getItem('authUsername', 'local'),
             'zenflows-hash': JSON.parse(result).hash
-        }))
+        }})
         return {headers: completeHeaders}
     }
 );
@@ -87,7 +93,7 @@ function useProvideAuth() {
         })
 
         return new ApolloClient({
-            link: isSignedIn()? concat(headersMiddleware, link) : link,
+            link: isSignedIn() ? concat(headersMiddleware, link) : link,
             ssrMode: typeof window === 'undefined',
             cache: new InMemoryCache({
                 addTypename: false
@@ -106,24 +112,22 @@ function useProvideAuth() {
             .then(({data}) => data)
             .catch((error) => {
                 if (`${error}`.includes("email doesn't exists")) {
-                     return "email doesn't exists"
-                }
-                else if (`${error}`.includes("email exists")) {
+                    return "email doesn't exists"
+                } else if (`${error}`.includes("email exists")) {
                     return "email has already been registered"
                 }
             })
     }
 
     const generateKeys = async ({
-                              question1,
-                              question2,
-                              question3,
-                              question4,
-                              question5,
-                              email,
-                              HMAC
-                          }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, HMAC: string }) => {
-        console.log('cccc',question1, question2, question3, question4, question5, email, HMAC)
+                                    question1,
+                                    question2,
+                                    question3,
+                                    question4,
+                                    question5,
+                                    email,
+                                    HMAC
+                                }: { question1: string, question2: string, question3: string, question4: string, question5: string, email: string, HMAC: string }) => {
         const zenData = `
             {
                 "userChallenges": {
@@ -152,7 +156,7 @@ function useProvideAuth() {
     }
 
 
-    const signIn = async ({email}:{email:string})=> {
+    const signIn = async ({email}: { email: string }) => {
         const client = createApolloClient()
         const SignInMutation = gql`query ($email: String!  $pubkey: String!) {
                                       personExists(email: $email, eddsaPublicKey: $pubkey) {
@@ -162,7 +166,10 @@ function useProvideAuth() {
                                         id
                                       }
                                     }`
-        const result = await client.query({query: SignInMutation, variables: {email, pubkey: getItem('eddsa_public_key', 'local')}})
+        const result = await client.query({
+            query: SignInMutation,
+            variables: {email, pubkey: getItem('eddsa_public_key', 'local')}
+        })
             .then(({data}) => {
                 setItem('authId', data?.personExists.id, 'local')
                 setItem('authName', data?.personExists.name, 'local')

@@ -1,11 +1,16 @@
 import type {NextPage} from 'next'
-import {gql, useMutation} from "@apollo/client";
-import React, {ChangeEvent, useState} from "react";
+import {gql, useMutation, useQuery} from "@apollo/client";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import BrTextField from "../components/brickroom/BrTextField";
 import BrInput from "../components/brickroom/BrInput";
 import {useRouter} from "next/router";
 import BrRadio from "../components/brickroom/BrRadio";
 import TagSelector from "../components/brickroom/TagSelector";
+import {useAuth} from "../lib/auth";
+import dayjs from 'dayjs'
+import devLog from "../lib/devLog";
+
+
 
 const newAssetProps = {
     headline: {
@@ -19,11 +24,11 @@ const newAssetProps = {
     assetType: {
         label: "Select asset type",
         array: [{id: "Design", name: "Design", value: "Design", label: "Design"}, {
-            id: "Development",
-            name: "Development",
-            value: "Development",
-            label: "Development"
-        }, {id: "Marketing", name: "Marketing", value: "Marketing", label: "Marketing"}],
+            id: "Service",
+            name: "Service",
+            value: "Service",
+            label: "Service"
+        }, {id: "Product", name: "Product", value: "Product", label: "Product"}],
         hint: "Refer to the standards we want to follow for this field",
     },
     assetName: {
@@ -46,9 +51,16 @@ const newAssetProps = {
         hint: "Add relevant keywords to describe your project",
     },
     location: {
-        label: "Location",
-        placeholder: "An d. Alsterschleife 3, 22399 - Hamburg, Germany",
-        hint: "Short description to be displayed inside the project page",
+        name: {
+            label: "Location Name",
+            placeholder: "E.g. Amburg Warehouse",
+            hint: "Short name to refers to the location",
+        },
+        address: {
+            label: "Location",
+            placeholder: "An d. Alsterschleife 3, 22399 - Hamburg, Germany",
+            hint: "Short description to be displayed inside the project page",
+        }
     },
     price: {
         label: "Price",
@@ -56,6 +68,8 @@ const newAssetProps = {
         hint: "Short description to be displayed inside the project page",
     },
     button: "Import project",
+    resourceSpec: "73u648QASpCtC80ihY0KLg",
+    unitId: "82XqknZlTsGcFbQw8Gg6ow"
 }
 
 const NewAsset: NextPage = () => {
@@ -63,50 +77,217 @@ const NewAsset: NextPage = () => {
     const [assetName, setAssetName] = useState('')
     const [assetDescription, setAssetDescription] = useState('')
     const [repositoryOrId, setRepositoryOrId] = useState('')
-    const [assetTags, setAssetTags] = useState('')
-    const [location, setLocation] = useState('')
+    const [assetTags, setAssetTags] = useState([] as string[])
+    const [locationAddress, setLocationAddress] = useState('')
+    const [locationId, setLocationId] = useState('')
+    const [locationName, setLocationName] = useState('')
     const [price, setPrice] = useState('')
+    const [resourceSpec, setResourceSpec] = useState('')
+    const [resourceId, setResourceId] = useState('')
+    const [intentId, setIntentId] = useState('')
+
+    useEffect(() => {
+        if (assetType === 'Product') {
+            setResourceSpec(instanceVariables?.specs?.specProjectProduct.id)
+        }
+        if (assetType === 'Service') {
+            setResourceSpec(instanceVariables?.specs?.specProjectService.id)
+        }
+        if (assetType === 'Design') {
+            setResourceSpec(instanceVariables?.specs?.specProjectDesign.id)
+        }
+    }, [assetType])
+
+
+    const {authId} = useAuth()
+
+
+
+    const QUERY_VARIABLES = gql`query {
+   instanceVariables {
+     units {
+       unitOne {id}
+       unitCurrency {id}
+    }
+    specs {
+      specProjectDesign {id}
+      specProjectService {id}
+      specProjectProduct {id}
+    }
+  }}`
+
+    const CREATE_PROPOSAL = gql`
+    mutation {
+  createProposal(proposal: {
+    name: "price tag",
+    unitBased: true
+  }) {
+    proposal {
+      id
+    }
+  }
+}
+`
+    const CREATE_INTENT = gql`mutation (
+  $agent: ID!,
+  $resource: ID!,
+  $oneUnit: ID!,
+  $currency: ID!,
+  $howMuch: Int!
+) {
+  item: createIntent(
+    intent: {
+      name: "asset",
+      action: "transfer",
+      provider: $agent,
+      resourceInventoriedAs: $resource,
+      resourceQuantity: { hasNumericalValue: 1, hasUnit: $oneUnit }
+    }
+  ) {
+    intent {
+      id
+    }
+  }
+
+  payment: createIntent(
+    intent: {
+      name: "payment",
+      action: "transfer",
+      receiver: $agent,
+      resourceConformsTo: $currency,
+      resourceQuantity: { hasNumericalValue: $howMuch, hasUnit: $oneUnit }
+    }
+  ) {
+    intent {
+      id
+    }
+  }
+}
+`
+
+    const LINK_PROPOSAL_AND_INTENT = gql`mutation (
+  $proposal: ID!
+  $item: ID!
+  $payment: ID!
+) {
+  linkItem: proposeIntent(
+    publishedIn: $proposal
+    publishes: $item
+    reciprocal: false
+  ) {
+    id
+  }
+
+  linkPayment: proposeIntent(
+    publishedIn: $proposal
+    publishes: $payment
+    reciprocal: true
+  ) {
+    id
+  }
+}`
+
+
+    const CREATE_LOCATION = gql`mutation ($name: String!, $addr: String!) {
+  createSpatialThing(spatialThing: { name: $name, mappableAddress: $addr }) {
+    spatialThing {
+      id
+    }
+  }
+}
+`
 
     const CREATE_ASSET = gql`mutation (
-                              $name: String!
-                              $metadata: String!
-                              $agent: ID!
-                              $creationTime: DateTime!
-                              $location: ID!
-                              $tags: [URI!]
-                              $projectSpec: ID!
-                              $oneUnit: ID!
-                            ) {
-                              createEconomicEvent(
-                                event: {
-                                  action: "raise"
-                                  provider: $agent
-                                  receiver: $agent
-                                  hasPointInTime: $creationTime
-                                  resourceClassifiedAs: $tags
-                                  resourceConformsTo: $projectSpec
-                                  resourceQuantity: {
-                                    hasNumericalValue: 1
-                                    hasUnit: $oneUnit
-                                  }
-                                  toLocation: $location
-                                }
-                                newInventoriedResource: {
-                                  name: $name
-                                  note: $metadata
-                                }
-                              )
-                            }
-            `
+  $name: String!,
+  $metadata: String!,
+  $agent: ID!,
+  $creationTime: DateTime!,
+  $location: ID!,
+  $tags: [URI!],
+  $resourceSpec: ID!,
+  $oneUnit: ID!
+) {
+  createEconomicEvent(
+    event: {
+      action: "raise",
+      provider: $agent,
+      receiver: $agent,
+      hasPointInTime: $creationTime,
+      resourceClassifiedAs: $tags,
+      resourceConformsTo: $resourceSpec,
+      resourceQuantity: { hasNumericalValue: 1, hasUnit: $oneUnit },
+      toLocation: $location
+    }
+    newInventoriedResource: { name: $name, note: $metadata }
+  ) {
+    economicEvent {
+      id
+      resourceInventoriedAs {
+        id
+      }
+    }
+  }
+}
+`
+    const instanceVariables = useQuery(QUERY_VARIABLES).data?.instanceVariables
+
     const [createAsset, {data}] = useMutation(CREATE_ASSET)
 
+    const [createLocation, {data: spatialThing}] = useMutation(CREATE_LOCATION)
 
+    const [createProposal, {data: proposal}] = useMutation(CREATE_PROPOSAL)
+
+    const [createIntent, {data: intent}] = useMutation(CREATE_INTENT)
+
+    const [linkProposalAndIntent, {data: link}] = useMutation(LINK_PROPOSAL_AND_INTENT)
+
+    const handleCreateLocation = async () => {
+        const name = locationName === '' ? '*untitled*' : locationName
+        await createLocation({variables: {name: name, addr: locationAddress}}).then((r) => {
+            setLocationId(r.data.createSpatialThing.spatialThing.id)
+        })
+    }
     const router = useRouter()
 
     function onSubmit(e: any) {
         e.preventDefault()
-        createAsset({variables: {assetType, assetName, assetDescription, repositoryOrId, assetTags, location, price}})
-            .then((re: any) => router.push(`/processes/${re.data?.createProcess.process.id}`))
+        createAsset({
+            variables: {
+                resourceSpec: resourceSpec,
+                agent: authId,
+                name: assetName,
+                metadata: assetDescription + repositoryOrId,
+                location: locationId,
+                oneUnit: instanceVariables?.units?.unitOne.id,
+                creationTime: dayjs().toISOString()
+            }
+        })
+            .then((re: any) => {
+                setResourceId(re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id)
+                devLog('2', re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id)
+                createProposal()
+                    .then((r) => {
+                        devLog('3', r)
+                        createIntent({
+                            variables: {
+                                agent: authId,
+                                resource: re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id,
+                                oneUnit: instanceVariables?.units?.unitOne.id,
+                                howMuch: parseFloat(price),
+                                currency: instanceVariables?.units?.unitCurrency.id
+                            }
+                        }).then((r) => {
+                            devLog('4', r)
+                            linkProposalAndIntent({
+                                variables: {
+                                    proposal: proposal?.createProposal.proposal.id,
+                                    item: intent?.createIntent.intent.id,
+                                    payment: intent?.createIntent.intent.id
+                                }
+                            })
+                        })
+                    })
+            })
     }
 
     return (<>
@@ -132,10 +313,18 @@ const NewAsset: NextPage = () => {
                 <BrInput label={newAssetProps.repositoryOrId.label} hint={newAssetProps.repositoryOrId.hint}
                          value={repositoryOrId} placeholder={newAssetProps.repositoryOrId.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
-                <TagSelector label={newAssetProps.assetTags.label} hint={newAssetProps.assetTags.hint}/>
-                <BrInput label={newAssetProps.location.label} hint={newAssetProps.location.hint} value={location}
-                         placeholder={newAssetProps.location.placeholder}
-                         onChange={(e: ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}/>
+                <TagSelector label={newAssetProps.assetTags.label} hint={newAssetProps.assetTags.hint}
+                             onSelect={(tags) => setAssetTags(tags)}/>
+                <div className="grid grid-cols-2 gap-2">
+                    <BrInput label={newAssetProps.location.name.label} hint={newAssetProps.location.name.hint}
+                             value={locationName} placeholder={newAssetProps.location.name.placeholder}
+                             onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationName(e.target.value)}/>
+                    <BrInput label={newAssetProps.location.address.label} hint={newAssetProps.location.address.hint}
+                             value={locationAddress}
+                             placeholder={newAssetProps.location.address.placeholder}
+                             onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationAddress(e.target.value)}
+                             onBlur={handleCreateLocation}/>
+                </div>
                 <BrInput label={newAssetProps.price.label} hint={newAssetProps.price.hint} value={price}
                          placeholder={newAssetProps.price.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}/>

@@ -14,14 +14,11 @@ const SignRequest = async ({query, variables}:{query:string, variables?:any}) =>
                         }
         }
     `
-    console.log(zenKeys)
     const zenData = `
         {
                 "gql": "${Buffer.from(body, 'utf8').toString('base64')}",
         }
     `
-    console.log('eddsa:', getItem('eddsa_key', 'local'))
-    console.log(zenData)
     return await zencode_exec(sign(), {data: zenData ,keys:zenKeys})
 }
 
