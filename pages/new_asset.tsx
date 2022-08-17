@@ -9,6 +9,7 @@ import TagSelector from "../components/brickroom/TagSelector";
 import {useAuth} from "../lib/auth";
 import dayjs from 'dayjs'
 import devLog from "../lib/devLog";
+import BrImageUpload from "../components/brickroom/BrImageUpload";
 
 
 
@@ -85,6 +86,7 @@ const NewAsset: NextPage = () => {
     const [resourceSpec, setResourceSpec] = useState('')
     const [resourceId, setResourceId] = useState('')
     const [intentId, setIntentId] = useState('')
+    const [image, setImage] = useState('')
 
     useEffect(() => {
         if (assetType === 'Product') {
@@ -218,7 +220,8 @@ const NewAsset: NextPage = () => {
   $location: ID!,
   $tags: [URI!],
   $resourceSpec: ID!,
-  $oneUnit: ID!
+  $oneUnit: ID!,
+  $image: String
 ) {
   createEconomicEvent(
     event: {
@@ -231,7 +234,7 @@ const NewAsset: NextPage = () => {
       resourceQuantity: { hasNumericalValue: 1, hasUnit: $oneUnit },
       toLocation: $location
     }
-    newInventoriedResource: { name: $name, note: $metadata }
+    newInventoriedResource: { name: $name, note: $metadata, image: $image }
   ) {
     economicEvent {
       id
@@ -264,6 +267,7 @@ const NewAsset: NextPage = () => {
 
     function onSubmit(e: any) {
         e.preventDefault()
+
         createAsset({
             variables: {
                 resourceSpec: resourceSpec,
@@ -272,7 +276,8 @@ const NewAsset: NextPage = () => {
                 metadata: `description: ${assetDescription}, repositoryOrId: ${repositoryOrId}, `,
                 location: locationId,
                 oneUnit: instanceVariables?.units?.unitOne.id,
-                creationTime: dayjs().toISOString()
+                creationTime: dayjs().toISOString(),
+                image: image.split(',')[1],
             }
         })
             .then((re: any) => {
@@ -322,6 +327,7 @@ const NewAsset: NextPage = () => {
                 <BrInput label={newAssetProps.assetName.label} hint={newAssetProps.assetName.hint} value={assetName}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetName(e.target.value)}
                          placeholder={newAssetProps.assetName.placeholder}/>
+                <BrImageUpload onChange={setImage} label={'upload one Image'} placeholder={'uploadedImage.png'} hint={'SVG, PNG, JPG or GIF (MAX. 800x400px)'}/>
                 <BrTextField label={newAssetProps.assetDescription.label} hint={newAssetProps.assetDescription.hint}
                              value={assetDescription} placeholder={newAssetProps.assetDescription.placeholder}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
