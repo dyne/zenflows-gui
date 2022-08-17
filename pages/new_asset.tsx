@@ -104,17 +104,29 @@ const NewAsset: NextPage = () => {
 
 
     const QUERY_VARIABLES = gql`query {
-   instanceVariables {
-     units {
-       unitOne {id}
-       unitCurrency {id}
+  instanceVariables{
+    specs{
+      specCurrency {
+        id
+      }
+      specProjectDesign {
+        id
+      }
+      specProjectProduct {
+        id
+      }
+      specProjectService {
+        id
+      }
+      
     }
-    specs {
-      specProjectDesign {id}
-      specProjectService {id}
-      specProjectProduct {id}
+    units {
+      unitOne {
+        id
+      }
     }
-  }}`
+  }
+}`
 
     const CREATE_PROPOSAL = gql`
     mutation {
@@ -165,17 +177,15 @@ const NewAsset: NextPage = () => {
 }
 `
 
-    const LINK_PROPOSAL_AND_INTENT = gql`mutation (
-  $proposal: ID!
-  $item: ID!
-  $payment: ID!
-) {
+    const LINK_PROPOSAL_AND_INTENT = gql`mutation ($proposal: ID!, $item: ID!, $payment: ID!) {
   linkItem: proposeIntent(
     publishedIn: $proposal
     publishes: $item
     reciprocal: false
   ) {
-    id
+    proposedIntent {
+      id
+    }
   }
 
   linkPayment: proposeIntent(
@@ -183,9 +193,12 @@ const NewAsset: NextPage = () => {
     publishes: $payment
     reciprocal: true
   ) {
-    id
+    proposedIntent {
+      id
+    }
   }
-}`
+}
+`
 
 
     const CREATE_LOCATION = gql`mutation ($name: String!, $addr: String!) {
@@ -256,7 +269,7 @@ const NewAsset: NextPage = () => {
                 resourceSpec: resourceSpec,
                 agent: authId,
                 name: assetName,
-                metadata: assetDescription + repositoryOrId,
+                metadata: `description: ${assetDescription}, repositoryOrId: ${repositoryOrId}, `,
                 location: locationId,
                 oneUnit: instanceVariables?.units?.unitOne.id,
                 creationTime: dayjs().toISOString()
@@ -266,24 +279,26 @@ const NewAsset: NextPage = () => {
                 setResourceId(re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id)
                 devLog('2', re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id)
                 createProposal()
-                    .then((r) => {
-                        devLog('3', r)
+                    .then((proposal) => {
+                        devLog('3', proposal)
                         createIntent({
                             variables: {
                                 agent: authId,
                                 resource: re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id,
-                                oneUnit: instanceVariables?.units?.unitOne.id,
+                                oneUnit: instanceVariables?.units.unitOne.id,
                                 howMuch: parseFloat(price),
-                                currency: instanceVariables?.units?.unitCurrency.id
+                                currency: instanceVariables?.specs.specCurrency.id
                             }
-                        }).then((r) => {
-                            devLog('4', r)
+                        }).then((intent) => {
+                            devLog('4', intent)
                             linkProposalAndIntent({
                                 variables: {
-                                    proposal: proposal?.createProposal.proposal.id,
-                                    item: intent?.createIntent.intent.id,
-                                    payment: intent?.createIntent.intent.id
+                                    proposal: proposal.data?.createProposal.proposal.id,
+                                    item: intent.data?.item.intent.id,
+                                    payment: intent.data?.payment.intent.id
                                 }
+                            }).then(() => {
+                                router.push(`/asset/${proposal.data?.createProposal.proposal.id}`)
                             })
                         })
                     })
