@@ -33,7 +33,6 @@ const BrTextField = (props: BrTextFieldProps) => {
                     <ExclamationIcon className='w-5 h-5'/>
                     {props.error}</span>}
                 {props.hint && <span className="label-text-alt">{props.hint}</span>}
-
             </label>
         </div>
     </>)

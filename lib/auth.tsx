@@ -239,6 +239,8 @@ function useProvideAuth() {
         askKeypairoomServer,
         signIn,
         authId,
-        authUsername
+        authUsername,
+        authEmail,
+        authName
     }
 }

@@ -13,17 +13,17 @@ import BrImageUpload from "../components/brickroom/BrImageUpload";
 
 
 
-const newAssetProps = {
+const createProjectProps = {
     headline: {
-        title: "Create a new asset",
-        description: "Make sure you read the Comunity Guidelines before you create a new asset.",
+        title: "Create a new project",
+        description: "Make sure you read the Comunity Guidelines before you create a new project.",
     },
     generalInfo: {
         title: "General Information",
         desctiption: "Help us display your project correctly."
     },
-    assetType: {
-        label: "Select asset type",
+    projectType: {
+        label: "Select project type",
         array: [{id: "Design", name: "Design", value: "Design", label: "Design"}, {
             id: "Service",
             name: "Service",
@@ -32,12 +32,12 @@ const newAssetProps = {
         }, {id: "Product", name: "Product", value: "Product", label: "Product"}],
         hint: "Refer to the standards we want to follow for this field",
     },
-    assetName: {
+    projectName: {
         label: "Name",
         placeholder: "E.g. Fabulaser",
         hint: "Working name of the project module",
     },
-    assetDescription: {
+    projectDescription: {
         label: "Description",
         placeholder: "E.g. An open source laser cutter within you reach",
         hint: "Short description to be displayed inside the project page",
@@ -47,9 +47,10 @@ const newAssetProps = {
         placeholder: "E.g. github.com/my-repo",
         hint: "Reference to repository in which the technical documentation is developed",
     },
-    assetTags: {
+    projectTags: {
         label: "Tags",
-        hint: "Add relevant keywords to describe your project",
+        hint: "press space or return to add tags",
+        placeholder: "E.g. laser cutter, open source, 3d printing",
     },
     location: {
         name: {
@@ -73,12 +74,12 @@ const newAssetProps = {
     unitId: "82XqknZlTsGcFbQw8Gg6ow"
 }
 
-const NewAsset: NextPage = () => {
-    const [assetType, setAssetType] = useState('')
-    const [assetName, setAssetName] = useState('')
-    const [assetDescription, setAssetDescription] = useState('')
+const CreateProject: NextPage = () => {
+    const [projectType, setAssetType] = useState('')
+    const [projectName, setAssetName] = useState('')
+    const [projectDescription, setAssetDescription] = useState('')
     const [repositoryOrId, setRepositoryOrId] = useState('')
-    const [assetTags, setAssetTags] = useState([] as string[])
+    const [projectTags, setAssetTags] = useState([] as string[])
     const [locationAddress, setLocationAddress] = useState('')
     const [locationId, setLocationId] = useState('')
     const [locationName, setLocationName] = useState('')
@@ -89,16 +90,16 @@ const NewAsset: NextPage = () => {
     const [image, setImage] = useState('')
 
     useEffect(() => {
-        if (assetType === 'Product') {
+        if (projectType === 'Product') {
             setResourceSpec(instanceVariables?.specs?.specProjectProduct.id)
         }
-        if (assetType === 'Service') {
+        if (projectType === 'Service') {
             setResourceSpec(instanceVariables?.specs?.specProjectService.id)
         }
-        if (assetType === 'Design') {
+        if (projectType === 'Design') {
             setResourceSpec(instanceVariables?.specs?.specProjectDesign.id)
         }
-    }, [assetType])
+    }, [projectType])
 
 
     const {authId} = useAuth()
@@ -151,7 +152,7 @@ const NewAsset: NextPage = () => {
 ) {
   item: createIntent(
     intent: {
-      name: "asset",
+      name: "project",
       action: "transfer",
       provider: $agent,
       resourceInventoriedAs: $resource,
@@ -272,8 +273,8 @@ const NewAsset: NextPage = () => {
             variables: {
                 resourceSpec: resourceSpec,
                 agent: authId,
-                name: assetName,
-                metadata: `description: ${assetDescription}, repositoryOrId: ${repositoryOrId}, `,
+                name: projectName,
+                metadata: `description: ${projectDescription}, repositoryOrId: ${repositoryOrId}, `,
                 location: locationId,
                 oneUnit: instanceVariables?.units?.unitOne.id,
                 creationTime: dayjs().toISOString(),
@@ -303,7 +304,7 @@ const NewAsset: NextPage = () => {
                                     payment: intent.data?.payment.intent.id
                                 }
                             }).then(() => {
-                                router.push(`/asset/${proposal.data?.createProposal.proposal.id}`)
+                                router.push(`/project/${proposal.data?.createProposal.proposal.id}`)
                             })
                         })
                     })
@@ -313,48 +314,48 @@ const NewAsset: NextPage = () => {
     return (<>
         <div className="w-128">
             <div className="w-80">
-                <h2>{newAssetProps.headline.title} </h2>
-                <p>{newAssetProps.headline.description}</p>
+                <h2>{createProjectProps.headline.title} </h2>
+                <p>{createProjectProps.headline.description}</p>
             </div>
             <div className="w-80 my-12">
-                <h2>{newAssetProps.generalInfo.title} </h2>
-                <p>{newAssetProps.generalInfo.desctiption}</p>
+                <h2>{createProjectProps.generalInfo.title} </h2>
+                <p>{createProjectProps.generalInfo.desctiption}</p>
             </div>
 
             <form onSubmit={onSubmit} className="w-full">
-                <BrRadio array={newAssetProps.assetType.array} label={newAssetProps.assetType.label}
-                         hint={newAssetProps.assetType.hint} onChange={setAssetType} value={assetType}/>
-                <BrInput label={newAssetProps.assetName.label} hint={newAssetProps.assetName.hint} value={assetName}
+                <BrRadio array={createProjectProps.projectType.array} label={createProjectProps.projectType.label}
+                         hint={createProjectProps.projectType.hint} onChange={setAssetType} value={projectType}/>
+                <BrInput label={createProjectProps.projectName.label} hint={createProjectProps.projectName.hint} value={projectName}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetName(e.target.value)}
-                         placeholder={newAssetProps.assetName.placeholder}/>
+                         placeholder={createProjectProps.projectName.placeholder}/>
                 <BrImageUpload onChange={setImage} label={'upload one Image'} placeholder={'uploadedImage.png'} hint={'SVG, PNG, JPG or GIF (MAX. 800x400px)'}/>
-                <BrTextField label={newAssetProps.assetDescription.label} hint={newAssetProps.assetDescription.hint}
-                             value={assetDescription} placeholder={newAssetProps.assetDescription.placeholder}
+                <BrTextField label={createProjectProps.projectDescription.label} hint={createProjectProps.projectDescription.hint}
+                             value={projectDescription} placeholder={createProjectProps.projectDescription.placeholder}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
-                <BrInput label={newAssetProps.repositoryOrId.label} hint={newAssetProps.repositoryOrId.hint}
-                         value={repositoryOrId} placeholder={newAssetProps.repositoryOrId.placeholder}
+                <BrInput label={createProjectProps.repositoryOrId.label} hint={createProjectProps.repositoryOrId.hint}
+                         value={repositoryOrId} placeholder={createProjectProps.repositoryOrId.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
-                <TagSelector label={newAssetProps.assetTags.label} hint={newAssetProps.assetTags.hint}
-                             onSelect={(tags) => setAssetTags(tags)}/>
+                <TagSelector label={createProjectProps.projectTags.label} hint={createProjectProps.projectTags.hint}
+                             onSelect={(tags) => setAssetTags(tags)} placeholder={createProjectProps.projectTags.placeholder}/>
                 <div className="grid grid-cols-2 gap-2">
-                    <BrInput label={newAssetProps.location.name.label} hint={newAssetProps.location.name.hint}
-                             value={locationName} placeholder={newAssetProps.location.name.placeholder}
+                    <BrInput label={createProjectProps.location.name.label} hint={createProjectProps.location.name.hint}
+                             value={locationName} placeholder={createProjectProps.location.name.placeholder}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationName(e.target.value)}/>
-                    <BrInput label={newAssetProps.location.address.label} hint={newAssetProps.location.address.hint}
+                    <BrInput label={createProjectProps.location.address.label} hint={createProjectProps.location.address.hint}
                              value={locationAddress}
-                             placeholder={newAssetProps.location.address.placeholder}
+                             placeholder={createProjectProps.location.address.placeholder}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationAddress(e.target.value)}
                              onBlur={handleCreateLocation}/>
                 </div>
-                <BrInput label={newAssetProps.price.label} hint={newAssetProps.price.hint} value={price}
-                         placeholder={newAssetProps.price.placeholder}
+                <BrInput type={'number'} label={createProjectProps.price.label} hint={createProjectProps.price.hint} value={price}
+                         placeholder={createProjectProps.price.placeholder}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}/>
-                <button type="submit" className="btn btn-primary">{newAssetProps.button}</button>
+                <button type="submit" className="btn btn-primary">{createProjectProps.button}</button>
             </form>
         </div>
     </>)
 };
 
-export default NewAsset
+export default CreateProject
 
 

@@ -6,6 +6,7 @@ import LoginBtn from "./LoginMenu";
 import SideBarMenu from "./brickroom/SideBarMenu";
 import NewProcessButton from "./NewProcessButton";
 import {useRouter} from "next/router";
+import CreateProjectButton from "./NewProjectButton";
 
 const SideBarProps = {
     newProcess: {text: "New Process", link: "/new_process"},
@@ -17,23 +18,27 @@ const SideBarProps = {
         {
             name: "Local",
             link: "/local",
-            svg: <UserGroupIcon className="w-5 h-5 float-left mr-2"/>
+            svg: <UserGroupIcon className="w-5 h-5 float-left mr-2"/>,
+            disabled: true
         },
         {
             name: "Federation",
             link: "/fed",
-            svg: <GlobeIcon className="w-5 h-5 float-left mr-2"/>
+            svg: <GlobeIcon className="w-5 h-5 float-left mr-2"/>,
+            disabled: true
         },],
     menu: [
         {
             name: "Processes",
             link: "/processes",
             svg: "",
+            disabled: true
         },
 
         {
             name: "Resources",
             link: "/my_inventory",
+            disabled: true
         },
         {
             name: "User Profile",
@@ -56,7 +61,11 @@ function Sidebar() {
                     </div>
                     <SideBarMenu menu={SideBarProps.menu1}/>
                     <SideBarMenu menu={SideBarProps.menu} title={'My Interfacer'}/>
+                    <br/>
                     <NewProcessButton/>
+                    <br/>
+                    <CreateProjectButton/>
+                    <br/>
                     <br/>
                     <LoginBtn/></>}
                 {isNewProcess && <>

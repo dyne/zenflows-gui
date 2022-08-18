@@ -56,7 +56,7 @@ const Profile: NextPage = () => {
                                             }
                                    }`)
 
-    const {authId} = useAuth()
+    const {authId, authUsername, authName, authEmail} = useAuth()
     const isUser: boolean = (id === 'my_profile' || id === authId)
     const idToBeFetch = isUser ? authId : id
     const user = useQuery(FETCH_USER, {variables: {id: idToBeFetch}}).data?.agent
@@ -67,13 +67,19 @@ const Profile: NextPage = () => {
             component: <ResourceTable resources={user?.inventoriedEconomicResources}/>
         }
     ]
-
+    //todo:
+    // return (<>
+    //     {!user && <Spinner/>}
+    //     {user && <>
+    //             <h3 className="mb-6">{user?.name}</h3>
+    //         <Tabs tabsArray={tabsArray}/></>}
+    // </>)
     return (<>
-        {!user && <Spinner/>}
-        {user && <>
-                <h3 className="mb-6">{user?.name}</h3>
-            <Tabs tabsArray={tabsArray}/></>}
-    </>)
+        {isUser && <>
+            <h3 className="mb-6">Name: {authName}</h3>
+            <h3 className="mb-6">UserName: {authUsername}</h3>
+            <h3 className="mb-6">Email: {authEmail}</h3>
+        </>}</>)
 };
 
 export default Profile

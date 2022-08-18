@@ -3,7 +3,7 @@ import React from 'react';
 import SideBarButton from "./SideBarButton";
 import { useRouter } from "next/router";
 
-type SideBarMenuProps = { menu: Array<{ name: string, link: string, svg?: any }>, title?: string }
+type SideBarMenuProps = { menu: Array<{ name: string, link: string, svg?: any, disabled?:boolean }>, title?: string }
 
 
 function Sidebar({ menu, title }: SideBarMenuProps) {
@@ -20,6 +20,7 @@ function Sidebar({ menu, title }: SideBarMenuProps) {
                     link={m.link}
                     active={isActive(m.link)}
                     svg={m?.svg}
+                    disabled={m?.disabled}
                 /></li>)}
         </ul>
     </>

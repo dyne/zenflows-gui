@@ -5,6 +5,7 @@ import RenderActivities from "../components/renderActivities"
 import Link from "next/link";
 import NewProcessButton from "./NewProcessButton";
 import Spinner from "./brickroom/Spinner";
+import CreateProjectButton from "./NewProjectButton";
 
 
 const FETCH_USER_DATA = gql`
@@ -81,18 +82,18 @@ const User: NextPage = () => {
             </div>
             <div className="w-80">
                 <NewProcessButton/>
-                <Link href="/processes">
-                    <a className="btn btn-outline font-medium normal-case btn-primary w-60 ml-4">
-                        See all process
-                    </a>
-                </Link>
+                <CreateProjectButton/>
+                {/*<Link href="/processes">*/}
+                {/*    <a className="btn btn-outline font-medium normal-case btn-primary w-60 ml-4">*/}
+                {/*        See all process*/}
+                {/*    </a>*/}
+                {/*</Link>*/}
             </div>
         </div>
-        {activities && <ul>
-            <RenderActivities userActivities={activities}/>
-        </ul>}
-        {!activities && <Spinner/>}
-
+        {/*{activities && <ul>*/}
+        {/*    <RenderActivities userActivities={activities}/>*/}
+        {/*</ul>}*/}
+        {/*{!activities && <Spinner/>}*/}
     </>
 };
 

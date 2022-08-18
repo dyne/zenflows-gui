@@ -1,7 +1,4 @@
 import React from 'react';
-import {NextPage} from "next";
-import Link from "next/link";
-import LoginBtn from "./LoginMenu";
 import {BellIcon, MailIcon} from "@heroicons/react/outline";
 
 
@@ -15,15 +12,15 @@ function Topbar() {
                             <path d="M4 6h16M4 12h16M4 18h16"/>
                         </svg>
                 </label>
-                <input type="text" placeholder="search.." className="input rounded-xl input-bordered w-128"/>
+                <input type="text" placeholder="search.." className="input rounded-xl input-bordered w-128" disabled/>
             </div>
             <div className="navbar-center">
             </div>
             <div className="navbar-end">
-                 <button className="btn btn-circle btn-accent  bg-white mr-4">
+                 <button className="btn btn-circle btn-accent  bg-white mr-4" disabled>
                      <BellIcon className="w-5 h-5"/>
                 </button>
-                <button className="btn btn-circle btn-accent bg-white btn-outlined">
+                <button className="btn btn-circle btn-accent bg-white btn-outlined" disabled>
                      <MailIcon className="w-5 h-5"/>
                 </button>
             </div>
