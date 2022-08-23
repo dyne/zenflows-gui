@@ -62,7 +62,7 @@ export default function Sign_in() {
     }
 
     return (
-        <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('/reflow_background.jpeg')"}}>
+        <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('https://www.interfacerproject.eu/assets/index/ABOUT.png')"}}>
             <div className="container mx-auto h-screen grid place-items-center">
                 <Card title={signInTextProps.title}
                       width={CardWidth.LG}

@@ -66,7 +66,7 @@ export default function SignUp() {
     const isButtonEnabled = (HMAC === '') ? 'btn-disabled' : ''
 
     return (
-        <div className="container mx-auto h-screen grid place-items-center">
+        <div className="mx-auto h-screen grid place-items-center bg-cover" style={{['backgroundImage' as any]: "url('https://www.interfacerproject.eu/assets/index/ABOUT.png')"}}>
             <Card title={signUpTextProps.title}
                   width={CardWidth.LG}
                   className="px-16 py-[4.5rem]">
