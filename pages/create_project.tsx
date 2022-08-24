@@ -256,24 +256,24 @@ const CreateProject: NextPage = () => {
     return (<>
         <div className="w-128">
             <div className="w-80">
-                <h2>{t('headline.title')} </h2>
+                <h2 className="text-primary">{t('headline.title')} </h2>
                 <p>{t('headline.description')}</p>
             </div>
             <div className="w-80 my-12">
                 <h2>{t('generalInfo.title')} </h2>
-                <p>{t('generalInfo.desctiptiont')}</p>
+                <p>{t('generalInfo.description')}</p>
             </div>
 
             <form onSubmit={onSubmit} className="w-full">
-                <BrRadio array={t('projectType.array', { returnObjects: true })} label={t('projectType.label')}
-                         hint={t('projectType.hint')} onChange={setAssetType} value={projectType}/>
                 <BrInput label={t('projectName.label')} hint={t('projectName.hint')} value={projectName}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetName(e.target.value)}
                          placeholder={t('projectName.placeholder')}/>
-                <BrImageUpload onChange={setImage} label={'upload one Image'} placeholder={'uploadedImage.png'} hint={'SVG, PNG, JPG or GIF (MAX. 800x400px)'}/>
                 <BrTextField label={t('projectDescription.label')} hint={t('projectDescription.hint')}
                              value={projectDescription} placeholder={t('projectDescription.placeholder')}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
+                <BrRadio array={t('projectType.array', { returnObjects: true })} label={t('projectType.label')}
+                         hint={t('projectType.hint')} onChange={setAssetType} value={projectType}/>
+                <BrImageUpload onChange={setImage} label={t('imageUpload.label')} placeholder={t('imageUpload.placeholder')} hint={t('imageUpload.hint')}/>
                 <BrInput label={t('repositoryOrId.label')} hint={t('repositoryOrId.hint')}
                          value={repositoryOrId} placeholder={t('repositoryOrId.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
