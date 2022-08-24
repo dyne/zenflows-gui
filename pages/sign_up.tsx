@@ -1,10 +1,20 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useState, useTransition} from 'react';
 import {useAuth} from "../lib/auth";
 import {useRouter} from "next/router";
 import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
 import {LinkIcon} from "@heroicons/react/solid";
 import KeyringGeneration from "../components/KeyringGeneration";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
+
+export async function getStaticProps({ locale }:any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['signUpProps'])),
+    },
+  };
+}
 
 export default function SignUp() {
     const [name, setName] = useState('')
@@ -14,30 +24,9 @@ export default function SignUp() {
     const [HMAC, setHMAC] = useState('')
     const [yetRegisteredEmail, setYetRegisteredEmail] = useState('')
     const [emailValid, setEmailValid] = useState('')
+    const {t} = useTranslation('signUpProps')
 
     const router = useRouter()
-    const signUpTextProps: any = {
-        title: "Welcome!",
-        presentation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna.",
-        name: {
-            label: "name",
-            placeholder: "Type your name"
-        },
-        user: {
-            label: "User",
-            placeholder: "Type your visible username"
-        },
-        email: {
-            label: "Email",
-            placeholder: "alice@email.com"
-        },
-        register: {
-            question: "✌️  yet regisetered?",
-            answer: "Sign In"
-        },
-        button: "Next Step"
-    }
-
 
     const {signUp, askKeypairoomServer} = useAuth()
 
@@ -67,35 +56,35 @@ export default function SignUp() {
 
     return (
         <div className="mx-auto h-screen grid place-items-center bg-cover" style={{['backgroundImage' as any]: "url('https://www.interfacerproject.eu/assets/index/ABOUT.png')"}}>
-            <Card title={signUpTextProps.title}
+            <Card title={t('title')}
                   width={CardWidth.LG}
                   className="px-16 py-[4.5rem]">
                 {(step === 0) && <>
-                    <p>{signUpTextProps.presentation}</p>
+                    <p>{t('presentation')}</p>
                     <form onSubmit={onSubmit}>
                         <BrInput type="email"
                                  error={yetRegisteredEmail}
                                  hint={emailValid}
-                                 placeholder={signUpTextProps.email.placeholder}
-                                 label={signUpTextProps.email.label}
+                                 placeholder={t('email.placeholder')}
+                                 label={t('email.label')}
                                  onBlur={(e: ChangeEvent<HTMLInputElement>) => verifyEmail({email: e.target.value})}
                         />
                         <BrInput type="text"
-                                 label={signUpTextProps.name.label}
-                                 placeholder={signUpTextProps.name.placeholder}
+                                 label={t('name.label')}
+                                 placeholder={t('name.placeholder')}
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}/>
                         <BrInput type="text"
-                                 placeholder={signUpTextProps.user.placeholder}
-                                 label={signUpTextProps.user.label}
+                                 placeholder={t('user.placeholder')}
+                                 label={t('user.label')}
                                  onChange={(e: ChangeEvent<HTMLInputElement>) => setUser(e.target.value)}
                         />
                         <button className={`btn btn-block ${isButtonEnabled}`}
-                                type="submit">{signUpTextProps.button}</button>
+                                type="submit">{t('button')}</button>
                     </form>
                     <p className="flex flex-row items-center justify-between">
-                        {signUpTextProps.register.question}
+                        {t('register.question')}
                         <LinkIcon className='h-5 w-5 ml-28'/>
-                        {signUpTextProps.register.answer}
+                        {t('register.answer')}
                     </p>
                 </>}
                 {(step === 1) &&

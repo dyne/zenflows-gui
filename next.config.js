@@ -4,7 +4,7 @@ const nextConfig = {
     i18n,
     reactStrictMode: true,
     env: {
-        GRAPHQL: "https://reflow-demo.dyne.org/api/graphql",
+        GRAPHQL: "http://65.109.11.42:8000/api",
     },
     webpack: (config) => {
         config.resolve.fallback = {

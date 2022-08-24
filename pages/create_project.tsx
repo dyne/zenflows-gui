@@ -10,69 +10,10 @@ import {useAuth} from "../lib/auth";
 import dayjs from 'dayjs'
 import devLog from "../lib/devLog";
 import BrImageUpload from "../components/brickroom/BrImageUpload";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 
-
-const createProjectProps = {
-    headline: {
-        title: "Create a new project",
-        description: "Make sure you read the Comunity Guidelines before you create a new project.",
-    },
-    generalInfo: {
-        title: "General Information",
-        desctiption: "Help us display your project correctly."
-    },
-    projectType: {
-        label: "Select project type",
-        array: [{id: "Design", name: "Design", value: "Design", label: "Design"}, {
-            id: "Service",
-            name: "Service",
-            value: "Service",
-            label: "Service"
-        }, {id: "Product", name: "Product", value: "Product", label: "Product"}],
-        hint: "Refer to the standards we want to follow for this field",
-    },
-    projectName: {
-        label: "Name",
-        placeholder: "E.g. Fabulaser",
-        hint: "Working name of the project module",
-    },
-    projectDescription: {
-        label: "Description",
-        placeholder: "E.g. An open source laser cutter within you reach",
-        hint: "Short description to be displayed inside the project page",
-    },
-    repositoryOrId: {
-        label: "Repository link or interfacer Id",
-        placeholder: "E.g. github.com/my-repo",
-        hint: "Reference to repository in which the technical documentation is developed",
-    },
-    projectTags: {
-        label: "Tags",
-        hint: "press space or return to add tags",
-        placeholder: "E.g. laser cutter, open source, 3d printing",
-    },
-    location: {
-        name: {
-            label: "Location Name",
-            placeholder: "E.g. Amburg Warehouse",
-            hint: "Short name to refers to the location",
-        },
-        address: {
-            label: "Location",
-            placeholder: "An d. Alsterschleife 3, 22399 - Hamburg, Germany",
-            hint: "Short description to be displayed inside the project page",
-        }
-    },
-    price: {
-        label: "Price",
-        placeholder: "E.g. 1 Fab Token",
-        hint: "Short description to be displayed inside the project page",
-    },
-    button: "Import project",
-    resourceSpec: "73u648QASpCtC80ihY0KLg",
-    unitId: "82XqknZlTsGcFbQw8Gg6ow"
-}
 
 const CreateProject: NextPage = () => {
     const [projectType, setAssetType] = useState('')
@@ -88,6 +29,7 @@ const CreateProject: NextPage = () => {
     const [resourceId, setResourceId] = useState('')
     const [intentId, setIntentId] = useState('')
     const [image, setImage] = useState('')
+    const { t } = useTranslation('createProjectProps')
 
     useEffect(() => {
         if (projectType === 'Product') {
@@ -314,48 +256,57 @@ const CreateProject: NextPage = () => {
     return (<>
         <div className="w-128">
             <div className="w-80">
-                <h2>{createProjectProps.headline.title} </h2>
-                <p>{createProjectProps.headline.description}</p>
+                <h2>{t('headline.title')} </h2>
+                <p>{t('headline.description')}</p>
             </div>
             <div className="w-80 my-12">
-                <h2>{createProjectProps.generalInfo.title} </h2>
-                <p>{createProjectProps.generalInfo.desctiption}</p>
+                <h2>{t('generalInfo.title')} </h2>
+                <p>{t('generalInfo.desctiptiont')}</p>
             </div>
 
             <form onSubmit={onSubmit} className="w-full">
-                <BrRadio array={createProjectProps.projectType.array} label={createProjectProps.projectType.label}
-                         hint={createProjectProps.projectType.hint} onChange={setAssetType} value={projectType}/>
-                <BrInput label={createProjectProps.projectName.label} hint={createProjectProps.projectName.hint} value={projectName}
+                <BrRadio array={t('projectType.array', { returnObjects: true })} label={t('projectType.label')}
+                         hint={t('projectType.hint')} onChange={setAssetType} value={projectType}/>
+                <BrInput label={t('projectName.label')} hint={t('projectName.hint')} value={projectName}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetName(e.target.value)}
-                         placeholder={createProjectProps.projectName.placeholder}/>
+                         placeholder={t('projectName.placeholder')}/>
                 <BrImageUpload onChange={setImage} label={'upload one Image'} placeholder={'uploadedImage.png'} hint={'SVG, PNG, JPG or GIF (MAX. 800x400px)'}/>
-                <BrTextField label={createProjectProps.projectDescription.label} hint={createProjectProps.projectDescription.hint}
-                             value={projectDescription} placeholder={createProjectProps.projectDescription.placeholder}
+                <BrTextField label={t('projectDescription.label')} hint={t('projectDescription.hint')}
+                             value={projectDescription} placeholder={t('projectDescription.placeholder')}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
-                <BrInput label={createProjectProps.repositoryOrId.label} hint={createProjectProps.repositoryOrId.hint}
-                         value={repositoryOrId} placeholder={createProjectProps.repositoryOrId.placeholder}
+                <BrInput label={t('repositoryOrId.label')} hint={t('repositoryOrId.hint')}
+                         value={repositoryOrId} placeholder={t('repositoryOrId.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
-                <TagSelector label={createProjectProps.projectTags.label} hint={createProjectProps.projectTags.hint}
-                             onSelect={(tags) => setAssetTags(tags)} placeholder={createProjectProps.projectTags.placeholder}/>
+                <TagSelector label={t('projectTags.label')} hint={t('projectTags.hint')}
+                             onSelect={(tags) => setAssetTags(tags)} placeholder={t('projectTags.placeholder')}/>
                 <div className="grid grid-cols-2 gap-2">
-                    <BrInput label={createProjectProps.location.name.label} hint={createProjectProps.location.name.hint}
-                             value={locationName} placeholder={createProjectProps.location.name.placeholder}
+                    <BrInput label={t('location.name.label')} hint={t('location.name.hint')}
+                             value={locationName} placeholder={t('location.name.placeholder')}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationName(e.target.value)}/>
-                    <BrInput label={createProjectProps.location.address.label} hint={createProjectProps.location.address.hint}
+                    <BrInput label={t('location.address.label')} hint={t('location.address.hint')}
                              value={locationAddress}
-                             placeholder={createProjectProps.location.address.placeholder}
+                             placeholder={t('location.address.placeholder')}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setLocationAddress(e.target.value)}
                              onBlur={handleCreateLocation}/>
                 </div>
-                <BrInput type={'number'} label={createProjectProps.price.label} hint={createProjectProps.price.hint} value={price}
-                         placeholder={createProjectProps.price.placeholder}
+                <BrInput type={'number'} label={t('price.label')} hint={t('price.hint')} value={price}
+                         placeholder={t('price.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}/>
-                <button type="submit" className="btn btn-primary">{createProjectProps.button}</button>
+                <button type="submit" className="btn btn-primary">{t('button')}</button>
             </form>
         </div>
     </>)
 };
 
+export async function getStaticProps({ locale }:any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['createProjectProps'])),
+    },
+  };
+}
 export default CreateProject
+
+
 
 

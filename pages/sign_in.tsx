@@ -6,7 +6,18 @@ import BrInput from "../components/brickroom/BrInput";
 import Link from "next/link";
 import KeyringGeneration from "../components/KeyringGeneration";
 import VerifySeed from "../components/VerifySeed";
+import devLog from "../lib/devLog";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
+
+export async function getStaticProps({ locale }:any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['signInProps'])),
+    },
+  };
+}
 
 export default function Sign_in() {
     const [isPassprhase, setIsPassphrase] = useState(false)
@@ -33,28 +44,15 @@ export default function Sign_in() {
         if (await result?.keypairoomServer) {
             setPdfk(result?.keypairoomServer)
             setStep(step)
-            console.log(result)
+            devLog(result)
         } else {
             setIsMailExising(false)
-            console.log(result)
+            devLog(result)
         }
-        // setPdfk(key)
-        // setStep(2)
     }
 
     const router = useRouter()
-    const signInTextProps: any = {
-        title: "Welcome!",
-        presentation: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna.",
-        button1: "Sign In via passprhase",
-        button2: "Sign In answering some questions",
-        button3: "Sign Up",
-        button4: "Next",
-        email: {
-            label: "Email address",
-            placeholder: "alice@email.com"
-        }
-    }
+    const {t} = useTranslation('signInProps')
 
 
     async function onSubmit(e: { preventDefault: () => void; }) {
@@ -64,31 +62,31 @@ export default function Sign_in() {
     return (
         <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('https://www.interfacerproject.eu/assets/index/ABOUT.png')"}}>
             <div className="container mx-auto h-screen grid place-items-center">
-                <Card title={signInTextProps.title}
+                <Card title={t('title')}
                       width={CardWidth.LG}
                       className="px-16 py-[4.5rem]">
                     <>
-                        {step === 0 && <><p>{signInTextProps.presentation}</p>
+                        {step === 0 && <><p>{t('presentation')}</p>
                             <button className="btn btn-block" type="button"
-                                    onClick={() => viaPassphrase()}>{signInTextProps.button1}</button>
+                                    onClick={() => viaPassphrase()}>{t('button1')}</button>
                             <button className="btn btn-block my-4" type="button"
-                                    onClick={() => viaQuestions()}>{signInTextProps.button2}</button>
+                                    onClick={() => viaQuestions()}>{t('button2')}</button>
                             <Link href={'/sign_up'}>
-                                <a className="btn btn-block">{signInTextProps.button3}</a>
+                                <a className="btn btn-block">{t('button3')}</a>
                             </Link></>}
                         {step === 1 && <>
-                            <BrInput type="email" label={signInTextProps.email.label}
+                            <BrInput type="email" label={t('email.label')}
                                      error={errorMail}
-                                     placeholder={signInTextProps.email.placeholder}
+                                     placeholder={t('email.placeholder')}
                                      onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
                             {!isPassprhase && <>
                                 <button className="btn btn-block" type="button" onClick={() => toNextStep(2)}>
-                                    {signInTextProps.button4}
+                                    {t('button4')}
                                 </button>
                             </>}
                             {isPassprhase && <>
                                 <button className="btn btn-block" type="button" onClick={() => toNextStep(3)}>
-                                    {signInTextProps.button4}
+                                    {t('button4')}
                                 </button>
                             </>}
                         </>}
@@ -100,8 +98,6 @@ export default function Sign_in() {
                 </>}
                     </>
                 </Card>
-
-
             </div>
         </div>
     )
