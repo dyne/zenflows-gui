@@ -8,7 +8,7 @@ export default function LoginBtn() {
 
     return (
         <>
-            <div className="btn btn-ghost btn-block text-white w-60">
+            <div className="mt-1 btn btn-ghost btn-block text-primary w-60 hover:bg-transparent">
             <span className="w-full text-left flex flex-row items-center pl-3">
                 <div className="pl-0 grid grid-cols-2 p-2 items-center">
                      <label tabIndex={0} className="btn btn-ghost btn-circle avatar bordered border-accent">
@@ -21,7 +21,7 @@ export default function LoginBtn() {
                             />;
                         </div>
                     </label>
-                    <div className="grid grid-cols-1 text-xs font-normal normal-case gap-y-1">
+                    <div className="ml-1 grid grid-cols-1 text-xs font-normal normal-case gap-y-1">
                         <p className="text-base-400 whitespace-nowrap test-2xs">{authUsername}</p>
                         <button className="hover:text-accent text-left" onClick={() => signOut()}>Sign Out</button>
                     </div>

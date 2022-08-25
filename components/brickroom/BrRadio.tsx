@@ -20,7 +20,7 @@ const BrRadio = (props: BrRadioProps) => {
             {props.array.map((unit: { id: string, name: string, value: string, label: string}) =>
             <label key={unit?.id} className={`label cursor-pointer flex ${props.value === unit.value? 'bg-green-100' : ''}`}>
                 <input type="radio" className="radio checked:bg-primary" name={unit.name} value={unit.value} onChange={(e: ChangeEvent<HTMLInputElement>) => props.onChange(e.target.value)} checked={props.value === unit.value}/>
-                <div className="flex-auto ml-2">
+                <div className="flex-auto ml-5">
                     <span className={`label-text ${props.value === unit.value? 'text-primary' : ''}`}>{unit.name}</span><br/>
                     <span className={`label-text ${props.value === unit.value? 'text-primary' : ''}`}>{unit.label}</span>
                 </div>

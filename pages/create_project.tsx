@@ -258,11 +258,7 @@ const CreateProject: NextPage = () => {
             <div className="w-80">
                 <h2 className="text-primary">{t('headline.title')} </h2>
                 <p>{t('headline.description')}</p>
-            </div>
-            <div className="w-80 my-12">
-                <h2>{t('generalInfo.title')} </h2>
-                <p>{t('generalInfo.description')}</p>
-            </div>
+            </div><br/>
 
             <form onSubmit={onSubmit} className="w-full">
                 <BrInput label={t('projectName.label')} hint={t('projectName.hint')} value={projectName}
@@ -292,7 +288,7 @@ const CreateProject: NextPage = () => {
                 <BrInput type={'number'} label={t('price.label')} hint={t('price.hint')} value={price}
                          placeholder={t('price.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setPrice(e.target.value)}/>
-                <button type="submit" className="btn btn-primary">{t('button')}</button>
+                <button type="submit" className="btn btn-accent">{t('button')}</button>
             </form>
         </div>
     </>)

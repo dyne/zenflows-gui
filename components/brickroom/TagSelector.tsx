@@ -31,12 +31,13 @@ const TagSelelector = (props: TagSelectorProps) => {
     }, [tags]);
     return (<>
         <div className={`form-control ${props.className}`}>
+             <label className="label mb-[-3px]">
+                <span className="label-text">{props.label}</span>
+            </label>
             {tags && tags.length > 0 && <>{
-                tags?.map((tag: string) => {
-                    return <span key={tag} className="badge left mb-1"><button  className={'btn btn-ghost btn-xs'} onClick={()=>cancelTag(tag)}>x</button> {tag}</span>
-                })
+                tags?.map((tag: string) => <span key={tag} className="badge left mb-1"><button  className={'btn btn-ghost btn-xs'} onClick={()=>cancelTag(tag)}>x</button> {tag}</span>)
             }</>}
-            <BrTextField placeholder={props.placeholder} label={props.label} hint={props.hint} error={props.error} onChange={handleAdd}/>
+            <BrTextField placeholder={props.placeholder} hint={props.hint} error={props.error} onChange={handleAdd}/>
         </div>
         </>)
 }

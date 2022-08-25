@@ -32,8 +32,8 @@ const Layout:React.FunctionComponent<layoutProps> = (layoutProps:layoutProps) =>
                             {layoutProps?.children}
                         </div>
                     </div>
-                    <div className="drawer-side bg-base-content">
-                        <label htmlFor="my-drawer" className="drawer-overlay">sidebar</label>
+                    <div className="drawer-side">
+                        <label htmlFor="my-drawer" className="drawer-overlay"/>
                         <Sidebar/>
                     </div>
                 </div>
