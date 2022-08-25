@@ -89,7 +89,7 @@ function Sidebar() {
     const isActive = (path: string) => path === router.asPath
     const isNewProcess = router.asPath === '/new_process'
     return (<>
-            <div className="title overflow-y-auto w-72 text-primary-content bg-white">
+            <div className="title overflow-y-auto w-72 text-primary-content bg-white border-r border-primary">
                 {!isNewProcess && <>
                     <div className="w-auto">
                         <Link href="/">
@@ -104,7 +104,7 @@ function Sidebar() {
                         </li>
                         <li tabIndex={0}>
                             <a className="ml-4 w-64 gap-2 pl-0 btn btn-ghost font-medium normal-case text-primary border-0 hover:bg-amber-200">
-                                <button className={`flex flex-row items-center w-full pl-3 text-left`} onClick={()=>setIsAssetsMenuOpen(!isAssetsMenuOpen)}>
+                                <button className={`flex flex-row items-center pl-3 text-left h-full`} onClick={()=>setIsAssetsMenuOpen(!isAssetsMenuOpen)}>
                                     <>
                                         <CubeIcon className="w-5 h-5 float-left mr-2"/>
                                         Assets

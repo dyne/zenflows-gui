@@ -6,6 +6,7 @@ import {zencode_exec} from "zenroom";
 import keypairoomClientRecreateKeys from "../zenflows-crypto/src/keypairoomClientRecreateKeys";
 import {useRouter} from "next/router";
 import {useAuth} from "../lib/auth";
+import devLog from "../lib/devLog";
 
 
 const VerifySeed = ({
@@ -63,7 +64,7 @@ const VerifySeed = ({
                 setItem('eddsa', res.keyring.eddsa, 'local')
                 setItem('seed', res.seed, 'local')
                 setIsButtonEnabled(true)
-            })
+            }).catch(()=>setError('Invalid pass phrase'))
     }
 
     return (

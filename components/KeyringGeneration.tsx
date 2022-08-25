@@ -1,11 +1,12 @@
 import Card, {CardWidth} from "./brickroom/Card";
 import BrInput from "./brickroom/BrInput";
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import useStorage from "../lib/useStorage";
 import {zencode_exec} from "zenroom";
 import keypairoomClient from "../zenflows-crypto/src/keypairoomClient-8-9-10-11-12";
 import {useRouter} from "next/router";
 import {useAuth} from "../lib/auth";
+import devLog from "../lib/devLog";
 
 
 const KeyringGeneration = ({
@@ -48,6 +49,10 @@ const KeyringGeneration = ({
     const {getItem, setItem} = useStorage()
     const router = useRouter()
 
+    useEffect(()=>{
+        devLog(error)
+    }, [error])
+
     const onSignUp = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
         signUp({name, user, email, eddsaPublicKey}).catch((err:string) => setError(err)).then(() => window.location.replace('/logged_in'))
@@ -77,7 +82,7 @@ const KeyringGeneration = ({
     const completeSignIn = async (e: { preventDefault: () => void; }) => {
         e.preventDefault()
 
-        await signIn({email}).then(() => {window.location.replace('/logged_in')})
+        await signIn({email}).then(() => {window.location.replace('/logged_in')}).catch((e:any) => setError(e))
     }
 
 
@@ -123,6 +128,7 @@ const KeyringGeneration = ({
                         <button className="btn btn-block" type="button" onClick={completeSignIn}>complete signin</button>
                     </p>}
                 </>}
+                {error !== ''&& <h5 className="text-warning">user not found: maybe wrong answers?</h5>}
             </>
     )
 }

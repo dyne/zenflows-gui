@@ -22,7 +22,7 @@ export default function LoginBtn() {
                         </div>
                     </label>
                     <div className="ml-1 grid grid-cols-1 text-xs font-normal normal-case gap-y-1">
-                        <p className="text-base-400 whitespace-nowrap test-2xs">{authUsername}</p>
+                        <Link href="/profile/my_profile"><a><p className="text-base-400 whitespace-nowrap test-2xs">{authUsername}</p></a></Link>
                         <button className="hover:text-accent text-left" onClick={() => signOut()}>Sign Out</button>
                     </div>
 
