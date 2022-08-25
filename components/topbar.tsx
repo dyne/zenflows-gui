@@ -4,7 +4,7 @@ import {BellIcon, MailIcon} from "@heroicons/react/outline";
 
 function Topbar() {
     return (
-        <div className="navbar bg-transparent mb-24">
+        <div className="navbar bg-[#F3F3F1]">
             <div className="navbar-start">
                 <label htmlFor="my-drawer" className= "btn btn-square btn-ghost drawer-button lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
