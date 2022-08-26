@@ -25,10 +25,10 @@ const TagSelelector = (props: TagSelectorProps) => {
     const cancelTag = (tag:string) => {
         setTags([...tags!.filter(t => t !== tag)])
     }
-
     useEffect(() => {
         props.onSelect && props.onSelect(tags!);
     }, [tags]);
+
     return (<>
         <div className={`form-control ${props.className}`}>
              <label className="label mb-[-3px]">

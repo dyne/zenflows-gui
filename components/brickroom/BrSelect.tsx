@@ -5,24 +5,25 @@ type BrSelectProps = {
     array: Array<{ id: string, name: string }>
     placeholder?: string,
     label?: string,
+    value?:string,
     handleSelect: ChangeEventHandler,
     hint?: string,
     error?: string,
     className?: string,
+    roundedLG?: boolean,
 }
 
 
 const BrSelect = (props: BrSelectProps) => {
 
     return (<>
-
         <div className={`form-control ${props.className}`}>
             <label className="label">
                 <span className="label-text">{props.label}</span>
             </label>
             <select onChange={(e: React.ChangeEvent<HTMLSelectElement>) => props.handleSelect(e)}
-                    className="select select-bordered">
-                <option disabled selected className="disabled" value="">{props.placeholder}</option>
+                    className="select select-bordered rounded-full" value={props.value}>
+                {props.placeholder && <option disabled selected className="disabled" value="">{props.placeholder}</option>}
                 {props.array?.map((unit: { id: string, name: string }) =>
                     (<option key={unit?.id} value={unit?.id}>{unit?.name}</option>))}
             </select>
@@ -33,7 +34,6 @@ const BrSelect = (props: BrSelectProps) => {
                     {props.error}</span>}
                 {props.hint && <span className="label-text-alt">{props.hint}
                 </span>}
-
             </label>
         </div>
     </>)
