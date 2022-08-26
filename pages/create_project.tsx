@@ -269,7 +269,7 @@ const CreateProject: NextPage = () => {
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
                 <BrRadio array={t('projectType.array', { returnObjects: true })} label={t('projectType.label')}
                          hint={t('projectType.hint')} onChange={setAssetType} value={projectType}/>
-                <BrImageUpload onChange={setImage} label={t('imageUpload.label')} placeholder={t('imageUpload.placeholder')} hint={t('imageUpload.hint')}/>
+                <BrImageUpload onChange={setImage} label={t('imageUpload.label')} placeholder={t('imageUpload.placeholder')} value={image} hint={t('imageUpload.hint')}/>
                 <BrInput label={t('repositoryOrId.label')} hint={t('repositoryOrId.hint')}
                          value={repositoryOrId} placeholder={t('repositoryOrId.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
