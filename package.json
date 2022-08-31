@@ -23,6 +23,7 @@
     "@types/base45": "^2.0.0",
     "base45": "^2.0.1",
     "boring-avatars": "^1.7.0",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.11.2",
     "debug": "^4.3.4",
     "deepmerge": "^4.2.2",

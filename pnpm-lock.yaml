@@ -19,6 +19,7 @@ specifiers:
   base45: ^2.0.1
   boring-avatars: ^1.7.0
   commitizen: ^4.2.4
+  crypto-js: ^4.1.1
   cypress: ^9.6.0
   cz-conventional-changelog: ^3.3.0
   daisyui: ^2.14.2
@@ -57,6 +58,7 @@ dependencies:
   '@types/base45': 2.0.0
   base45: 2.0.1
   boring-avatars: 1.7.0
+  crypto-js: 4.1.1
   dayjs: 1.11.3
   debug: 4.3.4
   deepmerge: 4.2.2
@@ -1944,6 +1946,10 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /crypto-js/4.1.1:
+    resolution: {integrity: sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==}
+    dev: false
 
   /css-blank-pseudo/3.0.3_postcss@8.4.14:
     resolution: {integrity: sha512-VS90XWtsHGqoM0t4KpH053c4ehxZ2E6HtGI7x68YFV0pTo/QmkV/YFA+NnlvK8guxZVNWGQhVNJGC39Q8XF4OQ==}

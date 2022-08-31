@@ -13,6 +13,16 @@ import BrImageUpload from "../components/brickroom/BrImageUpload";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
 
+type Image = {
+    description: string,
+    extension: string,
+    hash: string,
+    mimeType: string,
+    name: string,
+    signature: any,
+    size: number
+}
+type Images = Array<Image>
 
 
 const CreateProject: NextPage = () => {
@@ -28,8 +38,9 @@ const CreateProject: NextPage = () => {
     const [resourceSpec, setResourceSpec] = useState('')
     const [resourceId, setResourceId] = useState('')
     const [intentId, setIntentId] = useState('')
-    const [image, setImage] = useState('')
-    const { t } = useTranslation('createProjectProps')
+    const [images, setImages] = useState([] as Images)
+    const [imagesFiles, setImagesFiles] = useState([{} as any])
+    const {t} = useTranslation('createProjectProps')
 
     useEffect(() => {
         if (projectType === 'Product') {
@@ -45,7 +56,6 @@ const CreateProject: NextPage = () => {
 
 
     const {authId} = useAuth()
-
 
 
     const QUERY_VARIABLES = gql`query {
@@ -164,7 +174,7 @@ const CreateProject: NextPage = () => {
   $tags: [URI!],
   $resourceSpec: ID!,
   $oneUnit: ID!,
-  $image: String
+  $images: [IFile!]
 ) {
   createEconomicEvent(
     event: {
@@ -177,7 +187,7 @@ const CreateProject: NextPage = () => {
       resourceQuantity: { hasNumericalValue: 1, hasUnit: $oneUnit },
       toLocation: $location
     }
-    newInventoriedResource: { name: $name, note: $metadata, image: $image }
+    newInventoriedResource: { name: $name, note: $metadata, images: $images }
   ) {
     economicEvent {
       id
@@ -188,6 +198,7 @@ const CreateProject: NextPage = () => {
   }
 }
 `
+
     const instanceVariables = useQuery(QUERY_VARIABLES).data?.instanceVariables
 
     const [createAsset, {data}] = useMutation(CREATE_ASSET)
@@ -220,10 +231,19 @@ const CreateProject: NextPage = () => {
                 location: locationId,
                 oneUnit: instanceVariables?.units?.unitOne.id,
                 creationTime: dayjs().toISOString(),
-                image: image.split(',')[1],
+                images: images,
             }
         })
             .then((re: any) => {
+                images.forEach((i, index) => {
+                    const pp = new FormData()
+                    pp.append(i.hash, imagesFiles[index])
+                    fetch("http://65.109.11.42:8000/api/file", {
+                        method: "post",
+                        body: pp,
+                    }).then((r: any) => devLog(r))
+                })
+
                 setResourceId(re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id)
                 devLog('2', re.data?.createEconomicEvent.economicEvent.resourceInventoriedAs.id)
                 createProposal()
@@ -246,7 +266,8 @@ const CreateProject: NextPage = () => {
                                     payment: intent.data?.payment.intent.id
                                 }
                             }).then(() => {
-                                router.push(`/project/${proposal.data?.createProposal.proposal.id}`)
+                                debugger
+                                router.push(`/asset/${proposal.data?.createProposal.proposal.id}`)
                             })
                         })
                     })
@@ -258,7 +279,8 @@ const CreateProject: NextPage = () => {
             <div className="w-80">
                 <h2 className="text-primary">{t('headline.title')} </h2>
                 <p>{t('headline.description')}</p>
-            </div><br/>
+            </div>
+            <br/>
 
             <form onSubmit={onSubmit} className="w-full">
                 <BrInput label={t('projectName.label')} hint={t('projectName.hint')} value={projectName}
@@ -267,9 +289,10 @@ const CreateProject: NextPage = () => {
                 <BrTextField label={t('projectDescription.label')} hint={t('projectDescription.hint')}
                              value={projectDescription} placeholder={t('projectDescription.placeholder')}
                              onChange={(e: ChangeEvent<HTMLInputElement>) => setAssetDescription(e.target.value)}/>
-                <BrRadio array={t('projectType.array', { returnObjects: true })} label={t('projectType.label')}
+                <BrRadio array={t('projectType.array', {returnObjects: true})} label={t('projectType.label')}
                          hint={t('projectType.hint')} onChange={setAssetType} value={projectType}/>
-                <BrImageUpload onChange={setImage} label={t('imageUpload.label')} placeholder={t('imageUpload.placeholder')} value={image} hint={t('imageUpload.hint')}/>
+                <BrImageUpload onChange={setImages} setImagesFiles={setImagesFiles} label={t('imageUpload.label')}
+                               placeholder={t('imageUpload.placeholder')} value={images} hint={t('imageUpload.hint')}/>
                 <BrInput label={t('repositoryOrId.label')} hint={t('repositoryOrId.hint')}
                          value={repositoryOrId} placeholder={t('repositoryOrId.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>
@@ -294,13 +317,14 @@ const CreateProject: NextPage = () => {
     </>)
 };
 
-export async function getStaticProps({ locale }:any) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ['createProjectProps'])),
-    },
-  };
+export async function getStaticProps({locale}: any) {
+    return {
+        props: {
+            ...(await serverSideTranslations(locale, ['createProjectProps'])),
+        },
+    };
 }
+
 export default CreateProject
 
 
