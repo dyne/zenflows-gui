@@ -30,7 +30,7 @@ const CreateProject: NextPage = () => {
     const [projectName, setAssetName] = useState('')
     const [projectDescription, setAssetDescription] = useState('')
     const [repositoryOrId, setRepositoryOrId] = useState('')
-    const [projectTags, setAssetTags] = useState([] as string[])
+    const [assetTags, setAssetTags] = useState([] as string[])
     const [locationAddress, setLocationAddress] = useState('')
     const [locationId, setLocationId] = useState('')
     const [locationName, setLocationName] = useState('')
@@ -227,7 +227,7 @@ const CreateProject: NextPage = () => {
                 resourceSpec: resourceSpec,
                 agent: authId,
                 name: projectName,
-                metadata: `description: ${projectDescription}, repositoryOrId: ${repositoryOrId}, `,
+                metadata: `description: ${projectDescription}, repositoryOrId: ${repositoryOrId}`,
                 location: locationId,
                 oneUnit: instanceVariables?.units?.unitOne.id,
                 creationTime: dayjs().toISOString(),
@@ -238,7 +238,7 @@ const CreateProject: NextPage = () => {
                 images.forEach((i, index) => {
                     const pp = new FormData()
                     pp.append(i.hash, imagesFiles[index])
-                    fetch("http://65.109.11.42:8000/api/file", {
+                    fetch(process.env.FILE!, {
                         method: "post",
                         body: pp,
                     }).then((r: any) => devLog(r))
@@ -266,7 +266,6 @@ const CreateProject: NextPage = () => {
                                     payment: intent.data?.payment.intent.id
                                 }
                             }).then(() => {
-                                debugger
                                 router.push(`/asset/${proposal.data?.createProposal.proposal.id}`)
                             })
                         })

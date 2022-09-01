@@ -4,7 +4,8 @@ const nextConfig = {
     i18n,
     reactStrictMode: true,
     env: {
-        GRAPHQL: "http://65.109.11.42:8000/api",
+        GRAPHQL: "http://65.109.11.42:8000/api/",
+        FILE: "http://65.109.11.42:8000/api/file",
     },
     webpack: (config) => {
         config.resolve.fallback = {
