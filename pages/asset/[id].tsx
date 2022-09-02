@@ -47,12 +47,17 @@ const Asset = () => {
     const asset = useQuery(QUERY_ASSET, {variables: {id}}).data
     devLog(asset)
     return (<>
-                    <h1>{asset?.proposal.primaryIntents[0].resourceInventoriedAs.name}</h1>
-                    <p>{t('This is a')} <span className="text-primary bold">{asset?.proposal.primaryIntents[0].resourceInventoriedAs.conformsTo.name}</span></p><br/>
-                    <p>{asset?.proposal.primaryIntents[0].resourceInventoriedAs.note.split(':')[1].split(',')[0]}</p>
-                    <img src={`data:${asset?.proposal.primaryIntents[0].resourceInventoriedAs.images[0].mimeType};base64, ${process.env.FILE}/${asset?.proposal.primaryIntents[0].resourceInventoriedAs.images[0].hash}`}/>
-                    <p>{t('Value of this asset')}:</p>
-                    <b>{asset?.proposal.reciprocalIntents[0].resourceQuantity.hasNumericalValue} FAB TOKEN/${asset?.proposal.primaryIntents[0].resourceInventoriedAs.onhandQuantity.hasUnit.label}</b>
+            <h1>{asset?.proposal.primaryIntents[0].resourceInventoriedAs.name}</h1>
+            <p>{t('This is a')} <span
+                className="text-primary bold">{asset?.proposal.primaryIntents[0].resourceInventoriedAs.conformsTo.name}</span>
+            </p><br/>
+            <p>{asset?.proposal.primaryIntents[0].resourceInventoriedAs.note.split(':')[1].split(',')[0]}</p>
+            {asset?.proposal.primaryIntents[0].resourceInventoriedAs.images[0] &&
+            <img
+                src={`data:${asset?.proposal.primaryIntents[0].resourceInventoriedAs.images[0].mimeType};base64, ${process.env.FILE}/${asset?.proposal.primaryIntents[0].resourceInventoriedAs.images[0].hash}`}/>}
+            <p>{t('Value of this asset')}:</p>
+            <b>{asset?.proposal.reciprocalIntents[0].resourceQuantity.hasNumericalValue} FAB
+                TOKEN/${asset?.proposal.primaryIntents[0].resourceInventoriedAs.onhandQuantity.hasUnit.label}</b>
         </>
     )
 

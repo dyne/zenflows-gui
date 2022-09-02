@@ -29,7 +29,7 @@ const SideBarProps = {
     },
     seeAll: {
         name: 'See all',
-        link: '/',
+        link: '/assets',
         disabled: true
     },
     userGuide: {
