@@ -1,4 +1,4 @@
-import {gql, useMutation, useQuery} from "@apollo/client";
+import {gql, useQuery} from "@apollo/client";
 import AssetsTable from "../components/AssetsTable";
 import devLog from "../lib/devLog";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
@@ -61,7 +61,7 @@ const Assets = () => {
   }
 }
 `
-    const {loading, data, error, refetch, fetchMore} = useQuery(QUERY_ASSETS, {variables: {first: 10}})
+    const {loading, data, error, fetchMore } = useQuery(QUERY_ASSETS, {variables: {first: 10}})
     const updateQuery = (previousResult: any, {fetchMoreResult}: any) => {
         if (!fetchMoreResult) {
             return previousResult;
@@ -85,7 +85,6 @@ const Assets = () => {
             }
         }
     }
-    devLog(data)
 
 
     return (<>
