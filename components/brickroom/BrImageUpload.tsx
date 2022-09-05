@@ -2,13 +2,10 @@ import {ExclamationIcon} from "@heroicons/react/solid";
 import React, {useState} from "react";
 import devLog from "../../lib/devLog";
 import useStorage from "../../lib/useStorage";
-import {zencode_exec} from "zenroom";
+import {zencode_exec,
+    zenroom_hash_init, zenroom_hash_update, zenroom_hash_final} from "zenroom";
 import signFile from "../../zenflows-crypto/src/sign_file";
-
-var SHA512 = require("crypto-js/sha512");
-var BASE64URL = require("crypto-js/enc-base64url");
-var CryptoJS = require("crypto-js/");
-
+import base64url from 'base64url';
 
 type BrImageUploadProps = {
     onChange: (i: Images) => void;
@@ -43,21 +40,28 @@ const BrImageUpload = (props: BrImageUploadProps) => {
     `
     const isNotImageSelected = (props.value?.length === 0)
 
-    function arrayBufferToWordArray(ab:any) {
-      var i8a = new Uint8Array(ab);
-      var a = [];
-      for (var i = 0; i < i8a.length; i += 4) {
-        a.push(i8a[i] << 24 | i8a[i + 1] << 16 | i8a[i + 2] << 8 | i8a[i + 3]);
-      }
-      return CryptoJS.lib.WordArray.create(a, i8a.length);
-    }
+    async function hashFile(ab: ArrayBuffer): Promise<string> {
+        const bytesChunkSize = 1024 * 64;
+        let ctx = await zenroom_hash_init('sha512');
+        if(ctx.logs) devLog("ERROR during hash");
+        let i;
+        for(i = 0; i < ab.byteLength; i+=bytesChunkSize) {
+            const upperLimit = i+bytesChunkSize > ab.byteLength ?
+                ab.byteLength : i+bytesChunkSize;
+            const i8a = new Uint8Array(ab.slice(i, upperLimit));
+            ctx = await zenroom_hash_update(ctx.result, i8a);
+        }
+        ctx = await zenroom_hash_final(ctx.result);
 
+        return ctx.result;
+    }
 
     function handleUpload(elements: any) {
         const images: Images = []
         Array.from(elements).forEach(async (element: any) => {
             devLog()
-            const hash = await BASE64URL.stringify(SHA512(arrayBufferToWordArray(await element.arrayBuffer())))
+            const hash = base64url.fromBase64(
+                await hashFile(await element.arrayBuffer()));
             const zenData = `
         {
                 "hashedFile": "${hash}",
