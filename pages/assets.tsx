@@ -61,7 +61,7 @@ const Assets = () => {
   }
 }
 `
-    const {loading, data, error, fetchMore } = useQuery(QUERY_ASSETS, {variables: {first: 10}})
+    const {loading, data, error, fetchMore } = useQuery(QUERY_ASSETS, {variables: {last: 10}})
     const updateQuery = (previousResult: any, {fetchMoreResult}: any) => {
         if (!fetchMoreResult) {
             return previousResult;
@@ -78,13 +78,14 @@ const Assets = () => {
     const loadMore = () => {
         if (data && fetchMore) {
             const nextPage = getHasNextPage;
-            const after = data.proposals.pageInfo.endCursor;
+            const before = data.proposals.pageInfo.endCursor;
 
-            if (nextPage && after !== null) {
-                fetchMore({updateQuery, variables: {after}});
+            if (nextPage && before !== null) {
+                fetchMore({updateQuery, variables: {before}});
             }
         }
     }
+    devLog(data)
 
 
     return (<>

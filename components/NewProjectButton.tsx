@@ -4,7 +4,7 @@ import {RefreshIcon} from "@heroicons/react/solid";
 
 const CreateProjectButton = () => {
 
-    const createProjectText = 'Create a new project'
+    const createProjectText = 'Create a new asset'
 
     return (<>
         <Link href="/create_project">

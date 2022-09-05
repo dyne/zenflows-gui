@@ -44,7 +44,7 @@ const FETCH_INVENTORY = gql`query($first: Int, $after: ID, $last: Int, $before: 
 const Resources: NextPage = () => {
     const {t} = useTranslation('resourcesProps')
     const {authId} = useAuth()
-    const {loading, data, error, fetchMore} = useQuery(FETCH_INVENTORY, {variables: {first: 10}})
+    const {loading, data, error, fetchMore} = useQuery(FETCH_INVENTORY, {variables: {last: 10}})
     const updateQuery = (previousResult: any, {fetchMoreResult}: any) => {
         if (!fetchMoreResult) {
             return previousResult;
@@ -61,10 +61,10 @@ const Resources: NextPage = () => {
     const loadMore = () => {
         if (data && fetchMore) {
             const nextPage = getHasNextPage;
-            const after = data.economicResources.pageInfo.endCursor;
+            const before = data.economicResources.pageInfo.endCursor;
 
-            if (nextPage && after !== null) {
-                fetchMore({updateQuery, variables: {after}});
+            if (nextPage && before !== null) {
+                fetchMore({updateQuery, variables: {before}});
             }
         }
     }
