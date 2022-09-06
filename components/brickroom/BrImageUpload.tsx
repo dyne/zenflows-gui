@@ -1,5 +1,5 @@
 import {ExclamationIcon} from "@heroicons/react/solid";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import devLog from "../../lib/devLog";
 import useStorage from "../../lib/useStorage";
 import {zencode_exec} from "zenroom";
@@ -18,7 +18,7 @@ type BrImageUploadProps = {
     error?: string;
     hint?: string;
     className?: string;
-    value?: Images
+    value?: Array<{ file:any, base64:string }>
 }
 type Image = {
     description: string,
@@ -32,7 +32,7 @@ type Image = {
 type Images = Array<Image>
 
 const BrImageUpload = (props: BrImageUploadProps) => {
-    const [images, setImages] = useState([] as Images)
+    const [imagesPreview, setImagesPreview] = useState([] as Array<string>)
     const {getItem} = useStorage()
     const zenKeys = `
         {
@@ -41,7 +41,7 @@ const BrImageUpload = (props: BrImageUploadProps) => {
                         }
         }
     `
-    const isNotImageSelected = (props.value?.length === 0)
+    const isNotImageSelected = props.value?.length === 0
 
     function arrayBufferToWordArray(ab:any) {
       var i8a = new Uint8Array(ab);
@@ -51,12 +51,33 @@ const BrImageUpload = (props: BrImageUploadProps) => {
       }
       return CryptoJS.lib.WordArray.create(a, i8a.length);
     }
+    const convertBase64 = (file:any) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
 
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    };
+
+
+    const populatePreviews = async (files:Array<any>)=>{
+        let generatedResponse: Array<any> = []
+        await Promise.all(files!.map(async (f:any)=>{
+            await convertBase64(f).then((res)=>generatedResponse.push(res))
+        }))
+        setImagesPreview(generatedResponse)
+    }
 
     function handleUpload(elements: any) {
         const images: Images = []
         Array.from(elements).forEach(async (element: any) => {
-            devLog()
             const hash = await BASE64URL.stringify(SHA512(arrayBufferToWordArray(await element.arrayBuffer())))
             const zenData = `
         {
@@ -83,7 +104,9 @@ const BrImageUpload = (props: BrImageUploadProps) => {
         })
         props.onChange(images)
         props.setImagesFiles(Array.from(elements))
+        populatePreviews(Array.from(elements))
     }
+    devLog('previews', imagesPreview)
 
     return (<>
         <div className={`form-control ${props.className}`}>
@@ -93,6 +116,7 @@ const BrImageUpload = (props: BrImageUploadProps) => {
             <div className="flex justify-center items-center w-full">
                 <label htmlFor="dropzone-file"
                        className="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer hover:bg-gray-100">
+                    <>
                     {isNotImageSelected && <><div className="flex flex-col justify-center items-center pt-5 pb-6">
                         <svg aria-hidden="true" className="mb-3 w-10 h-10 text-gray-400" fill="none"
                              stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -105,15 +129,12 @@ const BrImageUpload = (props: BrImageUploadProps) => {
                         <p className="text-xs text-gray-500">{props.placeholder}</p>
 
                     </div></>}
-                    {!isNotImageSelected && <>
-                        <div className="w-3/12 border border-primary">
-                            <img className="w-full"/>
-                        </div>
-                        <button className="btn btn-ghost" onClick={() => props.onChange([])}>x</button>
-                    </>}
+                    {!isNotImageSelected && <div className="grid grid-cols-5 gap-1">{imagesPreview?.map((i:any)=>(<>
+                            <img src={i}/>
+                    </>))}</div>}
                     <input id="dropzone-file" type="file" className="hidden" onChange={(e) => {
                         handleUpload(e.target.files)
-                    }} multiple/>
+                    }} multiple/></>
                 </label>
             </div>
             <label className="label">

@@ -39,7 +39,7 @@ const CreateProject: NextPage = () => {
     const [resourceId, setResourceId] = useState('')
     const [intentId, setIntentId] = useState('')
     const [images, setImages] = useState([] as Images)
-    const [imagesFiles, setImagesFiles] = useState([{} as any])
+    const [imagesFiles, setImagesFiles] = useState([] as Array<any>)
     const {t} = useTranslation('createProjectProps')
 
     useEffect(() => {
@@ -100,7 +100,7 @@ const CreateProject: NextPage = () => {
   $resource: ID!,
   $oneUnit: ID!,
   $currency: ID!,
-  $howMuch: Int!
+  $howMuch: Float!
 ) {
   item: createIntent(
     intent: {
@@ -236,11 +236,11 @@ const CreateProject: NextPage = () => {
         })
             .then((re: any) => {
                 images.forEach((i, index) => {
-                    const pp = new FormData()
-                    pp.append(i.hash, imagesFiles[index])
+                    const filesArray = new FormData()
+                    filesArray.append(i.hash, imagesFiles[index])
                     fetch(process.env.FILE!, {
                         method: "post",
-                        body: pp,
+                        body: filesArray,
                     }).then((r: any) => devLog(r))
                 })
 
@@ -291,7 +291,7 @@ const CreateProject: NextPage = () => {
                 <BrRadio array={t('projectType.array', {returnObjects: true})} label={t('projectType.label')}
                          hint={t('projectType.hint')} onChange={setAssetType} value={projectType}/>
                 <BrImageUpload onChange={setImages} setImagesFiles={setImagesFiles} label={t('imageUpload.label')}
-                               placeholder={t('imageUpload.placeholder')} value={images} hint={t('imageUpload.hint')}/>
+                               placeholder={t('imageUpload.placeholder')} value={imagesFiles} hint={t('imageUpload.hint')}/>
                 <BrInput label={t('repositoryOrId.label')} hint={t('repositoryOrId.hint')}
                          value={repositoryOrId} placeholder={t('repositoryOrId.placeholder')}
                          onChange={(e: ChangeEvent<HTMLInputElement>) => setRepositoryOrId(e.target.value)}/>

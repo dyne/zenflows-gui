@@ -1,12 +1,8 @@
 import React, {useState} from "react";
 import Link from "next/link";
-
-
 import BrTable from "./brickroom/BrTable";
-import BrPagination from "./brickroom/BrPagination";
 import {mapUnit} from "../lib/mapUnit";
 import QrCodeButton from "./brickroom/QrCodeButton";
-import devLog from "../lib/devLog";
 
 const ResourceTable = ({resources}: { resources: Array<any> }) => {
     const resourcesHead = ['Resource', 'Name', 'Quantity', 'Location', 'Passport', 'Owner', 'Notes']
