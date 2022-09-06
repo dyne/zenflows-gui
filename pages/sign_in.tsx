@@ -3,67 +3,102 @@ import {useAuth} from "../lib/auth";
 import {useRouter} from "next/router";
 import Card, {CardWidth} from "../components/brickroom/Card";
 import BrInput from "../components/brickroom/BrInput";
-import {LinkIcon} from "@heroicons/react/solid";
+import Link from "next/link";
+import KeyringGeneration from "../components/KeyringGeneration";
+import VerifySeed from "../components/VerifySeed";
+import devLog from "../lib/devLog";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
-export default function SignIn() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
-  const router = useRouter()
-  const signInTextProps:any ={
-    title:"Welcome Back!",
-    presentation:"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quam semper felis volutpat mauris libero feugiat ornare aliquet urna.",
-    username: {
-      label: "Email address or @username",
-      placeholder: "alice@email.com"
+export async function getStaticProps({ locale }:any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['signInProps'])),
     },
-    password: {
-      label: "Password (min 8 characters)",
-      placeholder: "Type your password"
-    },
-    register:{
-      question:"✌️ You don’t have an account yet?",
-      answer:"Sign Up"
-    },
-    button: "Sign In"
-  }
+  };
+}
 
-  const { signIn } = useAuth()
+export default function Sign_in() {
+    const [isPassprhase, setIsPassphrase] = useState(false)
+    const [step, setStep] = useState(0)
+    const [email, setEmail] = useState('')
+    const [pdfk, setPdfk] = useState('')
+    const [isMailExisting, setIsMailExising] = useState(true)
 
-  async function  onSubmit(e: { preventDefault: () => void; }) {
-    e.preventDefault()
-    await signIn({ username, password }).then(()=> router.push('/'))
-  }
+    const {askKeypairoomServer, signIn} = useAuth()
 
-  return (
-    <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('/reflow_background.jpeg')"}}>
-      <div className="container mx-auto h-screen grid place-items-center">
-          <Card title={signInTextProps.title}
-                width={CardWidth.LG}
-                className="px-16 py-[4.5rem]">
-            <>
-              <p>{signInTextProps.presentation}</p>
-              <form onSubmit={onSubmit}>
-                <BrInput type="text"
-                         label={signInTextProps.username.label}
-                         placeholder={signInTextProps.username.placeholder}
-                         onChange={(e:ChangeEvent<HTMLInputElement>) => setUsername(e.target.value)} />
-                <BrInput type="password"
-                         placeholder={signInTextProps.password.placeholder}
-                         label={signInTextProps.password.label}
-                         onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                />
-                  <button className="btn btn-block" type="submit">{signInTextProps.button}</button>
-              </form>
-              <p className="flex flex-row items-center justify-between">
-                {signInTextProps.register.question}
-                <LinkIcon className='h-5 w-5 ml-6'/>
-                {signInTextProps.register.answer}
-              </p>
-            </>
-          </Card>
-      </div>
-    </div>
-  )
+    const errorMail = isMailExisting ? undefined : 'this email doesn\'t exists'
+    const viaPassphrase = () => {
+        setIsPassphrase(true)
+        setStep(1)
+    }
+
+
+    const viaQuestions = () => {
+        setIsPassphrase(false)
+        setStep(1)
+    }
+    const toNextStep = async (step:number) => {
+        const result = await askKeypairoomServer(email, false)
+        if (await result?.keypairoomServer) {
+            setPdfk(result?.keypairoomServer)
+            setStep(step)
+            devLog(result)
+        } else {
+            setIsMailExising(false)
+            devLog(result)
+        }
+    }
+
+    const router = useRouter()
+    const {t} = useTranslation('signInProps')
+
+
+    async function onSubmit(e: { preventDefault: () => void; }) {
+        e.preventDefault()
+    }
+
+    return (
+        <div className="h-screen bg-cover" style={{['backgroundImage' as any]: "url('https://www.interfacerproject.eu/assets/index/ABOUT.png')"}}>
+            <div className="container mx-auto h-screen grid place-items-center">
+                <Card title={t('title')}
+                      width={CardWidth.LG}
+                      className="px-16 py-[4.5rem]">
+                    <>
+                        {step === 0 && <><p>{t('presentation')}</p>
+                            <button className="btn btn-block" type="button"
+                                    onClick={() => viaPassphrase()}>{t('button1')}</button>
+                            <button className="btn btn-block my-4" type="button"
+                                    onClick={() => viaQuestions()}>{t('button2')}</button>
+                            <Link href={'/sign_up'}>
+                                <a className="btn btn-block">{t('button3')}</a>
+                            </Link></>}
+                        {step === 1 && <>
+                            <BrInput type="email" label={t('email.label')}
+                                     error={errorMail}
+                                     placeholder={t('email.placeholder')}
+                                     onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}/>
+                            {!isPassprhase && <>
+                                <button className="btn btn-block" type="button" onClick={() => toNextStep(2)}>
+                                    {t('button4')}
+                                </button>
+                            </>}
+                            {isPassprhase && <>
+                                <button className="btn btn-block" type="button" onClick={() => toNextStep(3)}>
+                                    {t('button4')}
+                                </button>
+                            </>}
+                        </>}
+                        {step === 3 && <>
+                    <VerifySeed email={email} HMAC={pdfk}/>
+                </>}
+                        {step === 2 && <>
+                    <KeyringGeneration email={email} HMAC={pdfk}/>
+                </>}
+                    </>
+                </Card>
+            </div>
+        </div>
+    )
 }

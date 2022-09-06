@@ -6,7 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
 a {
@@ -20,23 +20,32 @@ a {
 
 
 h1, .heading1 {
-    @apply text-4xl font-semibold leading-11;
+  @apply text-4xl font-bold leading-11;
+  font-family: 'Space Grotesk', sans-serif;
 }
+
 h2, .heading2 {
-    @apply text-2xl font-semibold leading-8;
+  @apply text-2xl font-bold leading-8;
+  font-family: 'Space Grotesk', sans-serif;
 }
+
 h3, .heading3 {
-    @apply text-xl font-semibold leading-6;
+  @apply text-xl font-bold leading-6;
+  font-family: 'Space Grotesk', sans-serif;
 }
+
 h4, .heading4 {
-    @apply text-base font-semibold;
+  @apply text-base font-semibold;
+  font-family: 'Space Grotesk', sans-serif;
 }
+
 p, .paragraph {
-    @apply text-sm;
+  @apply text-sm;
 }
+
 .logo {
-  width: 162px;
-  height: 32px;
+  width: 169px;
+  height: 20px;
   background-image: url('/logo.png');
   @apply bg-cover;
 }

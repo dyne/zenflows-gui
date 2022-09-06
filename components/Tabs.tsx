@@ -11,7 +11,6 @@ const Tabs = ({tabsArray}: {tabsArray:TabsProps}) => {
     const tabClass = (i:number)=> (i===tab)? "tab tab-bordered tab-active" : "tab tab-bordered"
 
     return (<>
-        <div className="divider"/>
         <div className="tabs">
             {tabsArray.map((t, i) =>
                 <a key={i} className={tabClass(i)} onClick={() => setTab(i)}>

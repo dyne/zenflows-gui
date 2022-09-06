@@ -1,7 +1,7 @@
 import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
 import React from "react";
-import ProcessCard from "../components/ProcessCard";
+import ProcessTable from "../components/ProcessTable";
 
 
 const Processes: NextPage = () => {
@@ -11,17 +11,25 @@ const Processes: NextPage = () => {
                 id
                 name
                 note
+                inputs {
+                  id
+                  provider {displayUsername id}
+                  receiver {displayUsername id}
+                }
+                outputs {
+                  id 
+                  provider {displayUsername id}
+                  receiver {displayUsername id}
+                }
               }
             }
           `
 
     const processes = useQuery(ProcessesQuery).data?.processes
 
-  return (<ul>
-      {processes?.map((process:any)=>{
-          return <li key={process.id}><ProcessCard process={process}/></li>})}
-  </ul>
-  )};
+
+    return (<ProcessTable processes={processes}/>)
+};
 
 export default Processes
 

@@ -2,20 +2,21 @@ import type {NextPage} from 'next'
 import {gql, useQuery} from "@apollo/client";
 import React from "react";
 import {useRouter} from 'next/router'
-import Popup from "../../components/popup";
 import Produce from "../../components/produce";
 import Raise from "../../components/raise";
 import Transfer from "../../components/transfer";
 import Use from "../../components/use";
 import Consume from "../../components/consume";
 import Lower from "../../components/lower";
-import EconomicEventCard from "../../components/EconomicEventCard";
 import {ActionsEnum} from "../../lib/ActionsEnum";
+import EventTable from "../../components/EventTable";
+import ActionsBlock from "../../components/ActionsBlock";
+import {ArrowNarrowLeftIcon} from "@heroicons/react/solid";
 
 
 const Process: NextPage = () => {
     const router = useRouter()
-    const { id } = router.query
+    const {id} = router.query
     const Process = gql`
             query {
               process(id:"${id}"){
@@ -55,26 +56,32 @@ const Process: NextPage = () => {
     const process = useQuery(Process)
     const processId = process.data?.process.id
     const actions = [
-        {name:ActionsEnum.Produce,component: <Produce processId={processId}/>},
-        {name:ActionsEnum.Raise,component: <Raise processId={processId}/>},
-        {name:ActionsEnum.Transfer,component: <Transfer processId={processId}/>},
-        {name:ActionsEnum.Use,component: <Use processId={processId}/>},
-        {name:ActionsEnum.Consume,component: <Consume processId={processId}/>},
-        {name:ActionsEnum.Lower,component: <Lower processId={processId}/>},
-        ]
-
-  return (
-  <ul>
-      <li>{process.data?.process.name}</li>
-      <li>{processId}</li>
-      <div className="divider"/>
-      {actions.map((a)=><li key={a.name} className="float-left mr-2">
-          <Popup name={a.name} action1={a.name}>{a.component}</Popup>
-      </li>)}
-      <div className="divider w-full"/>
-      <ul>{process.data?.process.inputs.map((i:any)=><li key={i.id}><EconomicEventCard event={i}/></li>)}</ul>
-      <li>{process.data?.process.outputs.map((o:any)=><EconomicEventCard event={o} key={o.id}/>)}</li>
-  </ul>
-  )};
+        {name: ActionsEnum.Produce, component: <Produce processId={processId}/>},
+        {name: ActionsEnum.Raise, component: <Raise processId={processId}/>},
+        {name: ActionsEnum.Transfer, component: <Transfer processId={processId}/>},
+        {name: ActionsEnum.Use, component: <Use processId={processId}/>},
+        {name: ActionsEnum.Consume, component: <Consume processId={processId}/>},
+        {name: ActionsEnum.Lower, component: <Lower processId={processId}/>},
+    ]
+    const back = () => {
+        router.back()
+    }
+    return (
+        <>
+            <button type={'button'} className="btn btn-outline" onClick={back}><ArrowNarrowLeftIcon
+                className="w-5 mr-1"/>Back
+            </button>
+            <br/><br/>
+            <h1>{process.data?.process.name}</h1>
+            <br/><br/>
+            <ActionsBlock processId={processId}/>
+            <br/><br/>
+            {(process.data?.process.inputs.length > 0 || process.data?.process.outputs.length > 0) && (<>
+                <h2>Activity fo this process:</h2>
+                <br/><br/>
+                <EventTable economicEvents={process.data?.process.inputs.concat(process.data?.process.outputs)} noProcess={true}/></>)}
+        </>
+    )
+};
 
 export default Process

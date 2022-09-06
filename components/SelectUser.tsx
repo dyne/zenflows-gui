@@ -1,8 +1,9 @@
 import React from "react";
 import {gql, useQuery} from "@apollo/client";
+import BrSelect from "./brickroom/BrSelect";
 
 
-const SelectUser= () => {
+const SelectUser= ({handleUserSelect}:{handleUserSelect:React.ChangeEventHandler<Element>}) => {
     const QUERY_AGENTS = gql`
             query {
               agents {
@@ -11,12 +12,10 @@ const SelectUser= () => {
               } 
             }
           `
-    const agents = useQuery(QUERY_AGENTS).data?.agents
+    const agents = useQuery(QUERY_AGENTS).data?.agents.map((agent:{id:string, name:string }) => ({id:agent.id, name:agent.name}))
 
     return(<>
-            <select className="select select-bordered w-full">
-                {agents?.map((agent:any) =><option key={agent.id} value={agent} label={agent.name}/>)}
-            </select>
+            <BrSelect label="Select the receiver of the transaction" array={agents} handleSelect={handleUserSelect}/>
         </>
 )}
 

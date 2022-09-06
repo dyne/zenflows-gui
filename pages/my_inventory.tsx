@@ -2,9 +2,7 @@ import {NextPage} from "next";
 import React from "react";
 import {useAuth} from "../lib/auth";
 import {gql, useQuery} from "@apollo/client";
-import Card from "../components/brickroom/Card";
-import Link from "next/link";
-import InventoriedResources from "../components/InventoriedResources";
+import ResourceTable from "../components/ResourceTable";
 
 
 
@@ -14,6 +12,9 @@ const FETCH_INVENTORY = gql(`query($id: ID!) {
                                           __typename
                                           id
                                           name
+                                          conformsTo {
+                                            id name
+                                          }
                                           note
                                           image
                                           currentLocation {
@@ -21,6 +22,10 @@ const FETCH_INVENTORY = gql(`query($id: ID!) {
                                             id
                                             name
                                             mappableAddress
+                                          }
+                                          primaryAccountable {
+                                            id
+                                            name
                                           }
                                           onhandQuantity {
                                             __typename
@@ -40,7 +45,15 @@ const MyInventory: NextPage = () => {
     const {authId} = useAuth()
     const inventory = useQuery(FETCH_INVENTORY, {variables:{id:authId}}).data?.agent.inventoriedEconomicResources
 
-    return <InventoriedResources inventoriedResources={inventory}/>
-};
+    return <>
+        <div className="w-80 mb-6">
+            <h1>My Inventory</h1>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Neque pellentesque hendrerit ultrices mauris et non pellentesque suspendisse est.
+            </p>
+        </div>
+        <ResourceTable resources={inventory}/>
+    </>};
 
 export default MyInventory

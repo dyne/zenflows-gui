@@ -3,59 +3,50 @@ import {useAuth} from "../../lib/auth";
 import {gql, useQuery} from "@apollo/client";
 import {useRouter} from "next/router";
 import Tabs from "../../components/Tabs";
-import InventoriedResources from "../../components/InventoriedResources";
-import RenderActivities from "../../components/renderActivities";
+import EventTable from "../../components/EventTable";
+import Spinner from "../../components/brickroom/Spinner";
+import ResourceTable from "../../components/ResourceTable";
+import devLog from "../../lib/devLog";
+
 
 const Profile: NextPage = () => {
     const router = useRouter()
     const {id} = router.query
-    const FETCH_USER = gql(`query($id:ID!){
-                                        agent(id:$id){
-                                            id 
-                                            name 
-                                            inventoriedEconomicResources {
-                                              id
-                                              name
-                                              note
-                                            }
-                                            economicEvents{
-                                                    __typename
-                                                    id
-                                                    note
-                                                    provider {displayUsername id}
-                                                    receiver {displayUsername id}
-                                                    resourceConformsTo {name note}
-                                                    resourceInventoriedAs {name id note}
-                                                    toResourceInventoriedAs {name note}
-                                                    action { id }
-                                                    resourceQuantity {
-                                                      hasNumericalValue
-                                                      hasUnit {label symbol}
-                                                    }
-                                                }
-                                            }
-                                   }`)
+    const FETCH_USER = gql(`query($id:ID!) {
+  person(id:$id) {
+    id
+    name
+    email
+    user
+    ethereumAddress
+    primaryLocation {
+      name
+      mappableAddress
+    }
+  }
+}`)
 
-    const {authId} = useAuth()
+    const {authId, authUsername, authName, authEmail} = useAuth()
     const isUser: boolean = (id === 'my_profile' || id === authId)
     const idToBeFetch = isUser ? authId : id
-    const user = useQuery(FETCH_USER, {variables: {id: idToBeFetch}}).data?.agent
+    const user = useQuery(FETCH_USER, {variables: {id: idToBeFetch}}).data?.person
+    devLog(user)
     const tabsArray = [
-        {title: 'Activity', component: <>
-                {user?.economicEvents.map((e:any, i:number)=><RenderActivities key={i} userActivity={e}/>)}
-            </>},
+        {title: 'Activity', component: <EventTable economicEvents={user?.economicEvents}/>},
         {
             title: 'Inventory',
-            component: <InventoriedResources inventoriedResources={user?.inventoriedEconomicResources}/>
+            component: <ResourceTable resources={user?.inventoriedEconomicResources}/>
         }
     ]
-
     return (<>
-        <ul>
-            <li>name:{user?.name}</li>
-        </ul>
-        <div className="divider"/>
-        <Tabs tabsArray={tabsArray}/>
+        {!user && <Spinner/>}
+        {user && <>
+                <h2 className="mb-6">{user?.name}</h2>
+                <h3 className="mb-6">Name: {user?.name}</h3>
+                <h3 className="mb-6">UserName: {user?.user}</h3>
+                <h3 className="mb-6">Email: {user?.email}</h3>
+            {/*<Tabs tabsArray={tabsArray}/>*/}
+        </>}
     </>)
 };
 
