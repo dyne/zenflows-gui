@@ -5,6 +5,7 @@ import {ChatIcon, CubeIcon, HomeIcon, GlobeIcon, ChevronUpIcon, ChevronDownIcon}
 import LoginBtn from "./LoginMenu";
 import {useRouter} from "next/router";
 import IfSideBarButton from "./brickroom/IfSideBarButton";
+import {useAuth} from "../lib/auth";
 
 const SideBarProps = {
     home: {
@@ -54,6 +55,7 @@ function Sidebar() {
     const router = useRouter()
     const isActive = (path: string) => path === router.asPath
     const isNewProcess = router.asPath === '/new_process'
+    const {isSignedIn} = useAuth()
     return (<>
             <div className="title overflow-y-auto w-72 text-primary-content bg-white border-r border-primary">
                 {!isNewProcess && <>
@@ -107,9 +109,10 @@ function Sidebar() {
                                              disabled={true}/>
                         </li>
                     </ul>
-                    <span className="inline-block align-bottom">
+                    {isSignedIn() &&<span className="inline-block align-bottom">
                         <LoginBtn/>
-                    </span> </>}
+                    </span>}
+                </>}
             </div>
         </>
     )

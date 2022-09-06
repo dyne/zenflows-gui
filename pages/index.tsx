@@ -25,7 +25,7 @@ const Home: NextPage = () => {
                 <h2>{t('title')}</h2>
                 <p className="mt-4"><CheckCircleIcon className="w-5 h-5 float-left"/>{t('paragraph1')}</p>
                 <p className="mt-4"><CheckCircleIcon className="w-5 h-5 float-left"/>{t('paragraph2')}</p>
-                <Link href="/sign_in"><a className={`btn btn-primary mt-4 ${isSignedIn? 'btn-disabled' : ''}`}>sign in</a></Link>
+                <Link href="/sign_in"><a className={`btn btn-primary mt-4 ${isSignedIn()? 'btn-disabled' : ''}`}>sign in</a></Link>
             </div>
             <div>
                 {/*<Link href="/processes">*/}

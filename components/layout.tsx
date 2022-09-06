@@ -15,7 +15,7 @@ const Layout:React.FunctionComponent<layoutProps> = (layoutProps:layoutProps) =>
   const { isSignedIn } = useAuth()
     const router = useRouter()
     const path = router.asPath
-    const authentication = path === '/sign_out' || path === '/sign_up' || path === '/sign_in' || !isSignedIn()
+    const authentication = path === '/sign_out' || path === '/sign_up' || path === '/sign_in' || !isSignedIn() && path !== '/'
 
     return (
         <>
