@@ -129,7 +129,8 @@ const BrImageUpload = (props: BrImageUploadProps) => {
                         <p className="text-xs text-gray-500">{props.placeholder}</p>
 
                     </div></>}
-                    {!isNotImageSelected && <div className="grid grid-cols-5 gap-1">{imagesPreview?.map((i:any)=>(<>
+                        <div className="hidden grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-5"/>
+                    {!isNotImageSelected && <div className={`grid grid-cols-${imagesPreview.length<5? imagesPreview.length%5 : 5} gap-1`}>{imagesPreview?.map((i:any)=>(<>
                             <img src={i}/>
                     </>))}</div>}
                     <input id="dropzone-file" type="file" className="hidden" onChange={(e) => {
